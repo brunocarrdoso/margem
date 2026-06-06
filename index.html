@@ -379,7 +379,6 @@ let chart        = null;
 let saveTimer    = null;
 let pinBuf       = '';
 let dark         = localStorage.getItem('margem-dark') === '1';
-let pendingProfile = null; // novo perfil aguardando auth
 
 // ─── HELPERS ───────────────────────────────────────────
 const fmt    = n => 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -484,12 +483,25 @@ async function createProfile(){
 
   const color=AV_COL[Math.floor(Math.random()*AV_COL.length)];
 
-  const {error}=await sb.auth.signUp({email, password:padPin(pin)});
+  const {data, error}=await sb.auth.signUp({email, password:padPin(pin)});
   if(error){ showNewErr(traduzErro(error.message)); btn.disabled=false; btn.textContent='criar conta'; return; }
 
-  // Guarda o perfil para inserir dentro do onAuthStateChange (após sessão ativa)
-  pendingProfile = {name, email, avatar_color: color};
+  if(!data.session){
+    // Confirmação de e-mail ainda ativa no Supabase
+    showView('vConfirm');
+    btn.disabled=false; btn.textContent='criar conta';
+    return;
+  }
+
+  // Sessão ativa — insere perfil agora via RPC
+  const {error:rpcErr}=await sb.rpc('upsert_profile',{p_name:name, p_email:email, p_color:color});
   btn.disabled=false; btn.textContent='criar conta';
+  if(rpcErr){ showNewErr('Erro ao salvar perfil: '+rpcErr.message); return; }
+
+  // Entra no app diretamente
+  curUser=data.user;
+  await loadProfiles();
+  await bootApp();
 }
 
 async function logout(){
@@ -498,22 +510,11 @@ async function logout(){
 }
 
 // ─── SESSION ───────────────────────────────────────────
+// Dispara para login via PIN (pinPress → signInWithPassword)
 sb.auth.onAuthStateChange(async (event,session)=>{
-  if(session?.user && !curUser){
+  if(event==='SIGNED_IN' && session?.user && !curUser){
     curUser=session.user;
-
-    // Se veio de um cadastro novo, insere o perfil via RPC (bypassa RLS)
-    if(pendingProfile){
-      const {error: rpcErr} = await sb.rpc('upsert_profile', {
-        p_name:  pendingProfile.name,
-        p_email: pendingProfile.email,
-        p_color: pendingProfile.avatar_color
-      });
-      if(rpcErr) console.error('upsert_profile error:', rpcErr);
-      pendingProfile=null;
-    }
-
-    await loadProfiles(); // atualiza lista e salva cache
+    await loadProfiles();
     await bootApp();
   }
 });
@@ -522,9 +523,9 @@ async function bootApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').classList.remove('hidden');
 
-  // Find profile for this user
+  // Busca perfil pelo ID do usuário logado
   const profile=allProfiles.find(p=>p.id===curUser.id);
-  const nm  = profile?.name  || curUser.email.split('@')[0];
+  const nm  = profile?.name  || curUser.user_metadata?.name || curUser.email.split('@')[0];
   const col = profile?.avatar_color || avc(curUser.id);
 
   document.getElementById('hdrAv').textContent=ini(nm);
