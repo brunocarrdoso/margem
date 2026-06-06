@@ -11,24 +11,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root {
-  --bg:       #ffffff;
-  --surf:     #f8fafc;
-  --surf2:    #f1f5f9;
-  --bdr:      #e2e8f0;
-  --bdr-soft: #f1f5f9;
-  --t1:       #0f172a;
-  --t2:       #334155;
-  --t3:       #64748b;
-  --t4:       #94a3b8;
-  --blue:    #2563eb; --blue-d:#1d4ed8; --blue-bg:#eff6ff;
-  --green:   #16a34a; --green-bg:#f0fdf4;
-  --red:     #dc2626; --red-bg:#fef2f2;
-  --amber:   #d97706; --amber-bg:#fffbeb;
-  --purple:  #9333ea; --purple-bg:#faf5ff;
+  --bg:#fff; --surf:#f8fafc; --surf2:#f1f5f9; --bdr:#e2e8f0; --bdr-soft:#f1f5f9;
+  --t1:#0f172a; --t2:#334155; --t3:#64748b; --t4:#94a3b8;
+  --blue:#2563eb; --blue-d:#1d4ed8; --blue-bg:#eff6ff;
+  --green:#16a34a; --green-bg:#f0fdf4;
+  --red:#dc2626; --red-bg:#fef2f2;
+  --amber:#d97706; --amber-bg:#fffbeb;
+  --purple:#9333ea; --purple-bg:#faf5ff;
 }
 html[data-dark] {
-  --bg:#0b1120; --surf:#131d2e; --surf2:#192338;
-  --bdr:#1e2d47; --bdr-soft:#192338;
+  --bg:#0b1120; --surf:#131d2e; --surf2:#192338; --bdr:#1e2d47; --bdr-soft:#192338;
   --t1:#e2e8f0; --t2:#94a3b8; --t3:#64748b; --t4:#3d5070;
   --blue-bg:rgba(37,99,235,.14); --green-bg:rgba(22,163,74,.12);
   --red-bg:rgba(220,38,38,.12); --amber-bg:rgba(217,119,6,.12); --purple-bg:rgba(147,51,234,.12);
@@ -38,14 +30,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .hidden{display:none!important}
 .c-green{color:var(--green)} .c-red{color:var(--red)} .c-amber{color:var(--amber)} .c-purple{color:var(--purple)}
 
-/* ── LOGIN ─────────────────────────────────────────── */
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+/* ── LOGIN ─────────────────────────────────── */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
 .l-card{width:100%;max-width:360px;text-align:center}
 .l-logo{font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--t1);margin-bottom:6px}
 .l-logo span{color:var(--blue)}
 .l-sub{font-size:13px;color:var(--t3);margin-bottom:36px}
 
-/* profile grid */
 .user-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:14px}
 .u-tile{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 18px;border-radius:14px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;transition:all .15s;min-width:84px;font-family:inherit}
 .u-tile:hover{border-color:var(--blue);background:var(--blue-bg)}
@@ -57,7 +48,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .u-new-lb{font-size:12px;font-weight:500;color:var(--t3)}
 
 /* PIN */
-.pin-box{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:24px;margin-top:4px;text-align:center}
+.pin-box{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:24px;text-align:center}
 .pin-who{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:18px}
 .pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:6px}
 .pd{width:11px;height:11px;border-radius:50%;border:2px solid var(--bdr);transition:all .15s}
@@ -65,11 +56,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .pin-err{font-size:11px;color:var(--red);height:18px;margin-bottom:8px}
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .nk{background:var(--surf2);border:1px solid var(--bdr);border-radius:10px;height:46px;font-family:inherit;font-size:17px;font-weight:600;color:var(--t1);cursor:pointer;transition:all .1s}
-.nk:hover{background:var(--bdr)}
-.nk:active{transform:scale(.95)}
-.nk.del{font-size:18px;color:var(--t3)}
+.nk:hover{background:var(--bdr)} .nk:active{transform:scale(.95)} .nk.del{font-size:18px;color:var(--t3)}
 
-/* form fields */
+/* form */
 .l-form{text-align:left}
 .l-form h2{font-size:17px;font-weight:700;color:var(--t1);margin-bottom:4px}
 .l-form-sub{font-size:13px;color:var(--t3);margin-bottom:22px}
@@ -79,12 +68,14 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .field input:focus{border-color:var(--blue)}
 .auth-err{font-size:12px;color:var(--red);background:var(--red-bg);border-radius:8px;padding:9px 12px;margin-bottom:12px;text-align:left}
 .btn-p{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px}
-.btn-p:hover:not(:disabled){background:var(--blue-d)}
-.btn-p:disabled{opacity:.6;cursor:default}
-.btn-g{background:none;border:none;color:var(--t3);font-family:inherit;font-size:13px;cursor:pointer;padding:10px;display:block;margin:8px auto 0;transition:color .15s;width:100%;text-align:center}
+.btn-p:hover:not(:disabled){background:var(--blue-d)} .btn-p:disabled{opacity:.6;cursor:default}
+.btn-g{background:none;border:none;color:var(--t3);font-family:inherit;font-size:13px;cursor:pointer;padding:10px;display:block;margin:8px auto 0;width:100%;text-align:center;transition:color .15s}
 .btn-g:hover{color:var(--t1)}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.divider span{font-size:11px;color:var(--t4);white-space:nowrap}
 
-/* ── APP ─────────────────────────────────────────────── */
+/* ── APP ──────────────────────────────────── */
 #app{min-height:100vh;display:flex;flex-direction:column}
 .load-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:50;transition:opacity .3s}
 .load-overlay.fade{opacity:0;pointer-events:none}
@@ -114,8 +105,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .hero-n.neg{color:var(--red)}
 .hstats{display:flex;align-items:stretch;padding-bottom:6px;flex-shrink:0}
 .hst{padding:0 18px;text-align:right}
-.hst:first-child{padding-left:0} .hst:last-child{padding-right:0}
-.hst+.hst{border-left:1px solid var(--bdr)}
+.hst:first-child{padding-left:0} .hst:last-child{padding-right:0} .hst+.hst{border-left:1px solid var(--bdr)}
 .hst-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:3px}
 .hst-v{font-size:16px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
 
@@ -138,8 +128,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .item-desc{flex:1;font-size:13px;color:var(--t3)}
 .item-val{font-size:13px;font-weight:500;color:var(--t2);font-variant-numeric:tabular-nums}
 .del-btn{width:18px;height:18px;background:none;border:none;color:transparent;cursor:pointer;font-size:14px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
-.item:hover .del-btn{color:var(--t4)}
-.item:hover .del-btn:hover{color:var(--red);background:var(--red-bg)}
+.item:hover .del-btn{color:var(--t4)} .item:hover .del-btn:hover{color:var(--red);background:var(--red-bg)}
 .add-trig{background:none;border:none;font-family:inherit;font-size:12px;font-weight:500;color:var(--t4);cursor:pointer;padding:10px 0 0;display:flex;align-items:center;gap:4px;transition:color .15s}
 .add-trig:hover{color:var(--blue)}
 
@@ -155,7 +144,6 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .chart-h{position:relative;height:190px}
 .chart-empty{height:190px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t4)}
 
-/* Modal */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;animation:fi .15s}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 .modal{background:var(--bg);border-radius:20px;width:100%;max-width:340px;padding:28px;box-shadow:0 24px 48px rgba(0,0,0,.2);animation:su .2s}
@@ -164,8 +152,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .m-field{margin-bottom:14px}
 .m-field label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
 .m-in{width:100%;border:1.5px solid var(--bdr);border-radius:10px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--t1);background:var(--surf);outline:none;transition:border-color .15s;-webkit-appearance:none}
-.m-in:focus{border-color:var(--blue);background:var(--bg)}
-.m-in::placeholder{color:var(--t4)}
+.m-in:focus{border-color:var(--blue);background:var(--bg)} .m-in::placeholder{color:var(--t4)}
 .val-wrap{position:relative}
 .val-pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:500;color:var(--t4);pointer-events:none}
 .val-wrap .m-in{padding-left:36px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
@@ -185,8 +172,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
   .cols{grid-template-columns:1fr;padding:24px 20px;gap:0}
   .col-rule{display:none}
   .col:first-child{padding-bottom:24px;border-bottom:1px solid var(--bdr-soft);margin-bottom:24px}
-  .sav-in{padding:20px}
-  .chart-in{padding:24px 20px 32px}
+  .sav-in{padding:20px} .chart-in{padding:24px 20px 32px}
 }
 </style>
 </head>
@@ -198,16 +184,39 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
     <div class="l-logo">mar<span>gem</span></div>
     <p class="l-sub">planejador financeiro pessoal</p>
 
-    <!-- Perfis -->
+    <!-- Perfis salvos neste dispositivo -->
     <div id="vPicker">
       <div class="user-grid" id="profileGrid"></div>
-      <button class="u-new" onclick="showView('vNew')">
-        <div class="u-new-ic">+</div>
-        <span class="u-new-lb">nova conta</span>
-      </button>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:4px">
+        <button class="u-new" onclick="showView('vNew')">
+          <div class="u-new-ic">+</div>
+          <span class="u-new-lb">nova conta</span>
+        </button>
+      </div>
+      <div class="divider"><span>ou</span></div>
+      <button class="btn-g" onclick="showView('vLogin')" style="margin-top:0">entrar com e-mail e PIN →</button>
     </div>
 
-    <!-- PIN -->
+    <!-- Primeiro acesso neste dispositivo -->
+    <div id="vLogin" class="hidden">
+      <div class="l-form">
+        <h2>entrar</h2>
+        <p class="l-form-sub">Primeiro acesso neste dispositivo</p>
+        <div class="field">
+          <label>e-mail</label>
+          <input id="lEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label>PIN</label>
+          <input id="lPin" type="number" placeholder="4 dígitos" />
+        </div>
+        <div class="auth-err hidden" id="lErr"></div>
+        <button class="btn-p" id="lBtn" onclick="doEmailLogin()">entrar</button>
+        <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
+      </div>
+    </div>
+
+    <!-- PIN do tile selecionado -->
     <div id="vPin" class="hidden">
       <div class="pin-box">
         <div class="pin-who" id="pinWho"></div>
@@ -248,10 +257,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 
 <!-- ══ APP ══════════════════════════════════════════════ -->
 <div id="app" class="hidden">
-
-  <div class="load-overlay" id="loadOverlay">
-    <div class="load-spinner"></div>
-  </div>
+  <div class="load-overlay" id="loadOverlay"><div class="load-spinner"></div></div>
 
   <header>
     <div class="logo">mar<span>gem</span></div>
@@ -357,61 +363,68 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 </div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────
 const SUPABASE_URL = 'https://dcrdwyahxunfwdbqnzmg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_fuAYUJVU42FSzHhBdPUN4w_Vdgf_sSs';
-// ───────────────────────────────────────────────────────
-
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const KEYS   = ['income-fixed','income-extra','exp-fixed','exp-extra','savings'];
 const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos','savings':'reserva'};
 const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
+const PROF_KEY = 'margem-profiles';
 
-let curUser      = null;
-let curMonth     = null;
-let allMonths    = {};
-let allProfiles  = [];
-let selProfile   = null;
-let modalKey     = null;
-let chart        = null;
-let saveTimer    = null;
-let pinBuf       = '';
-let dark         = localStorage.getItem('margem-dark') === '1';
+let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
+let modalKey=null, chart=null, saveTimer=null, pinBuf='';
+let dark = localStorage.getItem('margem-dark')==='1';
 
-// ─── HELPERS ───────────────────────────────────────────
-const fmt    = n => 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const sum    = a => (a||[]).reduce((s,i)=>s+i.value,0);
-const esc    = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const mkKey  = (y,m) => `${y}-${String(m+1).padStart(2,'0')}`;
-const ini    = n => n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-const padPin = p => p + '__margem';
-const avc    = id => { let h=0; for(let c of id) h=(h*31+c.charCodeAt(0))&0x7fffffff; return AV_COL[h%AV_COL.length]; };
+// ── Helpers ──────────────────────────────────────────
+const fmt    = n=>'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const sum    = a=>(a||[]).reduce((s,i)=>s+i.value,0);
+const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
+const ini    = n=>n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const padPin = p=>p+'__margem';
+const avc    = id=>{let h=0;for(let c of id)h=(h*31+c.charCodeAt(0))&0x7fffffff;return AV_COL[h%AV_COL.length];};
+const emptyMonth = ()=>{const o={};KEYS.forEach(k=>o[k]=[]);return o;};
+const monthLocal = k=>{if(!allMonths[k])allMonths[k]=emptyMonth();return allMonths[k];};
 
-function emptyMonth(){ const o={}; KEYS.forEach(k=>o[k]=[]); return o; }
-function monthLocal(key){ if(!allMonths[key]) allMonths[key]=emptyMonth(); return allMonths[key]; }
+// ── Perfis: localStorage como fonte de verdade ────────
+function loadProfilesLocal(){
+  try{ allProfiles=JSON.parse(localStorage.getItem(PROF_KEY)||'[]'); }catch(_){ allProfiles=[]; }
+}
 
-// ─── DARK MODE ─────────────────────────────────────────
+function saveProfileLocal(profile){
+  loadProfilesLocal();
+  const idx=allProfiles.findIndex(p=>p.id===profile.id);
+  if(idx>=0) allProfiles[idx]=profile; else allProfiles.push(profile);
+  try{ localStorage.setItem(PROF_KEY,JSON.stringify(allProfiles)); }catch(_){}
+}
+
+function removeProfileLocal(id){
+  loadProfilesLocal();
+  allProfiles=allProfiles.filter(p=>p.id!==id);
+  try{ localStorage.setItem(PROF_KEY,JSON.stringify(allProfiles)); }catch(_){}
+}
+
+// ── Dark mode ─────────────────────────────────────────
 function applyDark(on){
   document.documentElement.toggleAttribute('data-dark',on);
-  const btn=document.getElementById('darkBtn');
-  if(btn) btn.textContent = on ? '☀' : '◑';
+  const b=document.getElementById('darkBtn'); if(b) b.textContent=on?'☀':'◑';
   if(chart) drawChart();
 }
 function toggleDark(){ dark=!dark; localStorage.setItem('margem-dark',dark?'1':'0'); applyDark(dark); }
 
-// ─── LOGIN VIEWS ───────────────────────────────────────
+// ── Login views ───────────────────────────────────────
 function showView(id){
-  ['vPicker','vPin','vNew'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
+  ['vPicker','vLogin','vPin','vNew'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
   if(id==='vPicker') renderGrid();
-  if(id==='vNew') setTimeout(()=>document.getElementById('nName').focus(),50);
+  if(id==='vNew')    setTimeout(()=>document.getElementById('nName').focus(),50);
+  if(id==='vLogin')  setTimeout(()=>document.getElementById('lEmail').focus(),50);
 }
 
 function renderGrid(){
-  const grid=document.getElementById('profileGrid');
-  if(!allProfiles.length){ grid.innerHTML=''; return; }
-  grid.innerHTML=allProfiles.map(p=>`
+  loadProfilesLocal();
+  document.getElementById('profileGrid').innerHTML=allProfiles.map(p=>`
     <button class="u-tile" onclick="selectProfile('${p.id}')">
       <div class="avatar" style="background:${p.avatar_color||avc(p.id)}">${ini(p.name)}</div>
       <span class="u-name">${esc(p.name)}</span>
@@ -424,113 +437,120 @@ function selectProfile(id){
   pinBuf='';
   document.getElementById('pinWho').textContent=selProfile.name;
   document.getElementById('pinErr').textContent='';
-  buildNumpad(); updateDots();
-  showView('vPin');
+  buildNumpad(); updateDots(); showView('vPin');
 }
 
 function buildNumpad(){
-  const keys=[1,2,3,4,5,6,7,8,9,'',0,'⌫'];
-  document.getElementById('numpad').innerHTML=keys.map(k=>
-    k===''?'<div></div>'
-    :`<button class="nk${k==='⌫'?' del':''}" onclick="pinPress('${k}')">${k}</button>`
+  document.getElementById('numpad').innerHTML=[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>
+    k===''?'<div></div>':`<button class="nk${k==='⌫'?' del':''}" onclick="pinPress('${k}')">${k}</button>`
   ).join('');
 }
-
-function updateDots(){
-  for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('on',i<pinBuf.length);
-}
+function updateDots(){ for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('on',i<pinBuf.length); }
 
 async function pinPress(k){
   if(k==='⌫'){ pinBuf=pinBuf.slice(0,-1); updateDots(); return; }
   if(pinBuf.length>=4) return;
   pinBuf+=k; updateDots();
   if(pinBuf.length===4){
-    const {error}=await sb.auth.signInWithPassword({email:selProfile.email, password:padPin(pinBuf)});
+    const {data,error}=await sb.auth.signInWithPassword({email:selProfile.email,password:padPin(pinBuf)});
     if(error){
       document.getElementById('pinErr').textContent='PIN incorreto';
-      setTimeout(()=>{ pinBuf=''; document.getElementById('pinErr').textContent=''; updateDots(); },900);
+      setTimeout(()=>{pinBuf='';document.getElementById('pinErr').textContent='';updateDots();},900);
+    } else {
+      curUser=data.user;
+      await bootApp();
     }
-    // onAuthStateChange handles success
   }
 }
 
-function showNewErr(msg){
-  const el=document.getElementById('nErr');
-  el.textContent=msg; el.classList.remove('hidden');
+// Login com e-mail + PIN (novo dispositivo)
+async function doEmailLogin(){
+  const email=document.getElementById('lEmail').value.trim();
+  const pin  =document.getElementById('lPin').value.trim();
+  const err  =document.getElementById('lErr');
+  err.classList.add('hidden');
+  if(!email||!/^\d{4}$/.test(pin)){ err.textContent='Preencha e-mail e PIN (4 dígitos).'; err.classList.remove('hidden'); return; }
+
+  const btn=document.getElementById('lBtn');
+  btn.disabled=true; btn.textContent='entrando…';
+
+  const {data,error}=await sb.auth.signInWithPassword({email,password:padPin(pin)});
+  btn.disabled=false; btn.textContent='entrar';
+
+  if(error){ err.textContent=traduzErro(error.message); err.classList.remove('hidden'); return; }
+
+  curUser=data.user;
+  await bootApp();
 }
 
-function traduzErro(msg){
-  if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) return 'PIN incorreto.';
-  if(msg.includes('already registered')||msg.includes('already been registered')) return 'Este e-mail já está cadastrado.';
-  if(msg.includes('Password should')) return 'PIN inválido.';
-  if(msg.includes('Unable to validate')||msg.includes('invalid')) return 'Formato de e-mail inválido.';
-  if(msg.includes('security purposes')||msg.includes('rate limit')||msg.includes('too many')) return 'Muitas tentativas. Aguarde alguns segundos e tente de novo.';
-  return msg;
-}
-
+// Criar conta
 async function createProfile(){
-  const name  = document.getElementById('nName').value.trim();
-  const email = document.getElementById('nEmail').value.trim();
-  const pin   = document.getElementById('nPin').value.trim();
+  const name =document.getElementById('nName').value.trim();
+  const email=document.getElementById('nEmail').value.trim();
+  const pin  =document.getElementById('nPin').value.trim();
+  const errEl=document.getElementById('nErr');
+  errEl.classList.add('hidden');
 
-  document.getElementById('nErr').classList.add('hidden');
-  if(!name)            { showNewErr('Digite seu nome.');           return; }
-  if(!email)           { showNewErr('Digite seu e-mail.');         return; }
-  if(!/^\d{4}$/.test(pin)) { showNewErr('PIN deve ter exatamente 4 dígitos.'); return; }
+  if(!name)              { errEl.textContent='Digite seu nome.';                errEl.classList.remove('hidden'); return; }
+  if(!email)             { errEl.textContent='Digite seu e-mail.';              errEl.classList.remove('hidden'); return; }
+  if(!/^\d{4}$/.test(pin)){ errEl.textContent='PIN deve ter exatamente 4 dígitos.'; errEl.classList.remove('hidden'); return; }
 
   const btn=document.getElementById('nBtn');
   btn.disabled=true; btn.textContent='criando…';
 
   const color=AV_COL[Math.floor(Math.random()*AV_COL.length)];
 
-  const {data, error}=await sb.auth.signUp({email, password:padPin(pin)});
-  if(error){ showNewErr(traduzErro(error.message)); btn.disabled=false; btn.textContent='criar conta'; return; }
+  const {data,error}=await sb.auth.signUp({
+    email, password:padPin(pin),
+    options:{ data:{name, avatar_color:color} }
+  });
 
-  if(!data.session){
-    // Confirmação de e-mail ainda ativa no Supabase
-    showView('vConfirm');
-    btn.disabled=false; btn.textContent='criar conta';
-    return;
-  }
-
-  // Sessão ativa — insere perfil agora via RPC
-  const {error:rpcErr}=await sb.rpc('upsert_profile',{p_name:name, p_email:email, p_color:color});
   btn.disabled=false; btn.textContent='criar conta';
-  if(rpcErr){ showNewErr('Erro ao salvar perfil: '+rpcErr.message); return; }
 
-  // Entra no app diretamente
+  if(error){ errEl.textContent=traduzErro(error.message); errEl.classList.remove('hidden'); return; }
+  if(!data.session){ errEl.textContent='Verifique seu e-mail para confirmar a conta.'; errEl.classList.remove('hidden'); return; }
+
   curUser=data.user;
-  await loadProfiles();
+  // Salva perfil localmente imediatamente
+  saveProfileLocal({id:curUser.id, name, email, avatar_color:color});
   await bootApp();
+}
+
+function traduzErro(msg){
+  if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) return 'E-mail ou PIN incorreto.';
+  if(msg.includes('already registered')||msg.includes('already been registered')) return 'E-mail já cadastrado.';
+  if(msg.includes('security purposes')||msg.includes('rate limit')||msg.includes('too many')) return 'Muitas tentativas. Aguarde alguns segundos.';
+  if(msg.includes('Password should')) return 'PIN inválido.';
+  return msg;
 }
 
 async function logout(){
   await sb.auth.signOut();
-  window.location.reload(); // recarrega para estado limpo
+  curUser=null; curMonth=null; allMonths={};
+  if(chart){chart.destroy();chart=null;}
+  window.location.reload();
 }
 
-// ─── SESSION ───────────────────────────────────────────
-// Dispara para login via PIN (pinPress → signInWithPassword)
-sb.auth.onAuthStateChange(async (event,session)=>{
-  if(event==='SIGNED_IN' && session?.user && !curUser){
-    curUser=session.user;
-    await loadProfiles();
-    await bootApp();
-  }
-});
-
+// ── App ───────────────────────────────────────────────
 async function bootApp(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').classList.remove('hidden');
 
-  // Busca perfil pelo ID do usuário logado
-  const profile=allProfiles.find(p=>p.id===curUser.id);
-  const nm  = profile?.name  || curUser.user_metadata?.name || curUser.email.split('@')[0];
-  const col = profile?.avatar_color || avc(curUser.id);
+  // Nome e cor do perfil
+  loadProfilesLocal();
+  let profile=allProfiles.find(p=>p.id===curUser.id);
 
-  document.getElementById('hdrAv').textContent=ini(nm);
-  document.getElementById('hdrAv').style.background=col;
-  document.getElementById('hdrNm').textContent=nm;
+  // Se não tem no cache local, monta com metadados do Supabase e salva
+  if(!profile){
+    const nm  = curUser.user_metadata?.name  || curUser.email.split('@')[0];
+    const col = curUser.user_metadata?.avatar_color || avc(curUser.id);
+    profile={id:curUser.id, name:nm, email:curUser.email, avatar_color:col};
+    saveProfileLocal(profile);
+  }
+
+  document.getElementById('hdrAv').textContent=ini(profile.name);
+  document.getElementById('hdrAv').style.background=profile.avatar_color;
+  document.getElementById('hdrNm').textContent=profile.name;
 
   applyDark(dark);
   await loadAllMonths();
@@ -538,28 +558,13 @@ async function bootApp(){
   setTimeout(()=>document.getElementById('loadOverlay').classList.add('fade'),200);
 }
 
-// ─── DATA ──────────────────────────────────────────────
-async function loadProfiles(){
-  // Cache local (fallback enquanto Supabase responde)
-  try {
-    const cached = localStorage.getItem('margem-profiles');
-    if(cached) allProfiles = JSON.parse(cached);
-  } catch(_){}
-
-  // RPC pública — funciona sem autenticação
-  const {data, error} = await sb.rpc('list_profiles');
-  if(!error && data){
-    allProfiles = data;
-    try { localStorage.setItem('margem-profiles', JSON.stringify(data)); } catch(_){}
-  }
-}
-
+// ── Dados ─────────────────────────────────────────────
 async function loadAllMonths(){
   const {data}=await sb.from('financial_data').select('month_key,data').order('month_key');
   allMonths={};
   (data||[]).forEach(row=>{
     allMonths[row.month_key]=row.data||emptyMonth();
-    KEYS.forEach(k=>{ if(!allMonths[row.month_key][k]) allMonths[row.month_key][k]=[]; });
+    KEYS.forEach(k=>{if(!allMonths[row.month_key][k]) allMonths[row.month_key][k]=[];});
   });
 }
 
@@ -576,7 +581,7 @@ function schedSave(){
   },1000);
 }
 
-// ─── CARRY-OVER ────────────────────────────────────────
+// ── Carry-over ────────────────────────────────────────
 function carryOver(target){
   const d=monthLocal(target);
   if(d['income-fixed'].length||d['exp-fixed'].length) return false;
@@ -592,18 +597,15 @@ function carryOver(target){
   return false;
 }
 
-// ─── MONTH SELECTORS ───────────────────────────────────
+// ── Meses ─────────────────────────────────────────────
 function initSelectors(){
   const months=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   const now=new Date();
   const ms=document.getElementById('monthSel'), ys=document.getElementById('yearSel');
   if(!ms.options.length){
-    months.forEach((m,i)=>{ const o=new Option(m,i); if(i===now.getMonth()) o.selected=true; ms.appendChild(o); });
-    for(let y=now.getFullYear()-2;y<=now.getFullYear()+1;y++){
-      const o=new Option(y,y); if(y===now.getFullYear()) o.selected=true; ys.appendChild(o);
-    }
-    ms.addEventListener('change',switchMonth);
-    ys.addEventListener('change',switchMonth);
+    months.forEach((m,i)=>{const o=new Option(m,i);if(i===now.getMonth())o.selected=true;ms.appendChild(o);});
+    for(let y=now.getFullYear()-2;y<=now.getFullYear()+1;y++){const o=new Option(y,y);if(y===now.getFullYear())o.selected=true;ys.appendChild(o);}
+    ms.addEventListener('change',switchMonth); ys.addEventListener('change',switchMonth);
   }
   switchMonth();
 }
@@ -618,7 +620,7 @@ function switchMonth(){
   if(copied) schedSave();
 }
 
-// ─── RENDER ────────────────────────────────────────────
+// ── Render ────────────────────────────────────────────
 function renderRows(key){
   const d=monthLocal(curMonth);
   document.getElementById('rows-'+key).innerHTML=(d[key]||[]).map((it,i)=>`
@@ -629,52 +631,37 @@ function renderRows(key){
       <button class="del-btn" onclick="removeItem('${key}',${i})">×</button>
     </div>`).join('');
 }
-
 function renderAll(){ KEYS.forEach(renderRows); recalc(); }
-
 function recalc(){
   const d=monthLocal(curMonth);
-  const iF=sum(d['income-fixed']), iX=sum(d['income-extra']);
-  const eF=sum(d['exp-fixed']),    eX=sum(d['exp-extra']),  sv=sum(d['savings']);
-  const tI=iF+iX, tE=eF+eX, av=tI-tE-sv;
-
+  const iF=sum(d['income-fixed']),iX=sum(d['income-extra']),eF=sum(d['exp-fixed']),eX=sum(d['exp-extra']),sv=sum(d['savings']);
+  const tI=iF+iX,tE=eF+eX,av=tI-tE-sv;
   document.getElementById('tot-income-fixed').textContent=fmt(iF);
   document.getElementById('tot-income-extra').textContent=fmt(iX);
   document.getElementById('tot-exp-fixed').textContent   =fmt(eF);
   document.getElementById('tot-exp-extra').textContent   =fmt(eX);
   document.getElementById('tot-savings').textContent     =fmt(sv);
-
   const hn=document.getElementById('heroN');
   hn.textContent=fmt(av); hn.classList.toggle('neg',av<0);
   document.getElementById('hInc').textContent=fmt(tI);
   document.getElementById('hExp').textContent=fmt(tE);
   document.getElementById('hSav').textContent=fmt(sv);
-
   const fi=document.getElementById('progFi');
   if(tI>0){
-    const pct=Math.min((tE+sv)/tI*100,100), free=Math.max(100-pct,0);
+    const pct=Math.min((tE+sv)/tI*100,100),free=Math.max(100-pct,0);
     fi.style.width=pct.toFixed(1)+'%';
     fi.className='prog-fi'+(pct>90?' danger':pct>70?' warn':'');
     document.getElementById('pctL').textContent=pct.toFixed(0)+'% comprometido';
     document.getElementById('pctR').textContent=free.toFixed(0)+'% livre';
-  } else {
-    fi.style.width='0%'; fi.className='prog-fi';
-    document.getElementById('pctL').textContent='0% comprometido';
-    document.getElementById('pctR').textContent='100% livre';
-  }
+  } else { fi.style.width='0%'; fi.className='prog-fi'; document.getElementById('pctL').textContent='0% comprometido'; document.getElementById('pctR').textContent='100% livre'; }
 }
+function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); schedSave(); }
 
-function removeItem(key,i){
-  monthLocal(curMonth)[key].splice(i,1);
-  renderRows(key); recalc(); drawChart(); schedSave();
-}
-
-// ─── MODAL ─────────────────────────────────────────────
+// ── Modal ─────────────────────────────────────────────
 function openModal(key){
   modalKey=key;
   document.getElementById('mTitle').textContent='+ '+SEC_NM[key];
-  document.getElementById('mDesc').value='';
-  document.getElementById('mVal').value='';
+  document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
@@ -698,46 +685,36 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='nName') document.getElementById('nEmail').focus();
     else if(f?.id==='nEmail') document.getElementById('nPin').focus();
     else if(f?.id==='nPin') createProfile();
+    else if(f?.id==='lEmail') document.getElementById('lPin').focus();
+    else if(f?.id==='lPin') doEmailLogin();
   }
 });
 
-// ─── CHART ─────────────────────────────────────────────
+// ── Chart ─────────────────────────────────────────────
 function drawChart(){
   const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   const keys=Object.keys(allMonths).sort().slice(-12);
   const hasData=keys.some(k=>KEYS.some(key=>allMonths[k][key]?.length));
-  const cv=document.getElementById('myChart'), empty=document.getElementById('chartEmpty');
-
-  if(!keys.length||!hasData){
-    cv.classList.add('hidden'); empty.classList.remove('hidden');
-    if(chart){chart.destroy();chart=null;} return;
-  }
-
+  const cv=document.getElementById('myChart'),empty=document.getElementById('chartEmpty');
+  if(!keys.length||!hasData){ cv.classList.add('hidden'); empty.classList.remove('hidden'); if(chart){chart.destroy();chart=null;} return; }
   const labels=[],inc=[],exp=[],avl=[];
   keys.forEach(k=>{
     const m=allMonths[k];
-    const ti=sum(m['income-fixed'])+sum(m['income-extra']);
-    const te=sum(m['exp-fixed'])+sum(m['exp-extra']);
-    const sv=sum(m['savings']);
+    const ti=sum(m['income-fixed'])+sum(m['income-extra']),te=sum(m['exp-fixed'])+sum(m['exp-extra']),sv=sum(m['savings']);
     const [y,mo]=k.split('-');
-    labels.push(mns[parseInt(mo)-1]+' '+y.slice(2));
-    inc.push(ti); exp.push(te+sv); avl.push(ti-te-sv);
+    labels.push(mns[parseInt(mo)-1]+' '+y.slice(2)); inc.push(ti); exp.push(te+sv); avl.push(ti-te-sv);
   });
-
   cv.classList.remove('hidden'); empty.classList.add('hidden');
   const dk=document.documentElement.hasAttribute('data-dark');
-  const grid=dk?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)';
-  const tick=dk?'#3d5070':'#94a3b8';
+  const grid=dk?'rgba(255,255,255,.05)':'rgba(0,0,0,.05)',tick=dk?'#3d5070':'#94a3b8';
   const tip={backgroundColor:dk?'#192338':'#fff',borderColor:dk?'#1e2d47':'#e2e8f0',titleColor:dk?'#e2e8f0':'#0f172a',bodyColor:'#64748b',borderWidth:1,padding:12};
-
   const cfg={
     data:{labels,datasets:[
       {type:'bar',label:'renda',data:inc,backgroundColor:'rgba(22,163,74,.45)',borderColor:'rgba(22,163,74,.7)',borderWidth:1,borderRadius:4,order:2},
       {type:'bar',label:'gastos + reserva',data:exp,backgroundColor:'rgba(220,38,38,.35)',borderColor:'rgba(220,38,38,.6)',borderWidth:1,borderRadius:4,order:2},
       {type:'line',label:'disponível',data:avl,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.07)',borderWidth:2,pointBackgroundColor:'#2563eb',pointRadius:3,fill:true,tension:.35,order:1}
     ]},
-    options:{
-      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
       plugins:{
         legend:{position:'bottom',labels:{color:tick,font:{family:'Inter',size:11},boxWidth:12,padding:14}},
         tooltip:{...tip,callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}
@@ -748,16 +725,15 @@ function drawChart(){
       }
     }
   };
-
   if(chart){chart.data=cfg.data;chart.options=cfg.options;chart.update();}
   else{chart=new Chart(cv,{type:'bar',...cfg});}
 }
 
-// ─── BOOT ──────────────────────────────────────────────
+// ── Boot ──────────────────────────────────────────────
 applyDark(dark);
+loadProfilesLocal();
 
 (async()=>{
-  await loadProfiles();
   const {data:{session}}=await sb.auth.getSession();
   if(session?.user){
     curUser=session.user;
@@ -765,7 +741,7 @@ applyDark(dark);
   } else {
     document.getElementById('loadOverlay').classList.add('fade');
     setTimeout(()=>document.getElementById('loadOverlay').remove(),400);
-    showView(allProfiles.length ? 'vPicker' : 'vNew');
+    showView('vPicker');
   }
 })();
 </script>
