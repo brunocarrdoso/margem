@@ -309,7 +309,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
     <div class="hstats">
       <div class="hst"><div class="hst-lb">renda</div><div class="hst-v c-green" id="hInc">R$ 0,00</div></div>
       <div class="hst"><div class="hst-lb">gastos</div><div class="hst-v c-red" id="hExp">R$ 0,00</div></div>
-      <div class="hst"><div class="hst-lb">reserva</div><div class="hst-v c-purple" id="hSav">R$ 0,00</div></div>
+      <div class="hst"><div class="hst-lb">guardado</div><div class="hst-v c-purple" id="hSav">R$ 0,00</div></div>
     </div>
   </div>
 
@@ -714,9 +714,10 @@ function recalc(){
   document.getElementById('tot-savings').textContent     =fmt(sv);
   const hn=document.getElementById('heroN');
   hn.textContent=fmt(av); hn.classList.toggle('neg',av<0);
+  const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
   document.getElementById('hInc').textContent=fmt(tI);
   document.getElementById('hExp').textContent=fmt(tE);
-  document.getElementById('hSav').textContent=fmt(sv);
+  document.getElementById('hSav').textContent=fmt(totalSaved);
   const fi=document.getElementById('progFi');
   if(tI>0){
     const pct=Math.min((tE+sv)/tI*100,100),free=Math.max(100-pct,0);
@@ -839,12 +840,12 @@ function drawChart(){
   const hasData=keys.some(k=>KEYS.some(key=>allMonths[k][key]?.length));
   const cv=document.getElementById('myChart'),empty=document.getElementById('chartEmpty');
   if(!keys.length||!hasData){ cv.classList.add('hidden'); empty.classList.remove('hidden'); if(chart){chart.destroy();chart=null;} return; }
-  const labels=[],inc=[],exp=[],avl=[];
+  const labels=[],inc=[],exp=[],sav=[],avl=[];
   keys.forEach(k=>{
     const m=allMonths[k];
     const ti=sum(m['income-fixed'])+sum(m['income-extra']),te=sum(m['exp-fixed'])+sum(m['exp-extra']),sv=sum(m['savings']);
     const [y,mo]=k.split('-');
-    labels.push(mns[parseInt(mo)-1]+' '+y.slice(2)); inc.push(ti); exp.push(te+sv); avl.push(ti-te-sv);
+    labels.push(mns[parseInt(mo)-1]+' '+y.slice(2)); inc.push(ti); exp.push(te); sav.push(sv); avl.push(ti-te-sv);
   });
   cv.classList.remove('hidden'); empty.classList.add('hidden');
   const dk=document.documentElement.hasAttribute('data-dark');
@@ -853,7 +854,8 @@ function drawChart(){
   const cfg={
     data:{labels,datasets:[
       {type:'bar',label:'renda',data:inc,backgroundColor:'rgba(22,163,74,.45)',borderColor:'rgba(22,163,74,.7)',borderWidth:1,borderRadius:4,order:2},
-      {type:'bar',label:'gastos + reserva',data:exp,backgroundColor:'rgba(220,38,38,.35)',borderColor:'rgba(220,38,38,.6)',borderWidth:1,borderRadius:4,order:2},
+      {type:'bar',label:'gastos',data:exp,backgroundColor:'rgba(220,38,38,.35)',borderColor:'rgba(220,38,38,.6)',borderWidth:1,borderRadius:4,order:2},
+      {type:'bar',label:'reserva',data:sav,backgroundColor:'rgba(147,51,234,.35)',borderColor:'rgba(147,51,234,.6)',borderWidth:1,borderRadius:4,order:2},
       {type:'line',label:'disponível',data:avl,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.07)',borderWidth:2,pointBackgroundColor:'#2563eb',pointRadius:3,fill:true,tension:.35,order:1}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
