@@ -89,8 +89,14 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .hdr-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .3s;flex-shrink:0}
 .save-dot.show{opacity:1}
+.u-pill-wrap{position:relative}
 .u-pill{display:flex;align-items:center;gap:6px;background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:3px 10px 3px 5px;cursor:pointer;transition:all .15s;font-family:inherit}
 .u-pill:hover{border-color:var(--blue)}
+.u-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--bdr);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;z-index:40;min-width:150px}
+.u-menu button{display:block;width:100%;padding:10px 16px;text-align:left;background:none;border:none;font-family:inherit;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:background .12s}
+.u-menu button:hover{background:var(--surf)}
+.u-menu button.danger{color:var(--red)}
+.u-menu button.danger:hover{background:var(--red-bg)}
 .mini-av{width:22px;height:22px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pill-nm{font-size:12px;font-weight:600;color:var(--t2)}
 .pill-v{font-size:9px;color:var(--t4)}
@@ -263,11 +269,17 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
     <div class="logo">mar<span>gem</span></div>
     <div class="hdr-r">
       <div class="save-dot" id="saveDot"></div>
-      <button class="u-pill" onclick="logout()">
-        <div class="mini-av" id="hdrAv"></div>
-        <span class="pill-nm" id="hdrNm"></span>
-        <span class="pill-v">▾</span>
-      </button>
+      <div class="u-pill-wrap">
+        <button class="u-pill" onclick="toggleUserMenu()">
+          <div class="mini-av" id="hdrAv"></div>
+          <span class="pill-nm" id="hdrNm"></span>
+          <span class="pill-v">▾</span>
+        </button>
+        <div class="u-menu hidden" id="uMenu">
+          <button onclick="openProfileModal()">editar perfil</button>
+          <button class="danger" onclick="logout()">sair</button>
+        </div>
+      </div>
       <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
       <select class="sel" id="monthSel"></select>
       <select class="sel" id="yearSel"></select>
@@ -340,7 +352,32 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
   </div>
 </div>
 
-<!-- ══ MODAL ════════════════════════════════════════════ -->
+<!-- ══ MODAL PERFIL ══════════════════════════════════════ -->
+<div class="overlay hidden" id="profileOverlay" onclick="profileOverlayClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">editar perfil</div>
+    <div class="m-field">
+      <label>Nome</label>
+      <input class="m-in" id="editName" type="text" autocomplete="off" />
+    </div>
+    <div style="border-top:1px solid var(--bdr);margin:16px 0 18px"></div>
+    <div class="m-field">
+      <label>Novo PIN (deixe vazio para manter)</label>
+      <input class="m-in" id="editPin1" type="number" placeholder="4 dígitos" />
+    </div>
+    <div class="m-field">
+      <label>Confirmar novo PIN</label>
+      <input class="m-in" id="editPin2" type="number" placeholder="4 dígitos" />
+    </div>
+    <div class="auth-err hidden" id="editErr"></div>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="closeProfileModal()">cancelar</button>
+      <button class="m-ok" id="editSaveBtn" onclick="saveProfile()">salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ITEM ═══════════════════════════════════════ -->
 <div class="overlay hidden" id="overlay" onclick="overlayClick(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title" id="mTitle">novo item</div>
@@ -727,6 +764,70 @@ function drawChart(){
   };
   if(chart){chart.data=cfg.data;chart.options=cfg.options;chart.update();}
   else{chart=new Chart(cv,{type:'bar',...cfg});}
+}
+
+// ── Menu usuário ─────────────────────────────────────
+function toggleUserMenu(){
+  const m=document.getElementById('uMenu');
+  m.classList.toggle('hidden');
+}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('uMenu');
+  if(menu&&!menu.classList.contains('hidden')&&!menu.closest('.u-pill-wrap')?.contains(e.target))
+    menu.classList.add('hidden');
+},{capture:true});
+
+// ── Editar perfil ─────────────────────────────────────
+function openProfileModal(){
+  document.getElementById('uMenu').classList.add('hidden');
+  const profile=allProfiles.find(p=>p.id===curUser.id);
+  document.getElementById('editName').value = profile?.name || '';
+  document.getElementById('editPin1').value = '';
+  document.getElementById('editPin2').value = '';
+  document.getElementById('editErr').classList.add('hidden');
+  document.getElementById('profileOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('editName').focus(),60);
+}
+function closeProfileModal(){ document.getElementById('profileOverlay').classList.add('hidden'); }
+function profileOverlayClick(e){ if(e.target===document.getElementById('profileOverlay')) closeProfileModal(); }
+
+async function saveProfile(){
+  const name = document.getElementById('editName').value.trim();
+  const pin1 = document.getElementById('editPin1').value.trim();
+  const pin2 = document.getElementById('editPin2').value.trim();
+  const errEl= document.getElementById('editErr');
+  errEl.classList.add('hidden');
+
+  if(!name){ errEl.textContent='O nome não pode ser vazio.'; errEl.classList.remove('hidden'); return; }
+
+  const changingPin = pin1 || pin2;
+  if(changingPin){
+    if(!/^\d{4}$/.test(pin1)){ errEl.textContent='Novo PIN deve ter 4 dígitos.'; errEl.classList.remove('hidden'); return; }
+    if(pin1!==pin2){ errEl.textContent='Os PINs não coincidem.'; errEl.classList.remove('hidden'); return; }
+  }
+
+  const btn=document.getElementById('editSaveBtn');
+  btn.disabled=true; btn.textContent='salvando…';
+
+  // Atualiza PIN no Supabase (se solicitado)
+  if(changingPin){
+    const {error}=await sb.auth.updateUser({password: padPin(pin1)});
+    if(error){ errEl.textContent='Erro ao alterar PIN: '+error.message; errEl.classList.remove('hidden'); btn.disabled=false; btn.textContent='salvar'; return; }
+  }
+
+  // Atualiza nome localmente
+  const profile=allProfiles.find(p=>p.id===curUser.id);
+  if(profile){
+    profile.name=name;
+    saveProfileLocal(profile);
+  }
+
+  // Atualiza header
+  document.getElementById('hdrNm').textContent=name;
+  document.getElementById('hdrAv').textContent=ini(name);
+
+  btn.disabled=false; btn.textContent='salvar';
+  closeProfileModal();
 }
 
 // ── Boot ──────────────────────────────────────────────
