@@ -511,9 +511,9 @@ sb.auth.onAuthStateChange(async (event,session)=>{
         avatar_color: pendingProfile.avatar_color
       });
       pendingProfile=null;
-      await loadProfiles(); // recarrega com o novo perfil
     }
 
+    await loadProfiles(); // atualiza lista e salva cache
     await bootApp();
   }
 });
@@ -539,8 +539,18 @@ async function bootApp(){
 
 // ─── DATA ──────────────────────────────────────────────
 async function loadProfiles(){
-  const {data}=await sb.from('profiles').select('*').order('created_at');
-  allProfiles=data||[];
+  // Carrega do cache local primeiro (funciona sem permissão anônima)
+  try {
+    const cached = localStorage.getItem('margem-profiles');
+    if(cached) allProfiles = JSON.parse(cached);
+  } catch(_){}
+
+  // Tenta buscar do Supabase (atualiza cache se conseguir)
+  const {data, error} = await sb.from('profiles').select('*').order('created_at');
+  if(!error && data){
+    allProfiles = data;
+    try { localStorage.setItem('margem-profiles', JSON.stringify(data)); } catch(_){}
+  }
 }
 
 async function loadAllMonths(){
