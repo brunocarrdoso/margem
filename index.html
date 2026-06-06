@@ -464,6 +464,7 @@ function traduzErro(msg){
   if(msg.includes('already registered')||msg.includes('already been registered')) return 'Este e-mail já está cadastrado.';
   if(msg.includes('Password should')) return 'PIN inválido.';
   if(msg.includes('Unable to validate')||msg.includes('invalid')) return 'Formato de e-mail inválido.';
+  if(msg.includes('security purposes')||msg.includes('rate limit')||msg.includes('too many')) return 'Muitas tentativas. Aguarde alguns segundos e tente de novo.';
   return msg;
 }
 
