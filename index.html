@@ -175,6 +175,13 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .m-cancel:hover{border-color:var(--t3);color:var(--t1)}
 .m-ok{flex:2;background:var(--blue);border:none;border-radius:10px;padding:11px;font-family:inherit;font-size:14px;font-weight:600;color:#fff;cursor:pointer;transition:background .15s}
 .m-ok:hover{background:var(--blue-d)}
+.parc-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;padding:2px 0}
+.parc-lbl{font-size:12px;font-weight:600;color:var(--t3)}
+.t-sw{width:36px;height:20px;background:var(--bdr);border-radius:10px;position:relative;transition:background .2s;flex-shrink:0}
+.t-sw.on{background:var(--blue)}
+.t-sw::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.t-sw.on::after{transform:translateX(16px)}
+.parc-hint{font-size:11px;color:var(--t4);margin-top:5px}
 
 @media(max-width:660px){
   header{padding:0 16px}
@@ -398,15 +405,26 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
       <input class="m-in" id="mDesc" type="text" placeholder="ex: salário, aluguel…" autocomplete="off" />
     </div>
     <div class="m-field">
-      <label>Valor</label>
+      <label id="mValLabel">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
         <input class="m-in" id="mVal" type="number" placeholder="0,00" min="0" step="0.01" />
       </div>
     </div>
+    <div class="m-field hidden" id="parceladoWrap">
+      <div class="parc-row" onclick="toggleParcelado()">
+        <span class="parc-lbl">parcelado?</span>
+        <div class="t-sw" id="tSwitch"></div>
+      </div>
+    </div>
+    <div class="m-field hidden" id="parcelasField">
+      <label>Número de parcelas</label>
+      <input class="m-in" id="mParcelas" type="number" placeholder="ex: 12" min="2" max="60" oninput="updateParcelHint()" />
+      <div class="parc-hint hidden" id="parcelHint"></div>
+    </div>
     <div class="m-actions">
       <button class="m-cancel" onclick="closeModal()">cancelar</button>
-      <button class="m-ok" onclick="confirmModal()">adicionar →</button>
+      <button class="m-ok" id="mOkBtn" onclick="confirmModal()">adicionar →</button>
     </div>
   </div>
 </div>
@@ -423,7 +441,7 @@ const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
 const PROF_KEY = 'margem-profiles';
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
-let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='';
+let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 
@@ -713,6 +731,16 @@ function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(ke
 // ── Modal ─────────────────────────────────────────────
 function openModal(key, idx=-1){
   modalKey=key; editIdx=idx;
+  // reset parcelado state
+  isParcelado=false;
+  document.getElementById('tSwitch').classList.remove('on');
+  document.getElementById('parcelasField').classList.add('hidden');
+  document.getElementById('parcelHint').classList.add('hidden');
+  document.getElementById('mValLabel').textContent='Valor';
+  document.getElementById('mOkBtn').textContent='adicionar →';
+  // show parcelado toggle only for exp-extra on new items
+  document.getElementById('parceladoWrap').classList.toggle('hidden', key!=='exp-extra' || idx>=0);
+
   const editing = idx >= 0;
   document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
   if(editing){
@@ -725,16 +753,67 @@ function openModal(key, idx=-1){
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
-function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; }
+function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; }
 function confirmModal(){
   const desc=document.getElementById('mDesc').value.trim();
   const val=parseFloat(document.getElementById('mVal').value);
   if(!desc){ document.getElementById('mDesc').focus(); return; }
   if(!val||val<=0){ document.getElementById('mVal').focus(); return; }
+  if(isParcelado && editIdx<0){
+    const n=parseInt(document.getElementById('mParcelas').value);
+    if(!n||n<2||n>60){ document.getElementById('mParcelas').focus(); return; }
+    createInstallments(desc,val,n); return;
+  }
   const arr=monthLocal(curMonth)[modalKey];
   if(editIdx>=0) arr[editIdx]={desc,value:val};
   else arr.push({desc,value:val});
   renderRows(modalKey); recalc(); drawChart(); schedSave(); closeModal();
+}
+
+function toggleParcelado(){
+  isParcelado=!isParcelado;
+  document.getElementById('tSwitch').classList.toggle('on',isParcelado);
+  document.getElementById('parcelasField').classList.toggle('hidden',!isParcelado);
+  document.getElementById('mValLabel').textContent=isParcelado?'Valor por parcela':'Valor';
+  document.getElementById('mOkBtn').textContent=isParcelado?'criar parcelas →':'adicionar →';
+  if(isParcelado) setTimeout(()=>document.getElementById('mParcelas').focus(),60);
+  else document.getElementById('parcelHint').classList.add('hidden');
+}
+
+function updateParcelHint(){
+  const n=parseInt(document.getElementById('mParcelas').value);
+  const hint=document.getElementById('parcelHint');
+  if(!n||n<2){hint.classList.add('hidden');return;}
+  const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const [sy,sm]=curMonth.split('-').map(Number);
+  const endTotalM=(sm-1)+(n-1);
+  const ey=sy+Math.floor(endTotalM/12);
+  const em=(endTotalM%12)+1;
+  hint.textContent=`de ${mns[sm-1]}/${String(sy).slice(2)} até ${mns[em-1]}/${String(ey).slice(2)}`;
+  hint.classList.remove('hidden');
+}
+
+async function createInstallments(desc,val,n){
+  const btn=document.getElementById('mOkBtn');
+  btn.disabled=true; btn.textContent='salvando…';
+  const [sy,sm]=curMonth.split('-').map(Number);
+  const keysToSave=[];
+  for(let i=0;i<n;i++){
+    const totalM=(sm-1)+i;
+    const y=sy+Math.floor(totalM/12);
+    const m=(totalM%12)+1;
+    const mk=`${y}-${String(m).padStart(2,'0')}`;
+    monthLocal(mk)[modalKey].push({desc:`${desc} (${i+1}/${n})`,value:val});
+    keysToSave.push(mk);
+  }
+  const rows=keysToSave.map(k=>({
+    user_id:curUser.id, month_key:k,
+    data:allMonths[k]||emptyMonth(),
+    updated_at:new Date().toISOString()
+  }));
+  await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
+  btn.disabled=false;
+  renderRows(modalKey); recalc(); drawChart(); closeModal();
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
@@ -743,7 +822,8 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
-    else if(f?.id==='mVal') confirmModal();
+    else if(f?.id==='mVal'){ if(isParcelado) document.getElementById('mParcelas').focus(); else confirmModal(); }
+    else if(f?.id==='mParcelas') confirmModal();
     else if(f?.id==='nName') document.getElementById('nEmail').focus();
     else if(f?.id==='nEmail') document.getElementById('nPin').focus();
     else if(f?.id==='nPin') createProfile();
