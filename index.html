@@ -133,8 +133,14 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .item-dot{width:4px;height:4px;border-radius:50%;background:var(--bdr);flex-shrink:0}
 .item-desc{flex:1;font-size:13px;color:var(--t3)}
 .item-val{font-size:13px;font-weight:500;color:var(--t2);font-variant-numeric:tabular-nums}
-.del-btn{width:18px;height:18px;background:none;border:none;color:transparent;cursor:pointer;font-size:14px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
-.item:hover .del-btn{color:var(--t4)} .item:hover .del-btn:hover{color:var(--red);background:var(--red-bg)}
+.item-btns{display:flex;gap:2px;opacity:0;transition:opacity .12s;flex-shrink:0}
+.item:hover .item-btns{opacity:1}
+.del-btn,.edit-btn{width:20px;height:20px;background:none;border:none;cursor:pointer;font-size:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;transition:all .12s;line-height:1;color:var(--t4)}
+.del-btn:hover{color:var(--red);background:var(--red-bg)}
+.edit-btn:hover{color:var(--blue);background:var(--blue-bg)}
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.cswatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all .15s;flex-shrink:0}
+.cswatch.sel{border-color:var(--t1);transform:scale(1.12)}
 .add-trig{background:none;border:none;font-family:inherit;font-size:12px;font-weight:500;color:var(--t4);cursor:pointer;padding:10px 0 0;display:flex;align-items:center;gap:4px;transition:color .15s}
 .add-trig:hover{color:var(--blue)}
 
@@ -360,6 +366,10 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
       <label>Nome</label>
       <input class="m-in" id="editName" type="text" autocomplete="off" />
     </div>
+    <div class="m-field">
+      <label>Cor do avatar</label>
+      <div class="color-swatches" id="colorSwatches"></div>
+    </div>
     <div style="border-top:1px solid var(--bdr);margin:16px 0 18px"></div>
     <div class="m-field">
       <label>Novo PIN (deixe vazio para manter)</label>
@@ -411,8 +421,9 @@ const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
 const PROF_KEY = 'margem-profiles';
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
-let modalKey=null, chart=null, saveTimer=null, pinBuf='';
+let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='';
 let dark = localStorage.getItem('margem-dark')==='1';
+let selectedColor = AV_COL[0];
 
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n=>'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -665,7 +676,10 @@ function renderRows(key){
       <span class="item-dot"></span>
       <span class="item-desc">${esc(it.desc)}</span>
       <span class="item-val">${fmt(it.value)}</span>
-      <button class="del-btn" onclick="removeItem('${key}',${i})">×</button>
+      <div class="item-btns">
+        <button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>
+        <button class="del-btn" onclick="removeItem('${key}',${i})" title="remover">×</button>
+      </div>
     </div>`).join('');
 }
 function renderAll(){ KEYS.forEach(renderRows); recalc(); }
@@ -695,20 +709,29 @@ function recalc(){
 function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); schedSave(); }
 
 // ── Modal ─────────────────────────────────────────────
-function openModal(key){
-  modalKey=key;
-  document.getElementById('mTitle').textContent='+ '+SEC_NM[key];
-  document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
+function openModal(key, idx=-1){
+  modalKey=key; editIdx=idx;
+  const editing = idx >= 0;
+  document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
+  if(editing){
+    const item = monthLocal(curMonth)[key][idx];
+    document.getElementById('mDesc').value = item.desc;
+    document.getElementById('mVal').value  = item.value;
+  } else {
+    document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
+  }
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
-function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; }
+function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; }
 function confirmModal(){
   const desc=document.getElementById('mDesc').value.trim();
   const val=parseFloat(document.getElementById('mVal').value);
   if(!desc){ document.getElementById('mDesc').focus(); return; }
   if(!val||val<=0){ document.getElementById('mVal').focus(); return; }
-  monthLocal(curMonth)[modalKey].push({desc,value:val});
+  const arr=monthLocal(curMonth)[modalKey];
+  if(editIdx>=0) arr[editIdx]={desc,value:val};
+  else arr.push({desc,value:val});
   renderRows(modalKey); recalc(); drawChart(); schedSave(); closeModal();
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
@@ -785,8 +808,22 @@ function openProfileModal(){
   document.getElementById('editPin1').value = '';
   document.getElementById('editPin2').value = '';
   document.getElementById('editErr').classList.add('hidden');
+
+  // Render color swatches
+  selectedColor = profile?.avatar_color || avc(curUser.id);
+  document.getElementById('colorSwatches').innerHTML = AV_COL.map(c=>`
+    <div class="cswatch${c===selectedColor?' sel':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
+  `).join('');
+
   document.getElementById('profileOverlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('editName').focus(),60);
+}
+
+function selectColor(c){
+  selectedColor=c;
+  document.querySelectorAll('.cswatch').forEach(el=>{
+    el.classList.toggle('sel', el.style.background===c || el.style.backgroundColor===c);
+  });
 }
 function closeProfileModal(){ document.getElementById('profileOverlay').classList.add('hidden'); }
 function profileOverlayClick(e){ if(e.target===document.getElementById('profileOverlay')) closeProfileModal(); }
@@ -815,16 +852,18 @@ async function saveProfile(){
     if(error){ errEl.textContent='Erro ao alterar PIN: '+error.message; errEl.classList.remove('hidden'); btn.disabled=false; btn.textContent='salvar'; return; }
   }
 
-  // Atualiza nome localmente
+  // Atualiza nome e cor localmente
   const profile=allProfiles.find(p=>p.id===curUser.id);
   if(profile){
     profile.name=name;
+    profile.avatar_color=selectedColor;
     saveProfileLocal(profile);
   }
 
   // Atualiza header
   document.getElementById('hdrNm').textContent=name;
   document.getElementById('hdrAv').textContent=ini(name);
+  document.getElementById('hdrAv').style.background=selectedColor;
 
   btn.disabled=false; btn.textContent='salvar';
   closeProfileModal();
