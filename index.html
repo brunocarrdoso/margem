@@ -502,14 +502,14 @@ sb.auth.onAuthStateChange(async (event,session)=>{
   if(session?.user && !curUser){
     curUser=session.user;
 
-    // Se veio de um cadastro novo, insere o perfil agora (sessão já ativa)
+    // Se veio de um cadastro novo, insere o perfil via RPC (bypassa RLS)
     if(pendingProfile){
-      await sb.from('profiles').insert({
-        id: curUser.id,
-        name: pendingProfile.name,
-        email: pendingProfile.email,
-        avatar_color: pendingProfile.avatar_color
+      const {error: rpcErr} = await sb.rpc('upsert_profile', {
+        p_name:  pendingProfile.name,
+        p_email: pendingProfile.email,
+        p_color: pendingProfile.avatar_color
       });
+      if(rpcErr) console.error('upsert_profile error:', rpcErr);
       pendingProfile=null;
     }
 
