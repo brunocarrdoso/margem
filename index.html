@@ -494,15 +494,7 @@ async function createProfile(){
 
 async function logout(){
   await sb.auth.signOut();
-  curUser=null; curMonth=null; allMonths={};
-  if(chart){chart.destroy();chart=null;}
-  document.getElementById('app').classList.add('hidden');
-  document.getElementById('loginScreen').style.display='';
-  document.getElementById('monthSel').innerHTML='';
-  document.getElementById('yearSel').innerHTML='';
-  // Reload profiles for fresh login screen
-  await loadProfiles();
-  showView('vPicker');
+  window.location.reload(); // recarrega para estado limpo
 }
 
 // ─── SESSION ───────────────────────────────────────────
