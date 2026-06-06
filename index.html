@@ -379,6 +379,7 @@ let chart        = null;
 let saveTimer    = null;
 let pinBuf       = '';
 let dark         = localStorage.getItem('margem-dark') === '1';
+let pendingProfile = null; // novo perfil aguardando auth
 
 // ─── HELPERS ───────────────────────────────────────────
 const fmt    = n => 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -483,14 +484,12 @@ async function createProfile(){
 
   const color=AV_COL[Math.floor(Math.random()*AV_COL.length)];
 
-  const {data,error}=await sb.auth.signUp({email, password:padPin(pin)});
+  const {error}=await sb.auth.signUp({email, password:padPin(pin)});
   if(error){ showNewErr(traduzErro(error.message)); btn.disabled=false; btn.textContent='criar conta'; return; }
 
-  const {error:pe}=await sb.from('profiles').insert({id:data.user.id, name, email, avatar_color:color});
-  if(pe){ showNewErr('Erro ao criar perfil. Tente novamente.'); btn.disabled=false; btn.textContent='criar conta'; return; }
-
+  // Guarda o perfil para inserir dentro do onAuthStateChange (após sessão ativa)
+  pendingProfile = {name, email, avatar_color: color};
   btn.disabled=false; btn.textContent='criar conta';
-  // onAuthStateChange fires automatically after signUp if email confirmation is off
 }
 
 async function logout(){
@@ -510,6 +509,19 @@ async function logout(){
 sb.auth.onAuthStateChange(async (event,session)=>{
   if(session?.user && !curUser){
     curUser=session.user;
+
+    // Se veio de um cadastro novo, insere o perfil agora (sessão já ativa)
+    if(pendingProfile){
+      await sb.from('profiles').insert({
+        id: curUser.id,
+        name: pendingProfile.name,
+        email: pendingProfile.email,
+        avatar_color: pendingProfile.avatar_color
+      });
+      pendingProfile=null;
+      await loadProfiles(); // recarrega com o novo perfil
+    }
+
     await bootApp();
   }
 });
