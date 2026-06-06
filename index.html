@@ -540,14 +540,14 @@ async function bootApp(){
 
 // ─── DATA ──────────────────────────────────────────────
 async function loadProfiles(){
-  // Carrega do cache local primeiro (funciona sem permissão anônima)
+  // Cache local (fallback enquanto Supabase responde)
   try {
     const cached = localStorage.getItem('margem-profiles');
     if(cached) allProfiles = JSON.parse(cached);
   } catch(_){}
 
-  // Tenta buscar do Supabase (atualiza cache se conseguir)
-  const {data, error} = await sb.from('profiles').select('*').order('created_at');
+  // RPC pública — funciona sem autenticação
+  const {data, error} = await sb.rpc('list_profiles');
   if(!error && data){
     allProfiles = data;
     try { localStorage.setItem('margem-profiles', JSON.stringify(data)); } catch(_){}
