@@ -19,7 +19,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root {
-  --bg:#fff; --surf:#f8fafc; --surf2:#f1f5f9; --bdr:#e2e8f0; --bdr-soft:#eef2f8;
+  --bg:#f3f5fb; --surf:#ffffff; --surf2:#eef1f9; --bdr:#e2e8f0; --bdr-soft:#e8edf6;
   --t1:#0f172a; --t2:#334155; --t3:#64748b; --t4:#94a3b8;
   --blue:#2563eb; --blue-d:#1d4ed8; --blue-bg:#eff6ff;
   --green:#16a34a; --green-bg:#f0fdf4;
@@ -99,6 +99,24 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .load-spinner{width:28px;height:28px;border:3px solid var(--bdr);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ── Grain texture ───────────────────────────── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:500;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:160px 160px}
+html[data-dark] body::before{opacity:.05}
+
+/* ── Entrance animations ─────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes itemIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.stats-row{animation:fadeUp .42s ease-out both}
+.note-bar{animation:fadeUp .44s .05s ease-out both}
+.cols{animation:fadeUp .48s .08s ease-out both}
+.chart-sec{animation:fadeUp .5s .14s ease-out both}
+.item{animation:itemIn .2s ease-out both}
+.item:nth-child(2){animation-delay:.03s}
+.item:nth-child(3){animation-delay:.06s}
+.item:nth-child(4){animation-delay:.09s}
+.item:nth-child(5){animation-delay:.12s}
+.item:nth-child(n+6){animation-delay:.14s}
+
 header{height:52px;display:flex;align-items:center;padding:0 16px 0 20px;border-bottom:1px solid var(--bdr-soft);position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:30;gap:12px;transition:background .2s,border-color .2s;box-shadow:0 1px 0 var(--bdr-soft),0 4px 16px rgba(15,23,42,.04)}
 html[data-dark] header{background:rgba(8,12,24,.93);box-shadow:0 1px 0 var(--bdr),0 4px 24px rgba(0,0,0,.35)}
 .logo{font-size:16px;font-weight:900;letter-spacing:-.9px;color:var(--t1);flex-shrink:0}
@@ -154,7 +172,7 @@ html[data-dark] .scard-avail{border-color:transparent}
 .scard-avail .scard-lb{color:rgba(255,255,255,.6)}
 .scard-avail .hst-tr{color:rgba(255,255,255,.7)}
 .scard-avail-val{font-size:24px;font-weight:800;letter-spacing:-1.2px;font-variant-numeric:tabular-nums;line-height:1.1;color:#fff}
-.prog-tr{height:3px;background:var(--surf2);border-radius:99px;overflow:hidden}
+.prog-tr{height:5px;background:var(--surf2);border-radius:99px;overflow:hidden}
 .scard-avail .prog-tr{background:rgba(255,255,255,.2);margin-top:auto;padding-top:16px}
 .prog-fi{height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease,background .2s;width:0%}
 .prog-fi.warn{background:var(--amber)} .prog-fi.danger{background:var(--red)}
@@ -163,6 +181,9 @@ html[data-dark] .scard-avail{border-color:transparent}
 .scard-avail .prog-fi.danger{background:rgba(255,110,110,.9)}
 .avail-pcts{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.5);margin-top:5px;font-weight:500}
 .note-bar{max-width:960px;margin:0 auto;padding:16px 28px 6px}
+.note-card{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:14px;padding:11px 16px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:10px}
+.note-card::before{content:'✎';font-size:13px;color:var(--t4);flex-shrink:0}
+html[data-dark] .note-card{border-color:var(--bdr)}
 .cols{max-width:960px;margin:0 auto;padding:20px 28px 4px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .col{display:flex;flex-direction:column;gap:14px}
 /* cards de grupo */
@@ -172,7 +193,7 @@ html[data-dark] .group{border-color:var(--bdr)}
 html[data-dark] .group-income{background:rgba(22,163,74,.06)}
 .group-expense{background:rgba(220,38,38,.02)}
 html[data-dark] .group-expense{background:rgba(220,38,38,.06)}
-.grp-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px}
+.grp-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--bdr-soft);margin-bottom:2px}
 .grp-nm{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t2);display:flex;align-items:center;gap:7px}
 .grp-nm::before{content:'';display:inline-block;width:3px;height:13px;border-radius:2px;background:var(--bdr);flex-shrink:0}
 .group-income .grp-nm::before{background:var(--green)}
@@ -183,7 +204,10 @@ html[data-dark] .group-expense{background:rgba(220,38,38,.06)}
 .item:last-child{margin-bottom:0}
 .item:hover{border-color:var(--bdr);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.055)}
 html[data-dark] .item:hover{box-shadow:0 2px 12px rgba(0,0,0,.25)}
-.item-dot{width:5px;height:5px;border-radius:50%;background:var(--bdr);flex-shrink:0;transition:background .15s}
+.item-dot{width:6px;height:6px;border-radius:50%;background:var(--bdr);flex-shrink:0;transition:background .15s}
+.group-income .item-dot{background:var(--green)}
+.group-expense .item-dot{background:var(--red)}
+.sav-in .item-dot{background:var(--purple)}
 .item-desc{flex:1;font-size:13px;color:var(--t2);display:flex;flex-direction:column;justify-content:center;min-width:0}
 .item-cat-lb{font-size:10px;font-weight:600;margin-top:2px;line-height:1.2}
 .item-val{font-size:13px;font-weight:600;color:var(--t1);font-variant-numeric:tabular-nums}
@@ -197,11 +221,12 @@ html[data-dark] .item:hover{box-shadow:0 2px 12px rgba(0,0,0,.25)}
 .cswatch.sel{border-color:var(--t1);transform:scale(1.12)}
 .add-trig{background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;padding:10px 0 0;display:flex;align-items:center;gap:4px;transition:opacity .15s;opacity:.7}
 .add-trig:hover{opacity:1}
+.empty-state{font-size:12px;color:var(--t4);padding:14px 4px 6px;font-style:italic}
 
 .sav-wrap{max-width:960px;margin:0 auto;padding:14px 28px 4px}
 .sav-in{background:rgba(147,51,234,.02);border:1px solid transparent;border-radius:18px;padding:24px 26px;box-shadow:var(--shadow-sm)}
 html[data-dark] .sav-in{background:rgba(147,51,234,.06);border-color:var(--bdr)}
-.sav-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px}
+.sav-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--bdr-soft);margin-bottom:2px}
 .sav-nm{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t2);display:flex;align-items:center;gap:7px}
 .sav-nm::before{content:'';display:inline-block;width:3px;height:11px;border-radius:2px;background:var(--purple);flex-shrink:0}
 .sav-tot{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.3px}
@@ -249,7 +274,7 @@ html[data-dark] .chart-in{border-color:var(--bdr)}
 .tr-up{color:var(--green)} .tr-dn{color:var(--red)}
 
 /* ── NOTA MENSAL ──────────────────────────────────────── */
-.note-inp{width:100%;background:none;border:none;outline:none;font-family:inherit;font-size:12px;color:var(--t3);padding:2px 0;caret-color:var(--blue)}
+.note-inp{width:100%;background:none;border:none;outline:none;font-family:inherit;font-size:13px;color:var(--t2);padding:0;caret-color:var(--blue)}
 .note-inp::placeholder{color:var(--t4)} .note-inp:focus{color:var(--t1)}
 
 /* ── META DE RESERVA ──────────────────────────────────── */
@@ -492,7 +517,9 @@ html[data-dark] .chart-in{border-color:var(--bdr)}
     </div>
 
     <div class="note-bar">
-      <input class="note-inp" id="noteInp" type="text" placeholder="✎  nota do mês…" oninput="schedNotesSave()" />
+      <div class="note-card">
+        <input class="note-inp" id="noteInp" type="text" placeholder="nota do mês…" oninput="schedNotesSave()" />
+      </div>
     </div>
 
     <div class="cols">
@@ -658,6 +685,7 @@ const CATS=[
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
 let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null, heroVal=null;
+let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
@@ -854,7 +882,7 @@ function traduzErro(msg){
 
 async function logout(){
   await sb.auth.signOut();
-  curUser=null; curMonth=null; allMonths={}; heroVal=null;
+  curUser=null; curMonth=null; allMonths={}; heroVal=null; prevInc=null; prevExp=null; prevSav=null;
   if(chart){chart.destroy();chart=null;}
   window.location.reload();
 }
@@ -957,6 +985,7 @@ function selectMonthPill(m){
 }
 
 function switchMonth(){
+  heroVal=null; prevInc=null; prevExp=null; prevSav=null;
   const m=parseInt(document.getElementById('monthSel').value);
   const y=parseInt(document.getElementById('yearSel').value);
   curMonth=mkKey(y,m);
@@ -970,9 +999,14 @@ function switchMonth(){
 // ── Render ────────────────────────────────────────────
 function renderRows(key){
   const d=monthLocal(curMonth);
-  document.getElementById('rows-'+key).innerHTML=(d[key]||[]).map((it,i)=>{
+  const items=d[key]||[];
+  if(!items.length){
+    document.getElementById('rows-'+key).innerHTML='<div class="empty-state">nenhum lançamento</div>';
+    return;
+  }
+  document.getElementById('rows-'+key).innerHTML=items.map((it,i)=>{
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
-    const dotStyle=cat?`style="background:${cat.color};width:6px;height:6px"`:'';
+    const dotStyle=cat?`style="background:${cat.color};width:7px;height:7px"`:'';
     const catLbl=cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'';
     return `<div class="item">
       <span class="item-dot" ${dotStyle}></span>
@@ -999,9 +1033,10 @@ function recalc(){
   animateNumber(hn, heroVal??av, av); heroVal=av;
   document.getElementById('scardAvail').classList.toggle('neg', av<0);
   const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
-  document.getElementById('hInc').textContent=fmt(tI);
-  document.getElementById('hExp').textContent=fmt(tE);
-  document.getElementById('hSav').textContent=fmt(totalSaved);
+  animateNumber(document.getElementById('hInc'), prevInc??tI, tI, 400);
+  animateNumber(document.getElementById('hExp'), prevExp??tE, tE, 400);
+  animateNumber(document.getElementById('hSav'), prevSav??totalSaved, totalSaved, 400);
+  prevInc=tI; prevExp=tE; prevSav=totalSaved;
   // tendências vs mês anterior
   const prevMk=prevMonthKey(curMonth), prevD=allMonths[prevMk];
   if(prevD){
