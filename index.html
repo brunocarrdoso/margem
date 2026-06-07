@@ -648,6 +648,7 @@ const CATS=[
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
 let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null, heroVal=null;
+let recoveryMode=false;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 
@@ -1423,10 +1424,10 @@ loadProfilesLocal();
 // Detecta retorno pelo link de recuperação de senha
 sb.auth.onAuthStateChange(async(event, session)=>{
   if(event==='PASSWORD_RECOVERY'){
+    recoveryMode=true;
     curUser=session?.user||null;
     document.getElementById('loginScreen').style.display='';
     document.getElementById('app').classList.add('hidden');
-    // Remove o spinner de carregamento se ainda estiver visível
     const lo=document.getElementById('loadOverlay');
     if(lo){ lo.classList.add('fade'); setTimeout(()=>lo.remove(),400); }
     showView('vNewPin');
@@ -1434,7 +1435,19 @@ sb.auth.onAuthStateChange(async(event, session)=>{
 });
 
 (async()=>{
+  // Detecção direta no hash (flow implícito: #access_token=...&type=recovery)
+  const hashType=new URLSearchParams(window.location.hash.slice(1)).get('type');
+  const isRecoveryUrl=hashType==='recovery';
+
   const {data:{session}}=await sb.auth.getSession();
+
+  // Se for recovery (via URL ou via onAuthStateChange), não inicializa o app
+  if(isRecoveryUrl||recoveryMode){
+    const lo=document.getElementById('loadOverlay');
+    if(lo){ lo.classList.add('fade'); setTimeout(()=>lo.remove(),400); }
+    return;
+  }
+
   if(session?.user){
     curUser=session.user;
     await bootApp();
