@@ -90,11 +90,21 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .load-spinner{width:28px;height:28px;border:3px solid var(--bdr);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-header{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;border-bottom:1px solid var(--bdr-soft);position:sticky;top:0;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:30;gap:10px;transition:background .2s}
-html[data-dark] header{background:rgba(11,17,32,.88)}
+header{height:52px;display:flex;align-items:center;padding:0 16px 0 20px;border-bottom:1px solid var(--bdr-soft);position:sticky;top:0;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:30;gap:12px;transition:background .2s,border-color .2s}
+html[data-dark] header{background:rgba(11,17,32,.9)}
 .logo{font-size:16px;font-weight:800;letter-spacing:-.6px;color:var(--t1);flex-shrink:0}
 .logo span{color:var(--blue)}
-.hdr-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
+/* month nav */
+.hdr-month{flex:1;display:flex;align-items:center;gap:8px;overflow:hidden;min-width:0}
+.month-pills{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding:2px 0}
+.month-pills::-webkit-scrollbar{display:none}
+.mp{padding:5px 9px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid transparent;color:var(--t3);background:none;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;line-height:1}
+.mp.cur{background:var(--blue);color:#fff}
+.mp:hover:not(.cur){color:var(--blue)}
+/* right actions */
+.hdr-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.hdr-btns{display:flex;gap:5px}
+.main-content{flex:1;min-width:0}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .3s;flex-shrink:0}
 .save-dot.show{opacity:1}
 .u-pill-wrap{position:relative}
@@ -113,32 +123,68 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .sel{border:1px solid var(--bdr);background:var(--surf);border-radius:8px;padding:5px 9px;font-family:inherit;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;transition:all .15s}
 .sel:hover{border-color:var(--blue)}
 
-.hero{max-width:900px;margin:0 auto;padding:44px 36px 28px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
-.hero-ey{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t4);margin-bottom:6px}
-.hero-n{font-size:54px;font-weight:800;letter-spacing:-3px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums;transition:color .2s}
-.hero-n.neg{color:var(--red)}
-.hstats{display:flex;align-items:stretch;padding-bottom:6px;flex-shrink:0}
-.hst{padding:0 18px;text-align:right}
-.hst:first-child{padding-left:0} .hst:last-child{padding-right:0} .hst+.hst{border-left:1px solid var(--bdr)}
-.hst-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:3px}
-.hst-v{font-size:16px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+/* ── SIDEBAR DESKTOP ──────────────────────────────────── */
+@media(min-width:901px){
+  #app{flex-direction:row;align-items:flex-start}
+  header{
+    width:210px;flex-shrink:0;height:100vh;
+    position:sticky;top:0;overflow-y:auto;
+    flex-direction:column;align-items:flex-start;
+    padding:24px 14px;gap:0;
+    border-right:1px solid var(--bdr-soft);border-bottom:none;
+    background:var(--surf);backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  html[data-dark] header{background:var(--surf)}
+  .logo{font-size:17px;margin-bottom:22px;padding:0 4px}
+  .hdr-month{flex-direction:column;align-items:flex-start;gap:1px;flex:1;width:100%;overflow:visible}
+  .month-pills{flex-direction:column;gap:1px;overflow:visible;width:100%;padding:0}
+  .mp{width:100%;text-align:left;padding:7px 10px;border-radius:8px;font-size:12px;letter-spacing:-.1px}
+  .mp.cur{background:var(--blue-bg);color:var(--blue)}
+  .year-sel-wrap{margin-top:10px;padding:0 2px;width:100%}
+  .year-sel-wrap .sel{width:100%}
+  .hdr-actions{flex-direction:column;align-items:flex-start;gap:8px;width:100%;margin-top:auto;padding-top:14px;border-top:1px solid var(--bdr-soft)}
+  .u-pill{width:100%;justify-content:flex-start}
+  .hdr-btns{width:100%;justify-content:flex-start}
+  .save-dot{order:10}
+  .main-content{flex:1;min-width:0;overflow-x:hidden}
+}
 
-.prog{max-width:900px;margin:0 auto;padding:0 36px 36px}
-.prog-tr{height:3px;background:var(--surf2);border-radius:99px;overflow:hidden}
+/* ── BENTO HERO ───────────────────────────────────────── */
+.bento{max-width:960px;margin:0 auto;padding:28px 28px 0;display:grid;grid-template-columns:1fr 186px;gap:12px;align-items:stretch}
+.bento-main{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:20px;padding:28px 30px}
+.bento-side{display:flex;flex-direction:column;gap:10px}
+.bento-stat{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:14px;padding:14px 16px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.hero-ey{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t4);margin-bottom:8px}
+.hero-n{font-size:52px;font-weight:800;letter-spacing:-3px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums;transition:color .2s}
+.hero-n.neg{color:var(--red)}
+.hst-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:4px}
+.hst-v{font-size:15px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.prog-tr{height:3px;background:var(--surf2);border-radius:99px;overflow:hidden;margin-top:22px}
 .prog-fi{height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease,background .2s;width:0%}
 .prog-fi.warn{background:var(--amber)} .prog-fi.danger{background:var(--red)}
 .prog-mt{display:flex;justify-content:space-between;font-size:11px;color:var(--t4);margin-top:6px;font-weight:500;gap:8px}
-
-.h-rule{background:var(--bdr-soft);height:1px}
-.cols{max-width:900px;margin:0 auto;padding:36px;display:grid;grid-template-columns:1fr 1px 1fr;gap:0 48px}
-.col-rule{background:var(--bdr-soft)}
-.group{margin-bottom:30px} .group:last-child{margin-bottom:0}
-.grp-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--bdr-soft)}
-.grp-nm{font-size:13px;font-weight:600;color:var(--t2)}
-.grp-tot{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;margin-left:8px}
-.item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr-soft)}
-.item:last-child{border-bottom:none}
-.item-dot{width:4px;height:4px;border-radius:50%;background:var(--bdr);flex-shrink:0}
+.note-bar{max-width:960px;margin:0 auto;padding:14px 28px 6px}
+.cols{max-width:960px;margin:0 auto;padding:16px 28px 4px;display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.col-rule{display:none}
+/* cards de grupo */
+.group{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:16px;padding:18px 20px;margin-bottom:12px}
+.group:last-child{margin-bottom:0}
+.group-income{background:rgba(22,163,74,.025)}
+html[data-dark] .group-income{background:rgba(22,163,74,.06)}
+.group-expense{background:rgba(220,38,38,.02)}
+html[data-dark] .group-expense{background:rgba(220,38,38,.06)}
+.grp-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px}
+.grp-nm{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t4);display:flex;align-items:center;gap:7px}
+.grp-nm::before{content:'';display:inline-block;width:3px;height:11px;border-radius:2px;background:var(--bdr);flex-shrink:0}
+.group-income .grp-nm::before{background:var(--green)}
+.group-expense .grp-nm::before{background:var(--red)}
+.grp-tot{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0}
+/* micro-cards de item */
+.item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:3px;background:var(--bg);border:1px solid transparent;transition:border-color .14s,transform .14s,box-shadow .14s}
+.item:last-child{margin-bottom:0}
+.item:hover{border-color:var(--bdr);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.055)}
+html[data-dark] .item:hover{box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.item-dot{width:5px;height:5px;border-radius:50%;background:var(--bdr);flex-shrink:0;transition:background .15s}
 .item-desc{flex:1;font-size:13px;color:var(--t3);display:flex;flex-direction:column;justify-content:center;min-width:0}
 .item-cat-lb{font-size:10px;font-weight:600;margin-top:2px;line-height:1.2}
 .item-val{font-size:13px;font-weight:500;color:var(--t2);font-variant-numeric:tabular-nums}
@@ -153,14 +199,16 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .add-trig{background:none;border:none;font-family:inherit;font-size:12px;font-weight:500;color:var(--t4);cursor:pointer;padding:10px 0 0;display:flex;align-items:center;gap:4px;transition:color .15s}
 .add-trig:hover{color:var(--blue)}
 
-.sav-wrap{background:var(--surf);border-top:1px solid var(--bdr-soft)}
-.sav-in{max-width:900px;margin:0 auto;padding:24px 36px}
-.sav-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--bdr)}
-.sav-nm{font-size:13px;font-weight:600;color:var(--t2)}
+.sav-wrap{max-width:960px;margin:0 auto;padding:12px 28px 4px}
+.sav-in{background:rgba(147,51,234,.02);border:1px solid var(--bdr-soft);border-radius:16px;padding:18px 20px}
+html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
+.sav-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px}
+.sav-nm{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t4);display:flex;align-items:center;gap:7px}
+.sav-nm::before{content:'';display:inline-block;width:3px;height:11px;border-radius:2px;background:var(--purple);flex-shrink:0}
 .sav-tot{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
 
-.chart-sec{border-top:1px solid var(--bdr-soft)}
-.chart-in{max-width:900px;margin:0 auto;padding:32px 36px 40px}
+.chart-sec{max-width:960px;margin:0 auto;padding:12px 28px 36px}
+.chart-in{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:16px;padding:22px 24px}
 .chart-lb{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t4);margin-bottom:20px}
 .chart-h{position:relative;height:190px}
 .chart-empty{height:190px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--t4)}
@@ -201,7 +249,6 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .tr-up{color:var(--green)} .tr-dn{color:var(--red)}
 
 /* ── NOTA MENSAL ──────────────────────────────────────── */
-.note-bar{max-width:900px;margin:0 auto;padding:0 36px 18px}
 .note-inp{width:100%;background:none;border:none;outline:none;font-family:inherit;font-size:12px;color:var(--t3);padding:2px 0;caret-color:var(--blue)}
 .note-inp::placeholder{color:var(--t4)} .note-inp:focus{color:var(--t1)}
 
@@ -249,23 +296,25 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .ann-avg span{font-weight:600;color:var(--t2)}
 
 @media(max-width:660px){
-  header{padding:0 16px}
-  .hero{flex-direction:column;align-items:flex-start;padding:28px 20px 20px;gap:18px}
+  header{padding:0 14px;height:50px}
+  .bento{grid-template-columns:1fr;padding:14px 14px 0;gap:10px}
+  .bento-main{padding:20px}
   .hero-n{font-size:42px;letter-spacing:-2px}
-  .hstats{width:100%;border-top:1px solid var(--bdr-soft);padding-top:14px}
-  .hst{text-align:left}
-  .prog{padding:0 20px 26px}
-  .cols{grid-template-columns:1fr;padding:24px 20px;gap:0}
-  .col-rule{display:none}
-  .col:first-child{padding-bottom:24px;border-bottom:1px solid var(--bdr-soft);margin-bottom:24px}
-  .sav-in{padding:20px} .chart-in{padding:24px 20px 32px}
-  .note-bar{padding:0 20px 14px}
+  .bento-side{flex-direction:row;gap:8px}
+  .bento-stat{padding:12px 14px;min-width:0}
+  .hst-v{font-size:13px}
+  .cols{grid-template-columns:1fr;padding:12px 14px 4px;gap:0}
+  .col:first-child{margin-bottom:0}
+  .note-bar{padding:12px 14px 4px}
+  .sav-wrap{padding:10px 14px 4px}
+  .sav-in{padding:16px}
+  .chart-sec{padding:10px 14px 28px}
+  .chart-in{padding:18px}
   .ann-modal{padding:20px}
-  .ann-table td,.ann-table th{padding:6px 6px;font-size:12px}
+  .ann-table td,.ann-table th{padding:6px;font-size:12px}
   /* bottom sheet */
   .overlay{align-items:flex-end;padding:0}
   .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1)}
-  /* drag handle */
   .modal::before{content:'';display:block;width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
 }
 </style>
@@ -355,7 +404,13 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 
   <header>
     <div class="logo">mar<span>gem</span></div>
-    <div class="hdr-r">
+    <div class="hdr-month">
+      <div class="month-pills" id="monthPills"></div>
+      <div class="year-sel-wrap">
+        <select class="sel" id="yearSel"></select>
+      </div>
+    </div>
+    <div class="hdr-actions">
       <div class="save-dot" id="saveDot"></div>
       <div class="u-pill-wrap">
         <button class="u-pill" onclick="toggleUserMenu()">
@@ -368,97 +423,109 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
           <button class="danger" onclick="logout()">sair</button>
         </div>
       </div>
-      <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
-      <select class="sel" id="monthSel"></select>
-      <select class="sel" id="yearSel"></select>
-      <button class="icon-btn" onclick="openAnnual()" title="resumo anual" style="font-size:10px;font-weight:700;letter-spacing:-.2px">ANO</button>
+      <div class="hdr-btns">
+        <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
+        <button class="icon-btn" onclick="openAnnual()" title="resumo anual" style="font-size:10px;font-weight:700;letter-spacing:-.2px">ANO</button>
+      </div>
     </div>
   </header>
+  <select class="hidden" id="monthSel"></select>
 
-  <div class="hero">
-    <div>
-      <div class="hero-ey">disponível este mês</div>
-      <div class="hero-n" id="heroN">R$ 0,00</div>
-    </div>
-    <div class="hstats">
-      <div class="hst"><div class="hst-lb">renda</div><div class="hst-v c-green" id="hInc">R$ 0,00</div><div class="hst-tr" id="trInc"></div></div>
-      <div class="hst"><div class="hst-lb">gastos</div><div class="hst-v c-red" id="hExp">R$ 0,00</div><div class="hst-tr" id="trExp"></div></div>
-      <div class="hst"><div class="hst-lb">guardado</div><div class="hst-v c-purple" id="hSav">R$ 0,00</div><div class="hst-tr" id="trSav"></div></div>
-    </div>
-  </div>
+  <div class="main-content">
 
-  <div class="prog">
-    <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
-    <div class="prog-mt"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
-  </div>
-
-  <div class="note-bar">
-    <input class="note-inp" id="noteInp" type="text" placeholder="✎  nota do mês…" oninput="schedNotesSave()" />
-  </div>
-
-  <div class="h-rule"></div>
-
-  <div class="cols">
-    <div class="col">
-      <div class="group">
-        <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
-        <div id="rows-income-fixed"></div>
-        <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
+    <div class="bento">
+      <div class="bento-main">
+        <div class="hero-ey">disponível este mês</div>
+        <div class="hero-n" id="heroN">R$ 0,00</div>
+        <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
+        <div class="prog-mt"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
       </div>
-      <div class="group">
-        <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
-        <div id="rows-income-extra"></div>
-        <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
-      </div>
-    </div>
-    <div class="col-rule"></div>
-    <div class="col">
-      <div class="group">
-        <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
-        <div id="rows-exp-fixed"></div>
-        <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
-      </div>
-      <div class="group">
-        <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
-        <div id="rows-exp-extra"></div>
-        <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="sav-wrap">
-    <div class="sav-in">
-      <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
-      <div id="rows-savings"></div>
-      <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
-      <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
-        <div class="goal-row hidden" id="goalDisplay">
-          <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
-          <span class="goal-lbl" id="goalLbl"></span>
+      <div class="bento-side">
+        <div class="bento-stat">
+          <div class="hst-lb">renda</div>
+          <div class="hst-v c-green" id="hInc">R$ 0,00</div>
+          <div class="hst-tr" id="trInc"></div>
         </div>
-        <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
-        <div class="goal-edit-row hidden" id="goalEdit">
-          <span class="goal-pfx">R$</span>
-          <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
-          <button class="goal-ok" onclick="saveGoal()">ok</button>
+        <div class="bento-stat">
+          <div class="hst-lb">gastos</div>
+          <div class="hst-v c-red" id="hExp">R$ 0,00</div>
+          <div class="hst-tr" id="trExp"></div>
+        </div>
+        <div class="bento-stat">
+          <div class="hst-lb">guardado</div>
+          <div class="hst-v c-purple" id="hSav">R$ 0,00</div>
+          <div class="hst-tr" id="trSav"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="chart-sec">
-    <div class="chart-in">
-      <div class="chart-lb">evolução mensal</div>
-      <div class="chart-h">
-        <div class="chart-empty" id="chartEmpty">adicione dados para ver a evolução</div>
-        <canvas id="myChart" class="hidden"></canvas>
+    <div class="note-bar">
+      <input class="note-inp" id="noteInp" type="text" placeholder="✎  nota do mês…" oninput="schedNotesSave()" />
+    </div>
+
+    <div class="cols">
+      <div class="col">
+        <div class="group group-income">
+          <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
+          <div id="rows-income-fixed"></div>
+          <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
+        </div>
+        <div class="group group-income">
+          <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
+          <div id="rows-income-extra"></div>
+          <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
+        </div>
       </div>
-      <div class="cat-break hidden" id="catBreak">
-        <div class="cat-break-lb">gastos por categoria</div>
-        <div class="cat-seg-tr" id="catSegBar"></div>
-        <div class="cat-leg" id="catLegend"></div>
+      <div class="col-rule"></div>
+      <div class="col">
+        <div class="group group-expense">
+          <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
+          <div id="rows-exp-fixed"></div>
+          <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
+        </div>
+        <div class="group group-expense">
+          <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
+          <div id="rows-exp-extra"></div>
+          <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
+        </div>
       </div>
     </div>
+
+    <div class="sav-wrap">
+      <div class="sav-in">
+        <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
+        <div id="rows-savings"></div>
+        <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+        <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
+          <div class="goal-row hidden" id="goalDisplay">
+            <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
+            <span class="goal-lbl" id="goalLbl"></span>
+          </div>
+          <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
+          <div class="goal-edit-row hidden" id="goalEdit">
+            <span class="goal-pfx">R$</span>
+            <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
+            <button class="goal-ok" onclick="saveGoal()">ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-sec">
+      <div class="chart-in">
+        <div class="chart-lb">evolução mensal</div>
+        <div class="chart-h">
+          <div class="chart-empty" id="chartEmpty">adicione dados para ver a evolução</div>
+          <canvas id="myChart" class="hidden"></canvas>
+        </div>
+        <div class="cat-break hidden" id="catBreak">
+          <div class="cat-break-lb">gastos por categoria</div>
+          <div class="cat-seg-tr" id="catSegBar"></div>
+          <div class="cat-leg" id="catLegend"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -792,8 +859,26 @@ function initSelectors(){
   if(!ms.options.length){
     months.forEach((m,i)=>{const o=new Option(m,i);if(i===now.getMonth())o.selected=true;ms.appendChild(o);});
     for(let y=now.getFullYear()-2;y<=now.getFullYear()+1;y++){const o=new Option(y,y);if(y===now.getFullYear())o.selected=true;ys.appendChild(o);}
-    ms.addEventListener('change',switchMonth); ys.addEventListener('change',switchMonth);
+    ys.addEventListener('change',()=>{ renderMonthPills(); switchMonth(); });
   }
+  renderMonthPills();
+  switchMonth();
+}
+
+function renderMonthPills(){
+  const mShort=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const ms=document.getElementById('monthSel');
+  const cur=ms?parseInt(ms.value):new Date().getMonth();
+  const wrap=document.getElementById('monthPills');
+  if(!wrap) return;
+  wrap.innerHTML=mShort.map((m,i)=>`<button class="mp${i===cur?' cur':''}" onclick="selectMonthPill(${i})">${m}</button>`).join('');
+  // scroll active pill into view (mobile horizontal scroll)
+  setTimeout(()=>{ const a=wrap.querySelector('.cur'); if(a) a.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'}); },60);
+}
+
+function selectMonthPill(m){
+  const ms=document.getElementById('monthSel');
+  if(ms) ms.value=m;
   switchMonth();
 }
 
@@ -802,6 +887,7 @@ function switchMonth(){
   const y=parseInt(document.getElementById('yearSel').value);
   curMonth=mkKey(y,m);
   monthLocal(curMonth);
+  renderMonthPills();
   const copied=carryOver(curMonth);
   renderAll(); drawChart(); loadNote(curMonth);
   if(copied) schedSave();
