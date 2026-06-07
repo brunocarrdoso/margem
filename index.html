@@ -6,6 +6,12 @@
 <title>Margem</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%232563eb'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='20' font-weight='900' fill='white' text-anchor='middle'>m</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%232563eb'/><text x='90' y='130' font-family='Arial,sans-serif' font-size='110' font-weight='900' fill='white' text-anchor='middle'>m</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Margem">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -133,7 +139,8 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr-soft)}
 .item:last-child{border-bottom:none}
 .item-dot{width:4px;height:4px;border-radius:50%;background:var(--bdr);flex-shrink:0}
-.item-desc{flex:1;font-size:13px;color:var(--t3)}
+.item-desc{flex:1;font-size:13px;color:var(--t3);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.item-cat-lb{font-size:10px;font-weight:600;margin-top:2px;line-height:1.2}
 .item-val{font-size:13px;font-weight:500;color:var(--t2);font-variant-numeric:tabular-nums}
 .item-btns{display:flex;gap:2px;opacity:0;transition:opacity .12s;flex-shrink:0}
 .item:hover .item-btns{opacity:1}
@@ -162,6 +169,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 .modal{background:var(--bg);border-radius:20px;width:100%;max-width:340px;padding:28px;box-shadow:0 24px 48px rgba(0,0,0,.2);animation:su .2s}
 @keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .m-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t4);margin-bottom:20px}
 .m-field{margin-bottom:14px}
 .m-field label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
@@ -182,6 +190,11 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .t-sw::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .t-sw.on::after{transform:translateX(16px)}
 .parc-hint{font-size:11px;color:var(--t4);margin-top:5px}
+
+/* ── TOAST ────────────────────────────────────────────── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--t1);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity .22s,transform .22s;white-space:nowrap;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--red)}
 
 /* ── TENDÊNCIAS ───────────────────────────────────────── */
 .hst-tr{font-size:10px;font-weight:600;height:13px;margin-top:2px;font-variant-numeric:tabular-nums;transition:color .2s}
@@ -249,6 +262,11 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
   .note-bar{padding:0 20px 14px}
   .ann-modal{padding:20px}
   .ann-table td,.ann-table th{padding:6px 6px;font-size:12px}
+  /* bottom sheet */
+  .overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1)}
+  /* drag handle */
+  .modal::before{content:'';display:block;width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
 }
 </style>
 </head>
@@ -490,7 +508,8 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
     <div class="m-title" id="mTitle">novo item</div>
     <div class="m-field">
       <label>O que é?</label>
-      <input class="m-in" id="mDesc" type="text" placeholder="ex: salário, aluguel…" autocomplete="off" />
+      <input class="m-in" id="mDesc" type="text" placeholder="ex: salário, aluguel…" autocomplete="off" list="mDescList" />
+      <datalist id="mDescList"></datalist>
     </div>
     <div class="m-field">
       <label id="mValLabel">Valor</label>
@@ -541,7 +560,7 @@ const CATS=[
 ];
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
-let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null;
+let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null, heroVal=null;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 
@@ -694,7 +713,7 @@ function traduzErro(msg){
 
 async function logout(){
   await sb.auth.signOut();
-  curUser=null; curMonth=null; allMonths={};
+  curUser=null; curMonth=null; allMonths={}; heroVal=null;
   if(chart){chart.destroy();chart=null;}
   window.location.reload();
 }
@@ -793,10 +812,11 @@ function renderRows(key){
   const d=monthLocal(curMonth);
   document.getElementById('rows-'+key).innerHTML=(d[key]||[]).map((it,i)=>{
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
-    const catHtml=cat?`<span class="item-cat" style="background:${cat.color}">${cat.lb}</span>`:'';
+    const dotStyle=cat?`style="background:${cat.color};width:6px;height:6px"`:'';
+    const catLbl=cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'';
     return `<div class="item">
-      <span class="item-dot"></span>
-      <span class="item-desc">${catHtml}${esc(it.desc)}</span>
+      <span class="item-dot" ${dotStyle}></span>
+      <span class="item-desc">${esc(it.desc)}${catLbl}</span>
       <span class="item-val">${fmt(it.value)}</span>
       <div class="item-btns">
         <button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>
@@ -816,7 +836,7 @@ function recalc(){
   document.getElementById('tot-exp-extra').textContent   =fmt(eX);
   document.getElementById('tot-savings').textContent     =fmt(sv);
   const hn=document.getElementById('heroN');
-  hn.textContent=fmt(av); hn.classList.toggle('neg',av<0);
+  animateNumber(hn, heroVal??av, av); heroVal=av;
   const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
   document.getElementById('hInc').textContent=fmt(tI);
   document.getElementById('hExp').textContent=fmt(tE);
@@ -869,6 +889,7 @@ function openModal(key, idx=-1){
     document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
   }
   if(hasCat) renderCatPills();
+  buildDescSuggestions(key);
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
@@ -937,6 +958,7 @@ async function createInstallments(desc,val,n){
   await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
   btn.disabled=false;
   renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); closeModal();
+  toast(`${n} parcelas criadas ✓`);
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
@@ -1072,8 +1094,67 @@ async function saveProfile(){
   document.getElementById('hdrAv').style.background=selectedColor;
 
   btn.disabled=false; btn.textContent='salvar';
-  closeProfileModal();
+  closeProfileModal(); toast('perfil atualizado ✓');
 }
+
+// ── Animação hero ─────────────────────────────────────
+function animateNumber(el, from, to, dur=480){
+  const start=performance.now();
+  const tick=now=>{
+    const p=Math.min((now-start)/dur,1);
+    const e=1-Math.pow(1-p,3); // ease-out cubic
+    const cur=from+(to-from)*e;
+    el.textContent=fmt(cur);
+    el.classList.toggle('neg',cur<0);
+    if(p<1) requestAnimationFrame(tick);
+    else { el.textContent=fmt(to); el.classList.toggle('neg',to<0); }
+  };
+  requestAnimationFrame(tick);
+}
+
+// ── Toast ─────────────────────────────────────────────
+function toast(msg, type=''){
+  const t=document.createElement('div');
+  t.className='toast'+(type?' '+type:'');
+  t.textContent=msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>t.classList.add('show'));
+    setTimeout(()=>{
+      t.classList.remove('show');
+      setTimeout(()=>t.remove(),300);
+    },2200);
+  });
+}
+
+// ── Sugestões de descrição ────────────────────────────
+function buildDescSuggestions(key){
+  const seen=new Set();
+  Object.values(allMonths).forEach(m=>(m[key]||[]).forEach(i=>seen.add(i.desc)));
+  const dl=document.getElementById('mDescList');
+  if(dl) dl.innerHTML=[...seen].map(d=>`<option value="${esc(d)}">`).join('');
+}
+
+// ── Swipe de mês ──────────────────────────────────────
+(()=>{
+  let sx=0,sy=0;
+  document.addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(e.target.closest('#overlay,#profileOverlay,#annOverlay,select,input,textarea')) return;
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5) return;
+    const ms=document.getElementById('monthSel');
+    const ys=document.getElementById('yearSel');
+    if(!ms||!ys) return;
+    const m=parseInt(ms.value), y=parseInt(ys.value);
+    if(dx<0){ ms.value=m===11?0:m+1; if(m===11) ys.value=y+1; }
+    else    { ms.value=m===0?11:m-1; if(m===0)  ys.value=y-1; }
+    switchMonth();
+  },{passive:true});
+})();
 
 // ── Tendências ────────────────────────────────────────
 function prevMonthKey(mk){
@@ -1128,7 +1209,7 @@ function saveGoal(){
   localStorage.setItem(goalKey(),String(val));
   document.getElementById('goalEdit').classList.add('hidden');
   const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
-  updateGoalDisplay(totalSaved);
+  updateGoalDisplay(totalSaved); toast('meta salva ✓');
 }
 
 // ── Resumo anual ──────────────────────────────────────
@@ -1183,6 +1264,7 @@ function drawCatBreak(){
 }
 
 // ── Boot ──────────────────────────────────────────────
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 applyDark(dark);
 loadProfilesLocal();
 
