@@ -129,26 +129,31 @@ html[data-dark] header{background:rgba(11,17,32,.9)}
 /* ── DESKTOP ──────────────────────────────────────────── */
 @media(min-width:901px){
   header{padding:0 44px 0 48px;height:58px}
-  .bento{padding:40px 44px 0}
+  .stats-row{padding:40px 44px 0}
   .note-bar{padding:18px 44px 6px}
   .cols{padding:22px 44px 4px}
   .chart-sec{padding:16px 44px 48px}
 }
 
-/* ── BENTO HERO ───────────────────────────────────────── */
-.bento{max-width:960px;margin:0 auto;padding:32px 28px 0;display:grid;grid-template-columns:1fr 190px;gap:14px;align-items:stretch}
-.bento-main{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:20px;padding:32px 34px}
-.bento-side{display:flex;flex-direction:column;gap:12px}
-.bento-stat{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:16px;padding:16px 18px;flex:1;display:flex;flex-direction:column;justify-content:center}
-.hero-ey{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t4);margin-bottom:8px}
-.hero-n{font-size:52px;font-weight:800;letter-spacing:-3px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums;transition:color .2s}
-.hero-n.neg{color:var(--red)}
-.hst-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);margin-bottom:4px}
-.hst-v{font-size:15px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
-.prog-tr{height:3px;background:var(--surf2);border-radius:99px;overflow:hidden;margin-top:22px}
+/* ── STATS ROW ────────────────────────────────────────── */
+.stats-row{max-width:960px;margin:0 auto;padding:28px 28px 0;display:grid;grid-template-columns:1fr 1fr 1fr 1.5fr;gap:12px}
+.scard{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column}
+.scard-lb{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t4);margin-bottom:8px}
+.scard-val{font-size:18px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums;line-height:1.1}
+/* card disponível */
+.scard-avail{background:var(--blue);border-color:transparent}
+.scard-avail.neg{background:var(--red)}
+.scard-avail .scard-lb{color:rgba(255,255,255,.6)}
+.scard-avail .hst-tr{color:rgba(255,255,255,.7)}
+.scard-avail-val{font-size:24px;font-weight:800;letter-spacing:-1.2px;font-variant-numeric:tabular-nums;line-height:1.1;color:#fff}
+.prog-tr{height:3px;background:var(--surf2);border-radius:99px;overflow:hidden}
+.scard-avail .prog-tr{background:rgba(255,255,255,.2);margin-top:auto;padding-top:16px}
 .prog-fi{height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease,background .2s;width:0%}
 .prog-fi.warn{background:var(--amber)} .prog-fi.danger{background:var(--red)}
-.prog-mt{display:flex;justify-content:space-between;font-size:11px;color:var(--t4);margin-top:6px;font-weight:500;gap:8px}
+.scard-avail .prog-fi{background:rgba(255,255,255,.8)}
+.scard-avail .prog-fi.warn{background:rgba(255,200,60,.9)}
+.scard-avail .prog-fi.danger{background:rgba(255,110,110,.9)}
+.avail-pcts{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.5);margin-top:5px;font-weight:500}
 .note-bar{max-width:960px;margin:0 auto;padding:16px 28px 6px}
 .cols{max-width:960px;margin:0 auto;padding:20px 28px 4px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .col{display:flex;flex-direction:column;gap:14px}
@@ -282,12 +287,9 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
 
 @media(max-width:660px){
   header{padding:0 14px;height:50px}
-  .bento{grid-template-columns:1fr;padding:14px 14px 0;gap:10px}
-  .bento-main{padding:20px}
-  .hero-n{font-size:42px;letter-spacing:-2px}
-  .bento-side{flex-direction:row;gap:8px}
-  .bento-stat{padding:12px 14px;min-width:0}
-  .hst-v{font-size:13px}
+  .stats-row{grid-template-columns:1fr 1fr;padding:14px 14px 0;gap:8px}
+  .scard-avail{grid-column:span 2}
+  .scard-avail-val{font-size:20px;letter-spacing:-.8px}
   .cols{padding:12px 14px 4px;grid-template-columns:1fr;gap:10px}
   .col{gap:10px}
   .note-bar{padding:12px 14px 4px}
@@ -455,29 +457,27 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
 
   <div class="main-content">
 
-    <div class="bento">
-      <div class="bento-main">
-        <div class="hero-ey">disponível este mês</div>
-        <div class="hero-n" id="heroN">R$ 0,00</div>
-        <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
-        <div class="prog-mt"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
+    <div class="stats-row">
+      <div class="scard">
+        <div class="scard-lb">renda</div>
+        <div class="scard-val c-green" id="hInc">R$ 0,00</div>
+        <div class="hst-tr" id="trInc"></div>
       </div>
-      <div class="bento-side">
-        <div class="bento-stat">
-          <div class="hst-lb">renda</div>
-          <div class="hst-v c-green" id="hInc">R$ 0,00</div>
-          <div class="hst-tr" id="trInc"></div>
-        </div>
-        <div class="bento-stat">
-          <div class="hst-lb">gastos</div>
-          <div class="hst-v c-red" id="hExp">R$ 0,00</div>
-          <div class="hst-tr" id="trExp"></div>
-        </div>
-        <div class="bento-stat">
-          <div class="hst-lb">guardado</div>
-          <div class="hst-v c-purple" id="hSav">R$ 0,00</div>
-          <div class="hst-tr" id="trSav"></div>
-        </div>
+      <div class="scard">
+        <div class="scard-lb">gastos</div>
+        <div class="scard-val c-red" id="hExp">R$ 0,00</div>
+        <div class="hst-tr" id="trExp"></div>
+      </div>
+      <div class="scard">
+        <div class="scard-lb">guardado</div>
+        <div class="scard-val c-purple" id="hSav">R$ 0,00</div>
+        <div class="hst-tr" id="trSav"></div>
+      </div>
+      <div class="scard scard-avail" id="scardAvail">
+        <div class="scard-lb">disponível este mês</div>
+        <div class="scard-avail-val" id="heroN">R$ 0,00</div>
+        <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
+        <div class="avail-pcts"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
       </div>
     </div>
 
@@ -987,6 +987,7 @@ function recalc(){
   document.getElementById('tot-savings').textContent     =fmt(sv);
   const hn=document.getElementById('heroN');
   animateNumber(hn, heroVal??av, av); heroVal=av;
+  document.getElementById('scardAvail').classList.toggle('neg', av<0);
   const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
   document.getElementById('hInc').textContent=fmt(tI);
   document.getElementById('hExp').textContent=fmt(tE);
