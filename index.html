@@ -129,7 +129,6 @@ html[data-dark] header{background:rgba(11,17,32,.9)}
   .bento{padding:40px 44px 0}
   .note-bar{padding:18px 44px 6px}
   .cols{padding:22px 44px 4px}
-  .sav-wrap{padding:16px 44px 4px}
   .chart-sec{padding:16px 44px 48px}
 }
 
@@ -148,7 +147,8 @@ html[data-dark] header{background:rgba(11,17,32,.9)}
 .prog-fi.warn{background:var(--amber)} .prog-fi.danger{background:var(--red)}
 .prog-mt{display:flex;justify-content:space-between;font-size:11px;color:var(--t4);margin-top:6px;font-weight:500;gap:8px}
 .note-bar{max-width:960px;margin:0 auto;padding:16px 28px 6px}
-.cols{max-width:960px;margin:0 auto;padding:20px 28px 4px;display:flex;flex-direction:column;gap:14px}
+.cols{max-width:960px;margin:0 auto;padding:20px 28px 4px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.col{display:flex;flex-direction:column;gap:14px}
 /* cards de grupo */
 .group{background:var(--surf);border:1px solid var(--bdr-soft);border-radius:18px;padding:24px 26px}
 .group-income{background:rgba(22,163,74,.025)}
@@ -285,7 +285,8 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
   .bento-side{flex-direction:row;gap:8px}
   .bento-stat{padding:12px 14px;min-width:0}
   .hst-v{font-size:13px}
-  .cols{padding:12px 14px 4px;gap:10px}
+  .cols{padding:12px 14px 4px;grid-template-columns:1fr;gap:10px}
+  .col{gap:10px}
   .note-bar{padding:12px 14px 4px}
   .group{padding:18px 18px;border-radius:15px}
   .sav-wrap{padding:10px 14px 4px}
@@ -446,44 +447,47 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
     </div>
 
     <div class="cols">
-      <div class="group group-income">
-        <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
-        <div id="rows-income-fixed"></div>
-        <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
-      </div>
-      <div class="group group-income">
-        <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
-        <div id="rows-income-extra"></div>
-        <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
-      </div>
-      <div class="group group-expense">
-        <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
-        <div id="rows-exp-fixed"></div>
-        <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
-      </div>
-      <div class="group group-expense">
-        <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
-        <div id="rows-exp-extra"></div>
-        <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
-      </div>
-    </div>
-
-    <div class="sav-wrap">
-      <div class="sav-in">
-        <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
-        <div id="rows-savings"></div>
-        <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
-        <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
-          <div class="goal-row hidden" id="goalDisplay">
-            <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
-            <span class="goal-lbl" id="goalLbl"></span>
+      <!-- coluna esquerda: ganhos + guardado -->
+      <div class="col">
+        <div class="group group-income">
+          <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
+          <div id="rows-income-fixed"></div>
+          <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
+        </div>
+        <div class="group group-income">
+          <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
+          <div id="rows-income-extra"></div>
+          <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
+        </div>
+        <div class="sav-in">
+          <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
+          <div id="rows-savings"></div>
+          <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+          <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
+            <div class="goal-row hidden" id="goalDisplay">
+              <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
+              <span class="goal-lbl" id="goalLbl"></span>
+            </div>
+            <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
+            <div class="goal-edit-row hidden" id="goalEdit">
+              <span class="goal-pfx">R$</span>
+              <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
+              <button class="goal-ok" onclick="saveGoal()">ok</button>
+            </div>
           </div>
-          <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
-          <div class="goal-edit-row hidden" id="goalEdit">
-            <span class="goal-pfx">R$</span>
-            <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
-            <button class="goal-ok" onclick="saveGoal()">ok</button>
-          </div>
+        </div>
+      </div>
+      <!-- coluna direita: gastos -->
+      <div class="col">
+        <div class="group group-expense">
+          <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
+          <div id="rows-exp-fixed"></div>
+          <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
+        </div>
+        <div class="group group-expense">
+          <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
+          <div id="rows-exp-extra"></div>
+          <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
         </div>
       </div>
     </div>
