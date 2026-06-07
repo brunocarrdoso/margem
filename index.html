@@ -75,6 +75,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .field input{width:100%;border:1.5px solid var(--bdr);border-radius:10px;padding:10px 13px;font-family:inherit;font-size:14px;color:var(--t1);background:var(--bg);outline:none;transition:border-color .15s;-webkit-appearance:none}
 .field input:focus{border-color:var(--blue)}
 .auth-err{font-size:12px;color:var(--red);background:var(--red-bg);border-radius:8px;padding:9px 12px;margin-bottom:12px;text-align:left}
+.auth-info{font-size:12px;color:var(--green);background:rgba(22,163,74,.09);border-radius:8px;padding:9px 12px;margin-bottom:12px;text-align:left}
+.btn-link{background:none;border:none;font-family:inherit;font-size:12px;color:var(--t4);cursor:pointer;padding:6px 0 0;display:block;margin:0 auto;text-decoration:underline;text-underline-offset:3px;transition:color .15s}
+.btn-link:hover{color:var(--t2)}
 .btn-p{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:12px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;margin-top:4px}
 .btn-p:hover:not(:disabled){background:var(--blue-d)} .btn-p:disabled{opacity:.6;cursor:default}
 .btn-g{background:none;border:none;color:var(--t3);font-family:inherit;font-size:13px;cursor:pointer;padding:10px;display:block;margin:8px auto 0;width:100%;text-align:center;transition:color .15s}
@@ -339,6 +342,7 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
         <div class="auth-err hidden" id="lErr"></div>
         <button class="btn-p" id="lBtn" onclick="doEmailLogin()">entrar</button>
         <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
+        <button class="btn-link" onclick="showView('vReset')">esqueci meu PIN</button>
       </div>
     </div>
 
@@ -354,6 +358,41 @@ html[data-dark] .sav-in{background:rgba(147,51,234,.06)}
         <div class="numpad" id="numpad"></div>
       </div>
       <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
+      <button class="btn-link" onclick="showView('vReset')">esqueci meu PIN</button>
+    </div>
+
+    <!-- Redefinir PIN -->
+    <div id="vReset" class="hidden">
+      <div class="l-form">
+        <h2>redefinir PIN</h2>
+        <p class="l-form-sub">Enviaremos um link para o seu e-mail</p>
+        <div class="field">
+          <label>e-mail</label>
+          <input id="rEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
+        </div>
+        <div class="auth-err hidden" id="rErr"></div>
+        <div class="auth-info hidden" id="rInfo">✓ Link enviado! Verifique sua caixa de entrada.</div>
+        <button class="btn-p" id="rBtn" onclick="doResetPassword()">enviar link</button>
+        <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
+      </div>
+    </div>
+
+    <!-- Novo PIN (chegou pelo link de recuperação) -->
+    <div id="vNewPin" class="hidden">
+      <div class="l-form">
+        <h2>novo PIN</h2>
+        <p class="l-form-sub">Escolha um PIN de 4 dígitos para sua conta</p>
+        <div class="field">
+          <label>novo PIN</label>
+          <input id="npPin1" type="number" placeholder="4 dígitos" />
+        </div>
+        <div class="field">
+          <label>confirmar PIN</label>
+          <input id="npPin2" type="number" placeholder="repita o PIN" />
+        </div>
+        <div class="auth-err hidden" id="npErr"></div>
+        <button class="btn-p" id="npBtn" onclick="doSaveNewPin()">salvar novo PIN</button>
+      </div>
     </div>
 
     <!-- Nova conta -->
@@ -651,10 +690,12 @@ function toggleDark(){ dark=!dark; localStorage.setItem('margem-dark',dark?'1':'
 
 // ── Login views ───────────────────────────────────────
 function showView(id){
-  ['vPicker','vLogin','vPin','vNew'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
+  ['vPicker','vLogin','vPin','vNew','vReset','vNewPin'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
   if(id==='vPicker') renderGrid();
   if(id==='vNew')    setTimeout(()=>document.getElementById('nName').focus(),50);
   if(id==='vLogin')  setTimeout(()=>document.getElementById('lEmail').focus(),50);
+  if(id==='vReset')  setTimeout(()=>document.getElementById('rEmail').focus(),50);
+  if(id==='vNewPin') setTimeout(()=>document.getElementById('npPin1').focus(),50);
 }
 
 function renderGrid(){
@@ -696,6 +737,47 @@ async function pinPress(k){
       await bootApp();
     }
   }
+}
+
+// Redefinir PIN — envia e-mail de recuperação
+async function doResetPassword(){
+  const email=document.getElementById('rEmail').value.trim();
+  const err=document.getElementById('rErr');
+  const info=document.getElementById('rInfo');
+  err.classList.add('hidden'); info.classList.add('hidden');
+  if(!email){ err.textContent='Digite seu e-mail.'; err.classList.remove('hidden'); return; }
+
+  const btn=document.getElementById('rBtn');
+  btn.disabled=true; btn.textContent='enviando…';
+
+  const {error}=await sb.auth.resetPasswordForEmail(email,{
+    redirectTo:'https://brunocarrdoso.github.io/margem/'
+  });
+  btn.disabled=false; btn.textContent='enviar link';
+
+  if(error){ err.textContent=traduzErro(error.message); err.classList.remove('hidden'); return; }
+  info.classList.remove('hidden');
+  document.getElementById('rEmail').value='';
+}
+
+// Salvar novo PIN (chegou pelo link de recuperação)
+async function doSaveNewPin(){
+  const pin1=document.getElementById('npPin1').value.trim();
+  const pin2=document.getElementById('npPin2').value.trim();
+  const err=document.getElementById('npErr');
+  err.classList.add('hidden');
+  if(!/^\d{4}$/.test(pin1)){ err.textContent='PIN deve ter exatamente 4 dígitos.'; err.classList.remove('hidden'); return; }
+  if(pin1!==pin2){ err.textContent='Os PINs não conferem.'; err.classList.remove('hidden'); return; }
+
+  const btn=document.getElementById('npBtn');
+  btn.disabled=true; btn.textContent='salvando…';
+
+  const {error}=await sb.auth.updateUser({password:padPin(pin1)});
+  btn.disabled=false; btn.textContent='salvar novo PIN';
+
+  if(error){ err.textContent=traduzErro(error.message); err.classList.remove('hidden'); return; }
+  toast('PIN redefinido com sucesso ✓');
+  await bootApp();
 }
 
 // Login com e-mail + PIN (novo dispositivo)
@@ -1041,6 +1123,9 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='nPin') createProfile();
     else if(f?.id==='lEmail') document.getElementById('lPin').focus();
     else if(f?.id==='lPin') doEmailLogin();
+    else if(f?.id==='rEmail') doResetPassword();
+    else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
+    else if(f?.id==='npPin2') doSaveNewPin();
   }
 });
 
@@ -1334,6 +1419,19 @@ function drawCatBreak(){
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 applyDark(dark);
 loadProfilesLocal();
+
+// Detecta retorno pelo link de recuperação de senha
+sb.auth.onAuthStateChange(async(event, session)=>{
+  if(event==='PASSWORD_RECOVERY'){
+    curUser=session?.user||null;
+    document.getElementById('loginScreen').style.display='';
+    document.getElementById('app').classList.add('hidden');
+    // Remove o spinner de carregamento se ainda estiver visível
+    const lo=document.getElementById('loadOverlay');
+    if(lo){ lo.classList.add('fade'); setTimeout(()=>lo.remove(),400); }
+    showView('vNewPin');
+  }
+});
 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
