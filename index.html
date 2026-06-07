@@ -183,6 +183,58 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
 .t-sw.on::after{transform:translateX(16px)}
 .parc-hint{font-size:11px;color:var(--t4);margin-top:5px}
 
+/* ── TENDÊNCIAS ───────────────────────────────────────── */
+.hst-tr{font-size:10px;font-weight:600;height:13px;margin-top:2px;font-variant-numeric:tabular-nums;transition:color .2s}
+.tr-up{color:var(--green)} .tr-dn{color:var(--red)}
+
+/* ── NOTA MENSAL ──────────────────────────────────────── */
+.note-bar{max-width:900px;margin:0 auto;padding:0 36px 18px}
+.note-inp{width:100%;background:none;border:none;outline:none;font-family:inherit;font-size:12px;color:var(--t3);padding:2px 0;caret-color:var(--blue)}
+.note-inp::placeholder{color:var(--t4)} .note-inp:focus{color:var(--t1)}
+
+/* ── META DE RESERVA ──────────────────────────────────── */
+.goal-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.goal-bar-tr{flex:1;height:3px;background:var(--bdr);border-radius:99px;overflow:hidden}
+.goal-bar-fi{height:100%;background:var(--purple);border-radius:99px;transition:width .5s ease}
+.goal-lbl{font-size:11px;color:var(--t4);font-weight:500;white-space:nowrap}
+.goal-set{background:none;border:none;font-family:inherit;font-size:11px;color:var(--t4);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+.goal-set:hover{color:var(--t2)}
+.goal-edit-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.goal-pfx{font-size:12px;color:var(--t4)}
+.goal-input{flex:1;border:1.5px solid var(--bdr);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--t1);outline:none;transition:border-color .15s;-webkit-appearance:none}
+.goal-input:focus{border-color:var(--blue)}
+.goal-ok{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.goal-ok:hover{background:var(--blue-d)}
+
+/* ── CATEGORIAS ───────────────────────────────────────── */
+.cat-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cat-pill{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .12s;background:var(--surf2);opacity:.6}
+.cat-pill.sel{opacity:1}
+.item-cat{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;color:#fff;margin-right:2px;flex-shrink:0;letter-spacing:.1px}
+.cat-break{margin-top:18px;padding-top:16px;border-top:1px solid var(--bdr-soft)}
+.cat-break-lb{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t4);margin-bottom:10px}
+.cat-seg-tr{height:8px;border-radius:99px;overflow:hidden;display:flex;gap:1px;margin-bottom:10px}
+.cat-seg{height:100%;transition:width .5s}
+.cat-leg{display:flex;flex-wrap:wrap;gap:6px 16px}
+.cat-leg-it{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3)}
+.cat-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── RESUMO ANUAL ─────────────────────────────────────── */
+.ann-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:fi .15s}
+.ann-modal{background:var(--bg);border-radius:20px;width:100%;max-width:680px;padding:28px;box-shadow:0 24px 48px rgba(0,0,0,.2);animation:su .2s;margin:auto}
+.ann-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.ann-title{font-size:16px;font-weight:700;color:var(--t1)}
+.ann-close{background:none;border:none;font-size:22px;color:var(--t4);cursor:pointer;padding:2px 8px;border-radius:6px;line-height:1;transition:all .12s}
+.ann-close:hover{color:var(--t1);background:var(--surf)}
+.ann-table{width:100%;border-collapse:collapse}
+.ann-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t4);padding:6px 10px;text-align:right;border-bottom:1px solid var(--bdr)}
+.ann-table th:first-child{text-align:left}
+.ann-table td{font-size:13px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--bdr-soft);font-variant-numeric:tabular-nums}
+.ann-table td:first-child{text-align:left;color:var(--t2);font-weight:500}
+.ann-table tfoot td{font-weight:700;font-size:14px;border-top:2px solid var(--bdr);border-bottom:none;padding-top:12px}
+.ann-avg{font-size:12px;color:var(--t3);margin-top:14px;padding-top:12px;border-top:1px solid var(--bdr-soft);display:flex;gap:6px 20px;flex-wrap:wrap}
+.ann-avg span{font-weight:600;color:var(--t2)}
+
 @media(max-width:660px){
   header{padding:0 16px}
   .hero{flex-direction:column;align-items:flex-start;padding:28px 20px 20px;gap:18px}
@@ -194,6 +246,9 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
   .col-rule{display:none}
   .col:first-child{padding-bottom:24px;border-bottom:1px solid var(--bdr-soft);margin-bottom:24px}
   .sav-in{padding:20px} .chart-in{padding:24px 20px 32px}
+  .note-bar{padding:0 20px 14px}
+  .ann-modal{padding:20px}
+  .ann-table td,.ann-table th{padding:6px 6px;font-size:12px}
 }
 </style>
 </head>
@@ -298,6 +353,7 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
       <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
       <select class="sel" id="monthSel"></select>
       <select class="sel" id="yearSel"></select>
+      <button class="icon-btn" onclick="openAnnual()" title="resumo anual" style="font-size:10px;font-weight:700;letter-spacing:-.2px">ANO</button>
     </div>
   </header>
 
@@ -307,15 +363,19 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
       <div class="hero-n" id="heroN">R$ 0,00</div>
     </div>
     <div class="hstats">
-      <div class="hst"><div class="hst-lb">renda</div><div class="hst-v c-green" id="hInc">R$ 0,00</div></div>
-      <div class="hst"><div class="hst-lb">gastos</div><div class="hst-v c-red" id="hExp">R$ 0,00</div></div>
-      <div class="hst"><div class="hst-lb">guardado</div><div class="hst-v c-purple" id="hSav">R$ 0,00</div></div>
+      <div class="hst"><div class="hst-lb">renda</div><div class="hst-v c-green" id="hInc">R$ 0,00</div><div class="hst-tr" id="trInc"></div></div>
+      <div class="hst"><div class="hst-lb">gastos</div><div class="hst-v c-red" id="hExp">R$ 0,00</div><div class="hst-tr" id="trExp"></div></div>
+      <div class="hst"><div class="hst-lb">guardado</div><div class="hst-v c-purple" id="hSav">R$ 0,00</div><div class="hst-tr" id="trSav"></div></div>
     </div>
   </div>
 
   <div class="prog">
     <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
     <div class="prog-mt"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
+  </div>
+
+  <div class="note-bar">
+    <input class="note-inp" id="noteInp" type="text" placeholder="✎  nota do mês…" oninput="schedNotesSave()" />
   </div>
 
   <div class="h-rule"></div>
@@ -353,6 +413,18 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
       <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
       <div id="rows-savings"></div>
       <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+      <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
+        <div class="goal-row hidden" id="goalDisplay">
+          <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
+          <span class="goal-lbl" id="goalLbl"></span>
+        </div>
+        <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
+        <div class="goal-edit-row hidden" id="goalEdit">
+          <span class="goal-pfx">R$</span>
+          <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
+          <button class="goal-ok" onclick="saveGoal()">ok</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -363,7 +435,23 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
         <div class="chart-empty" id="chartEmpty">adicione dados para ver a evolução</div>
         <canvas id="myChart" class="hidden"></canvas>
       </div>
+      <div class="cat-break hidden" id="catBreak">
+        <div class="cat-break-lb">gastos por categoria</div>
+        <div class="cat-seg-tr" id="catSegBar"></div>
+        <div class="cat-leg" id="catLegend"></div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ANUAL ══════════════════════════════════════ -->
+<div class="ann-overlay hidden" id="annOverlay" onclick="if(event.target===this)closeAnnual()">
+  <div class="ann-modal">
+    <div class="ann-hd">
+      <span class="ann-title" id="annTitle">resumo</span>
+      <button class="ann-close" onclick="closeAnnual()">×</button>
+    </div>
+    <div id="annContent"></div>
   </div>
 </div>
 
@@ -411,6 +499,10 @@ html[data-dark] header{background:rgba(11,17,32,.88)}
         <input class="m-in" id="mVal" type="number" placeholder="0,00" min="0" step="0.01" />
       </div>
     </div>
+    <div class="m-field hidden" id="catWrap">
+      <label>Categoria <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
+      <div class="cat-pills" id="catPills"></div>
+    </div>
     <div class="m-field hidden" id="parceladoWrap">
       <div class="parc-row" onclick="toggleParcelado()">
         <span class="parc-lbl">parcelado?</span>
@@ -439,9 +531,17 @@ const KEYS   = ['income-fixed','income-extra','exp-fixed','exp-extra','savings']
 const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos','savings':'reserva'};
 const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
 const PROF_KEY = 'margem-profiles';
+const CATS=[
+  {id:'food',   lb:'alimentação', color:'#f97316'},
+  {id:'transp', lb:'transporte',  color:'#0891b2'},
+  {id:'home',   lb:'moradia',     color:'#7c3aed'},
+  {id:'health', lb:'saúde',       color:'#dc2626'},
+  {id:'fun',    lb:'lazer',       color:'#d97706'},
+  {id:'other',  lb:'outros',      color:'#64748b'},
+];
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
-let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false;
+let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 
@@ -684,25 +784,28 @@ function switchMonth(){
   curMonth=mkKey(y,m);
   monthLocal(curMonth);
   const copied=carryOver(curMonth);
-  renderAll(); drawChart();
+  renderAll(); drawChart(); loadNote(curMonth);
   if(copied) schedSave();
 }
 
 // ── Render ────────────────────────────────────────────
 function renderRows(key){
   const d=monthLocal(curMonth);
-  document.getElementById('rows-'+key).innerHTML=(d[key]||[]).map((it,i)=>`
-    <div class="item">
+  document.getElementById('rows-'+key).innerHTML=(d[key]||[]).map((it,i)=>{
+    const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
+    const catHtml=cat?`<span class="item-cat" style="background:${cat.color}">${cat.lb}</span>`:'';
+    return `<div class="item">
       <span class="item-dot"></span>
-      <span class="item-desc">${esc(it.desc)}</span>
+      <span class="item-desc">${catHtml}${esc(it.desc)}</span>
       <span class="item-val">${fmt(it.value)}</span>
       <div class="item-btns">
         <button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>
         <button class="del-btn" onclick="removeItem('${key}',${i})" title="remover">×</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
-function renderAll(){ KEYS.forEach(renderRows); recalc(); }
+function renderAll(){ KEYS.forEach(renderRows); recalc(); drawCatBreak(); }
 function recalc(){
   const d=monthLocal(curMonth);
   const iF=sum(d['income-fixed']),iX=sum(d['income-extra']),eF=sum(d['exp-fixed']),eX=sum(d['exp-extra']),sv=sum(d['savings']);
@@ -718,6 +821,15 @@ function recalc(){
   document.getElementById('hInc').textContent=fmt(tI);
   document.getElementById('hExp').textContent=fmt(tE);
   document.getElementById('hSav').textContent=fmt(totalSaved);
+  // tendências vs mês anterior
+  const prevMk=prevMonthKey(curMonth), prevD=allMonths[prevMk];
+  if(prevD){
+    const pI=sum(prevD['income-fixed'])+sum(prevD['income-extra']);
+    const pE=sum(prevD['exp-fixed'])+sum(prevD['exp-extra']);
+    const pS=sum(prevD['savings']);
+    trendEl(tI,pI,'trInc'); trendEl(tE,pE,'trExp',true); trendEl(sv,pS,'trSav');
+  } else ['trInc','trExp','trSav'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent='';el.className='hst-tr';}});
+  updateGoalDisplay(totalSaved);
   const fi=document.getElementById('progFi');
   if(tI>0){
     const pct=Math.min((tE+sv)/tI*100,100),free=Math.max(100-pct,0);
@@ -727,7 +839,7 @@ function recalc(){
     document.getElementById('pctR').textContent=free.toFixed(0)+'% livre';
   } else { fi.style.width='0%'; fi.className='prog-fi'; document.getElementById('pctL').textContent='0% comprometido'; document.getElementById('pctR').textContent='100% livre'; }
 }
-function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); schedSave(); }
+function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
 
 // ── Modal ─────────────────────────────────────────────
 function openModal(key, idx=-1){
@@ -741,6 +853,9 @@ function openModal(key, idx=-1){
   document.getElementById('mOkBtn').textContent='adicionar →';
   // show parcelado toggle only for exp-extra on new items
   document.getElementById('parceladoWrap').classList.toggle('hidden', key!=='exp-extra' || idx>=0);
+  // categoria: só em gastos fixos e esporádicos
+  const hasCat=['exp-fixed','exp-extra'].includes(key);
+  document.getElementById('catWrap').classList.toggle('hidden',!hasCat);
 
   const editing = idx >= 0;
   document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
@@ -748,9 +863,12 @@ function openModal(key, idx=-1){
     const item = monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
     document.getElementById('mVal').value  = item.value;
+    selCat = item.cat || null;
   } else {
+    selCat = null;
     document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
   }
+  if(hasCat) renderCatPills();
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
@@ -766,9 +884,11 @@ function confirmModal(){
     createInstallments(desc,val,n); return;
   }
   const arr=monthLocal(curMonth)[modalKey];
-  if(editIdx>=0) arr[editIdx]={desc,value:val};
-  else arr.push({desc,value:val});
-  renderRows(modalKey); recalc(); drawChart(); schedSave(); closeModal();
+  const item={desc,value:val};
+  if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
+  if(editIdx>=0) arr[editIdx]=item;
+  else arr.push(item);
+  renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
 }
 
 function toggleParcelado(){
@@ -804,7 +924,9 @@ async function createInstallments(desc,val,n){
     const y=sy+Math.floor(totalM/12);
     const m=(totalM%12)+1;
     const mk=`${y}-${String(m).padStart(2,'0')}`;
-    monthLocal(mk)[modalKey].push({desc:`${desc} (${i+1}/${n})`,value:val});
+    const inst={desc:`${desc} (${i+1}/${n})`,value:val};
+    if(selCat) inst.cat=selCat;
+    monthLocal(mk)[modalKey].push(inst);
     keysToSave.push(mk);
   }
   const rows=keysToSave.map(k=>({
@@ -814,12 +936,12 @@ async function createInstallments(desc,val,n){
   }));
   await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
   btn.disabled=false;
-  renderRows(modalKey); recalc(); drawChart(); closeModal();
+  renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); closeModal();
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape') closeModal();
+  if(e.key==='Escape'){ closeModal(); closeAnnual(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -951,6 +1073,113 @@ async function saveProfile(){
 
   btn.disabled=false; btn.textContent='salvar';
   closeProfileModal();
+}
+
+// ── Tendências ────────────────────────────────────────
+function prevMonthKey(mk){
+  const [y,m]=mk.split('-').map(Number);
+  return m===1?`${y-1}-12`:`${y}-${String(m-1).padStart(2,'0')}`;
+}
+function trendEl(cur,prev,id,invert=false){
+  const el=document.getElementById(id); if(!el) return;
+  if(!prev||prev===0){el.textContent='';el.className='hst-tr';return;}
+  const pct=Math.round((cur-prev)/prev*100);
+  if(Math.abs(pct)<1){el.textContent='';el.className='hst-tr';return;}
+  const up=pct>0;
+  el.className='hst-tr '+(invert?(up?'tr-dn':'tr-up'):(up?'tr-up':'tr-dn'));
+  el.textContent=(up?'↑':'↓')+Math.abs(pct)+'% vs ant.';
+}
+
+// ── Notas mensais ─────────────────────────────────────
+function loadNote(mk){
+  const el=document.getElementById('noteInp'); if(el) el.value=(allMonths[mk]?.note)||'';
+}
+function schedNotesSave(){
+  clearTimeout(noteTimer);
+  noteTimer=setTimeout(()=>{
+    monthLocal(curMonth).note=document.getElementById('noteInp')?.value||'';
+    schedSave();
+  },600);
+}
+
+// ── Meta de reserva ───────────────────────────────────
+function goalKey(){ return 'margem-goal-'+(curUser?.id||''); }
+function loadGoal(){ return parseFloat(localStorage.getItem(goalKey())||'0')||0; }
+function updateGoalDisplay(totalSaved){
+  const goal=loadGoal();
+  const btn=document.getElementById('goalSetBtn');
+  const disp=document.getElementById('goalDisplay');
+  if(!goal){ if(btn) btn.textContent='+ definir meta de reserva'; if(disp) disp.classList.add('hidden'); return; }
+  if(btn) btn.textContent='editar meta ('+fmt(goal)+')';
+  if(disp) disp.classList.remove('hidden');
+  const pct=Math.min(totalSaved/goal*100,100);
+  const fi=document.getElementById('goalFi'), lb=document.getElementById('goalLbl');
+  if(fi) fi.style.width=pct.toFixed(1)+'%';
+  if(lb) lb.textContent=Math.round(pct)+'% da meta — '+fmt(totalSaved)+' de '+fmt(goal);
+}
+function toggleGoalEdit(){
+  const ed=document.getElementById('goalEdit');
+  const hidden=ed.classList.contains('hidden');
+  ed.classList.toggle('hidden',!hidden);
+  if(hidden){ document.getElementById('goalInput').value=loadGoal()||''; setTimeout(()=>document.getElementById('goalInput').focus(),60); }
+}
+function saveGoal(){
+  const val=parseFloat(document.getElementById('goalInput').value)||0;
+  localStorage.setItem(goalKey(),String(val));
+  document.getElementById('goalEdit').classList.add('hidden');
+  const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
+  updateGoalDisplay(totalSaved);
+}
+
+// ── Resumo anual ──────────────────────────────────────
+function openAnnual(){
+  const y=parseInt(document.getElementById('yearSel').value);
+  document.getElementById('annTitle').textContent='resumo '+y;
+  const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  let totI=0,totE=0,totS=0,count=0,rows='';
+  for(let m=1;m<=12;m++){
+    const mk=`${y}-${String(m).padStart(2,'0')}`;
+    const d=allMonths[mk];
+    const dash='<td style="color:var(--t4)">—</td>';
+    if(!d||!(sum(d['income-fixed'])+sum(d['income-extra'])+sum(d['exp-fixed'])+sum(d['exp-extra'])+sum(d['savings']))){
+      rows+=`<tr><td>${mns[m-1]}</td>${dash}${dash}${dash}${dash}</tr>`; continue;
+    }
+    const ti=sum(d['income-fixed'])+sum(d['income-extra']),te=sum(d['exp-fixed'])+sum(d['exp-extra']),sv=sum(d['savings']),av=ti-te-sv;
+    totI+=ti; totE+=te; totS+=sv; count++;
+    rows+=`<tr><td>${mns[m-1]}</td><td class="c-green">${fmt(ti)}</td><td class="c-red">${fmt(te)}</td><td class="c-purple">${fmt(sv)}</td><td class="${av<0?'c-red':'c-green'}">${fmt(av)}</td></tr>`;
+  }
+  const totAv=totI-totE-totS;
+  document.getElementById('annContent').innerHTML=`
+    <table class="ann-table">
+      <thead><tr><th>mês</th><th>renda</th><th>gastos</th><th>reserva</th><th>disponível</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td>total ${y}</td><td class="c-green">${fmt(totI)}</td><td class="c-red">${fmt(totE)}</td><td class="c-purple">${fmt(totS)}</td><td class="${totAv<0?'c-red':'c-green'}">${fmt(totAv)}</td></tr></tfoot>
+    </table>
+    ${count>1?`<div class="ann-avg">média mensal (${count} meses): renda <span>${fmt(totI/count)}</span> · gastos <span>${fmt(totE/count)}</span> · reserva <span>${fmt(totS/count)}</span></div>`:''}
+  `;
+  document.getElementById('annOverlay').classList.remove('hidden');
+}
+function closeAnnual(){ document.getElementById('annOverlay').classList.add('hidden'); }
+
+// ── Categorias ────────────────────────────────────────
+function renderCatPills(){
+  document.getElementById('catPills').innerHTML=CATS.map(c=>{
+    const on=selCat===c.id;
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c.color};${on?`background:${c.color}22;border-color:${c.color}`:'border-color:transparent'}" onclick="selectCat('${c.id}')">${c.lb}</div>`;
+  }).join('');
+}
+function selectCat(id){ selCat=selCat===id?null:id; renderCatPills(); }
+function drawCatBreak(){
+  const d=monthLocal(curMonth);
+  const items=[...(d['exp-fixed']||[]),...(d['exp-extra']||[])].filter(i=>i.cat);
+  const wrap=document.getElementById('catBreak');
+  if(!items.length){ if(wrap) wrap.classList.add('hidden'); return; }
+  if(wrap) wrap.classList.remove('hidden');
+  const totals={};
+  items.forEach(i=>{ totals[i.cat]=(totals[i.cat]||0)+i.value; });
+  const total=Object.values(totals).reduce((a,b)=>a+b,0)||1;
+  document.getElementById('catSegBar').innerHTML=CATS.filter(c=>totals[c.id]).map(c=>`<div class="cat-seg" style="width:${(totals[c.id]/total*100).toFixed(1)}%;background:${c.color}"></div>`).join('');
+  document.getElementById('catLegend').innerHTML=CATS.filter(c=>totals[c.id]).map(c=>`<div class="cat-leg-it"><div class="cat-leg-dot" style="background:${c.color}"></div>${c.lb} · ${fmt(totals[c.id])} (${Math.round(totals[c.id]/total*100)}%)</div>`).join('');
 }
 
 // ── Boot ──────────────────────────────────────────────
