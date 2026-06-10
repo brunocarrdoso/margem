@@ -149,8 +149,9 @@ html[data-dark] body::before{opacity:.1}
 .stats-row{animation:dropIn .52s cubic-bezier(.22,1,.36,1) both}
 .note-bar {animation:dropIn .5s .06s cubic-bezier(.22,1,.36,1) both}
 .cols     {animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
+.sav-wrap {animation:dropIn .55s .14s cubic-bezier(.22,1,.36,1) both}
 .chart-sec{animation:dropIn .55s .18s cubic-bezier(.22,1,.36,1) both}
-.item{animation:itemIn .28s cubic-bezier(.22,1,.36,1) both}
+.item{animation:itemIn .28s cubic-bezier(.22,1,.36,1) backwards}
 .item:nth-child(2){animation-delay:.04s}
 .item:nth-child(3){animation-delay:.08s}
 .item:nth-child(4){animation-delay:.12s}
@@ -240,7 +241,7 @@ html[data-dark] .scard-avail.neg{background:#380a12;border-color:#921028}
     transparent calc(75% - .5px), rgba(255,255,255,.12) calc(75% - .5px), rgba(255,255,255,.12) calc(75% + .5px), transparent calc(75% + .5px)
   );
   pointer-events:none;z-index:1}
-.scard-avail .prog-fi{background:rgba(245,185,100,.72);border-radius:6px}
+.scard-avail .prog-fi{background:rgba(245,185,100,.72);background-image:repeating-linear-gradient(-45deg,rgba(0,0,0,.14) 0 5px,transparent 5px 10px);border-radius:6px}
 .scard-avail .prog-fi.warn{background:rgba(245,140,45,.88)}
 .scard-avail .prog-fi.danger{background:rgba(220,80,80,.9)}
 .avail-pcts{display:flex;justify-content:space-between;font-size:9px;font-weight:500;color:rgba(245,185,100,.45);margin-top:7px;letter-spacing:.2px}
@@ -272,7 +273,7 @@ html[data-dark] .group-expense{background-color:rgba(159,18,57,.07)}
 .group-expense .grp-nm::before{background:var(--red)}
 .grp-tot{font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;letter-spacing:-.3px}
 /* micro-cards de item */
-.item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:3px;background:rgba(255,255,255,.25);border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 8px;transition:border-color .14s,background .14s,box-shadow .14s}
+.item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:3px;background:rgba(255,255,255,.25);border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 8px;transition:border-color .14s,background .14s,box-shadow .14s,transform .18s cubic-bezier(.22,1,.36,1)}
 html[data-dark] .item{background:rgba(255,255,255,.03)}
 .item:last-child{margin-bottom:0}
 .item:hover{border-style:solid;border-color:var(--bdr);background:rgba(255,255,255,.55);box-shadow:2px 2px 0 var(--bdr)}
@@ -351,9 +352,9 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .parc-hint{font-size:11px;color:var(--t4);margin-top:5px}
 
 /* ── TOAST ────────────────────────────────────────────── */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--t1);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:12px;font-weight:500;letter-spacing:.1px;z-index:300;opacity:0;transition:opacity .22s,transform .22s;white-space:nowrap;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.18)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.err{background:var(--red)}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(14px) rotate(-1deg) scale(.92);background:var(--pop);color:#241c12;border:2px solid var(--ink);padding:10px 18px;border-radius:10px 6px 12px 8px;font-size:12px;font-weight:700;letter-spacing:.1px;z-index:300;opacity:0;transition:opacity .22s,transform .26s cubic-bezier(.22,1,.36,1);white-space:nowrap;pointer-events:none;box-shadow:3px 3px 0 var(--ink-sh)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0) rotate(-1deg) scale(1)}
+.toast.err{background:var(--red);color:#fff}
 
 /* ── TENDÊNCIAS ───────────────────────────────────────── */
 .hst-tr{font-size:10px;font-weight:500;height:14px;margin-top:4px;font-variant-numeric:tabular-nums;transition:color .2s;letter-spacing:.1px}
@@ -443,6 +444,34 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 .mp.cur{background:var(--pop);color:#241c12;font-weight:700;box-shadow:1.5px 1.5px 0 var(--ink-sh)}
 .cat-break-lb{display:inline-block;background:var(--surf2);border:1px solid var(--bdr);padding:2px 8px 3px;border-radius:3px;transform:rotate(-0.8deg)}
 
+/* ── ANIMAÇÕES POP ────────────────────────────────────── */
+/* legendas entram como carimbo */
+@keyframes chipStamp{0%{opacity:0;transform:scale(1.6) rotate(4deg)}55%{opacity:1;transform:scale(.92) rotate(-2.6deg)}100%{opacity:1;transform:scale(1) rotate(-1.2deg)}}
+.scard-lb,.grp-nm,.sav-nm,.chart-lb{animation:chipStamp .45s cubic-bezier(.22,1,.36,1) both}
+.scard:nth-child(1) .scard-lb{animation-delay:.18s}
+.scard:nth-child(2) .scard-lb{animation-delay:.26s}
+.scard:nth-child(3) .scard-lb{animation-delay:.34s}
+.scard:nth-child(4) .scard-lb{animation-delay:.42s}
+.grp-nm{animation-delay:.32s}
+.sav-nm{animation-delay:.4s}
+.chart-lb{animation-delay:.5s}
+/* pílula do mês ativa dá um pulinho */
+@keyframes pillPop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.mp.cur{animation:pillPop .32s cubic-bezier(.22,1,.36,1)}
+/* totais pulsam quando mudam de valor */
+@keyframes totBump{0%{transform:scale(1)}45%{transform:scale(1.14) rotate(1.2deg)}100%{transform:scale(1) rotate(0)}}
+.bump{animation:totBump .4s cubic-bezier(.22,1,.36,1);display:inline-block}
+/* itens deslizam no hover */
+.item:hover{transform:translateX(3px) rotate(.35deg)}
+/* logo balança no hover */
+@keyframes wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-4deg)}60%{transform:rotate(3deg)}}
+.logo span{display:inline-block}
+.logo:hover span{animation:wiggle .55s ease-in-out}
+/* botão de dark mode gira ao clicar */
+#darkBtn{transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .14s,color .14s,background .14s}
+#darkBtn:active{transform:rotate(160deg) scale(.9)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
 /* ── ALTURA FIXA + SCROLL nos cards de lançamentos ────── */
 [id^="rows-"]{min-height:56px;max-height:252px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent;margin-right:-8px;padding-right:8px}
 [id^="rows-"]::-webkit-scrollbar{width:5px}
@@ -450,7 +479,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 [id^="rows-"]::-webkit-scrollbar-track{background:transparent}
 @media(min-width:901px){
   [id^="rows-"]{height:252px;max-height:none}
-  #rows-savings{height:160px}
+  #rows-savings{height:118px}
 }
 
 /* ── BANNER IMPORTAR MÊS ──────────────────────────────── */
@@ -721,23 +750,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div id="rows-income-extra"></div>
           <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
         </div>
-        <div class="sav-in">
-          <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
-          <div id="rows-savings"></div>
-          <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
-          <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
-            <div class="goal-row hidden" id="goalDisplay">
-              <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
-              <span class="goal-lbl" id="goalLbl"></span>
-            </div>
-            <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
-            <div class="goal-edit-row hidden" id="goalEdit">
-              <span class="goal-pfx">R$</span>
-              <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
-              <button class="goal-ok" onclick="saveGoal()">ok</button>
-            </div>
-          </div>
-        </div>
       </div>
       <!-- coluna direita: gastos -->
       <div class="col">
@@ -750,6 +762,26 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
           <div id="rows-exp-extra"></div>
           <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sav-wrap">
+      <div class="sav-in">
+        <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
+        <div id="rows-savings"></div>
+        <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+        <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
+          <div class="goal-row hidden" id="goalDisplay">
+            <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
+            <span class="goal-lbl" id="goalLbl"></span>
+          </div>
+          <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
+          <div class="goal-edit-row hidden" id="goalEdit">
+            <span class="goal-pfx">R$</span>
+            <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
+            <button class="goal-ok" onclick="saveGoal()">ok</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1282,16 +1314,24 @@ function renderRows(key){
     </div>`;
   }).join('');
 }
+function setTot(id,v){
+  const el=document.getElementById(id);
+  const t=fmt(v);
+  if(el.textContent!==t){
+    el.textContent=t;
+    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  }
+}
 function renderAll(){ KEYS.forEach(renderRows); recalc(); drawCatBreak(); }
 function recalc(){
   const d=monthLocal(curMonth);
   const iF=sum(d['income-fixed']),iX=sum(d['income-extra']),eF=sum(d['exp-fixed']),eX=sum(d['exp-extra']),sv=sum(d['savings']);
   const tI=iF+iX,tE=eF+eX,av=tI-tE-sv;
-  document.getElementById('tot-income-fixed').textContent=fmt(iF);
-  document.getElementById('tot-income-extra').textContent=fmt(iX);
-  document.getElementById('tot-exp-fixed').textContent   =fmt(eF);
-  document.getElementById('tot-exp-extra').textContent   =fmt(eX);
-  document.getElementById('tot-savings').textContent     =fmt(sv);
+  setTot('tot-income-fixed',iF);
+  setTot('tot-income-extra',iX);
+  setTot('tot-exp-fixed',eF);
+  setTot('tot-exp-extra',eX);
+  setTot('tot-savings',sv);
   const hn=document.getElementById('heroN');
   animateNumber(hn, heroVal??av, av); heroVal=av;
   document.getElementById('scardAvail').classList.toggle('neg', av<0);
