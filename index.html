@@ -147,7 +147,6 @@ html[data-dark] body::before{opacity:.1}
   100%{transform:scale(1) rotate(0deg)}
 }
 .stats-row{animation:dropIn .52s cubic-bezier(.22,1,.36,1) both}
-.note-bar {animation:dropIn .5s .06s cubic-bezier(.22,1,.36,1) both}
 .cols     {animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
 .sav-wrap {animation:dropIn .55s .14s cubic-bezier(.22,1,.36,1) both}
 .chart-sec{animation:dropIn .55s .18s cubic-bezier(.22,1,.36,1) both}
@@ -198,9 +197,9 @@ html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 @media(min-width:901px){
   .sidebar{padding:0 40px;height:58px}
   .stats-row{padding:36px 40px 0}
-  .note-bar{padding:18px 40px 0}
   .carry-bar{padding:18px 40px 0}
   .cols{padding:18px 40px 0}
+  .metas-wrap{padding:14px 40px 0}
   .sav-wrap{padding:14px 40px 0}
   .chart-sec{padding:14px 40px 44px}
 }
@@ -245,10 +244,6 @@ html[data-dark] .scard-avail.neg{background:#380a12;border-color:#921028}
 .scard-avail .prog-fi.warn{background:rgba(245,140,45,.88)}
 .scard-avail .prog-fi.danger{background:rgba(220,80,80,.9)}
 .avail-pcts{display:flex;justify-content:space-between;font-size:9px;font-weight:500;color:rgba(245,185,100,.45);margin-top:7px;letter-spacing:.2px}
-.note-bar{padding:14px 20px 0}
-.note-card{background:rgba(253,246,168,.55);border:1.5px dashed rgba(200,170,60,.5);border-radius:12px 8px 14px 10px;padding:12px 18px;box-shadow:2px 3px 0 rgba(180,150,30,.12),1px 1px 0 rgba(180,150,30,.07);display:flex;align-items:center;gap:12px;position:relative;transform:rotate(-0.2deg)}
-.note-card::before{content:'✎';font-size:18px;color:rgba(160,130,20,.55);flex-shrink:0;font-style:normal}
-html[data-dark] .note-card{background:rgba(253,246,168,.06);border-color:rgba(200,170,60,.2);box-shadow:2px 3px 0 rgba(0,0,0,.2)}
 .cols{padding:14px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .col{display:flex;flex-direction:column;gap:14px}
 /* cards de grupo */
@@ -360,11 +355,6 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .hst-tr{font-size:10px;font-weight:500;height:14px;margin-top:4px;font-variant-numeric:tabular-nums;transition:color .2s;letter-spacing:.1px}
 .tr-up{color:var(--green)} .tr-dn{color:var(--red)}
 
-/* ── NOTA MENSAL ──────────────────────────────────────── */
-.note-inp{width:100%;background:none;border:none;outline:none;font-size:16px;font-style:italic;font-weight:400;color:var(--t2);padding:0;caret-color:var(--t1)}
-.note-inp::placeholder{font-style:italic;color:rgba(120,90,30,.45)} .note-inp:focus{color:var(--t1)}
-html[data-dark] .note-inp::placeholder{color:rgba(200,160,80,.3)}
-
 /* ── META DE RESERVA ──────────────────────────────────── */
 .goal-row{display:flex;align-items:center;gap:10px;margin-top:8px}
 .goal-bar-tr{flex:1;height:3px;background:var(--bdr);border-radius:99px;overflow:hidden}
@@ -418,7 +408,6 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .stats-row{grid-template-columns:1fr 1fr;padding:12px 14px 0;gap:8px}
   .scard-avail{grid-column:span 2}
   .scard-avail-val{font-size:28px;letter-spacing:-.8px}
-  .note-bar{padding:10px 14px 0}
   .carry-bar{padding:10px 14px 0}
   .carry-card{padding:14px 16px}
   .cols{padding:10px 14px 0;grid-template-columns:1fr;gap:10px}
@@ -426,6 +415,8 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .group{padding:18px}
   .sav-wrap{padding:10px 14px 0}
   .sav-in{padding:18px}
+  .metas-wrap{padding:10px 14px 0}
+  .metas-in{padding:18px}
   .chart-sec{padding:10px 14px 24px}
   .chart-in{padding:18px 16px}
   .ann-modal{padding:20px}
@@ -438,7 +429,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 }
 
 /* ── POP-ART: legendas de quadrinho ───────────────────── */
-.scard-lb,.grp-nm,.sav-nm,.chart-lb{display:inline-flex;align-items:center;width:fit-content;align-self:flex-start;background:var(--pop);color:#241c12;border:1.5px solid var(--ink);padding:3px 9px 4px;border-radius:4px 2px 5px 3px;transform:rotate(-1.2deg);box-shadow:2px 2px 0 var(--ink-sh);font-weight:700}
+.scard-lb,.grp-nm,.sav-nm,.chart-lb,.metas-nm{display:inline-flex;align-items:center;width:fit-content;align-self:flex-start;background:var(--pop);color:#241c12;border:1.5px solid var(--ink);padding:3px 9px 4px;border-radius:4px 2px 5px 3px;transform:rotate(-1.2deg);box-shadow:2px 2px 0 var(--ink-sh);font-weight:700}
 .scard-avail .scard-lb{color:#241c12;letter-spacing:1px}
 .grp-nm::before,.sav-nm::before{box-shadow:0 0 0 1px rgba(36,28,18,.25)}
 .mp.cur{background:var(--pop);color:#241c12;font-weight:700;box-shadow:1.5px 1.5px 0 var(--ink-sh)}
@@ -447,13 +438,14 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 /* ── ANIMAÇÕES POP ────────────────────────────────────── */
 /* legendas entram como carimbo */
 @keyframes chipStamp{0%{opacity:0;transform:scale(1.6) rotate(4deg)}55%{opacity:1;transform:scale(.92) rotate(-2.6deg)}100%{opacity:1;transform:scale(1) rotate(-1.2deg)}}
-.scard-lb,.grp-nm,.sav-nm,.chart-lb{animation:chipStamp .45s cubic-bezier(.22,1,.36,1) both}
+.scard-lb,.grp-nm,.sav-nm,.chart-lb,.metas-nm{animation:chipStamp .45s cubic-bezier(.22,1,.36,1) both}
 .scard:nth-child(1) .scard-lb{animation-delay:.18s}
 .scard:nth-child(2) .scard-lb{animation-delay:.26s}
 .scard:nth-child(3) .scard-lb{animation-delay:.34s}
 .scard:nth-child(4) .scard-lb{animation-delay:.42s}
 .grp-nm{animation-delay:.32s}
 .sav-nm{animation-delay:.4s}
+.metas-nm{animation-delay:.46s}
 .chart-lb{animation-delay:.5s}
 /* pílula do mês ativa dá um pulinho */
 @keyframes pillPop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
@@ -472,15 +464,19 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 #darkBtn:active{transform:rotate(160deg) scale(.9)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
-/* ── ALTURA FIXA + SCROLL nos cards de lançamentos ────── */
-[id^="rows-"]{min-height:56px;max-height:252px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent;margin-right:-8px;padding-right:8px}
-[id^="rows-"]::-webkit-scrollbar{width:5px}
-[id^="rows-"]::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
-[id^="rows-"]::-webkit-scrollbar-track{background:transparent}
+/* ── ALTURA FIXA + PAGINAÇÃO nos cards de lançamentos ── */
+[id^="rows-"]{min-height:56px}
 @media(min-width:901px){
-  [id^="rows-"]{height:252px;max-height:none}
-  #rows-savings{height:118px}
+  [id^="rows-"]{height:248px;overflow:hidden}
+  #rows-savings{height:96px}
 }
+.grp-ft{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.pager{display:flex;align-items:center;gap:7px;padding-top:10px}
+.pg-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1.5px solid var(--ink);border-radius:7px 4px 7px 5px;font-size:14px;color:var(--t1);cursor:pointer;line-height:1;box-shadow:2px 2px 0 var(--ink-sh);transition:all .14s cubic-bezier(.22,1,.36,1);padding:0;font-family:inherit}
+.pg-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
+.pg-btn:active:not(:disabled){transform:translateY(1px);box-shadow:none}
+.pg-btn:disabled{opacity:.3;cursor:default;box-shadow:none}
+.pg-lbl{font-size:10px;font-weight:700;color:var(--t3);font-variant-numeric:tabular-nums;letter-spacing:.5px}
 
 /* ── BANNER IMPORTAR MÊS ──────────────────────────────── */
 .carry-bar{padding:14px 20px 0}
@@ -505,15 +501,26 @@ html[data-dark] .m-ok.m-danger{color:#241c12}
 html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .m-ok.m-danger:hover{opacity:.88;transform:translateY(-1px)}
 
-/* ── METAS FINANCEIRAS ────────────────────────────────── */
-.metas-modal{max-width:420px}
-.metas-grid{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+/* ── METAS DO SALÁRIO (seção incorporada) ─────────────── */
+.metas-wrap{padding:14px 20px 0;animation:dropIn .55s .16s cubic-bezier(.22,1,.36,1) both}
+.metas-in{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 12px 14px;padding:22px 24px;box-shadow:var(--shadow-sm);position:relative;overflow:visible;transform:rotate(-0.15deg);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s}
+.metas-in:hover{transform:rotate(-0.35deg) translateY(-2px);box-shadow:6px 6px 0 var(--ink-sh)}
+.metas-in::before{content:'';position:absolute;top:-9px;left:12%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.4deg)}
+.metas-hd{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-bottom:14px}
+.metas-sal-row{display:flex;align-items:center;gap:8px}
+.metas-sal-lb{font-size:11px;font-weight:600;color:var(--t3)}
+.metas-sal-in{max-width:130px;font-variant-numeric:tabular-nums}
+.metas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 .meta-row{background:var(--surf2);border-radius:12px 8px 12px 10px;padding:14px 16px;border:1.5px solid var(--bdr-soft);position:relative;overflow:hidden}
 .meta-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:0 2px 2px 0;opacity:.6}
+.meta-row.ok::before{background:var(--green);opacity:1}
+.meta-row.bad::before{background:var(--red);opacity:1}
 .meta-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--t4);margin-bottom:4px}
-.meta-val{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;letter-spacing:-.4px;line-height:1.15}
-.meta-val.empty{color:var(--t4);font-size:16px;font-family:inherit;font-weight:400;font-style:italic;letter-spacing:0}
+.meta-val{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;letter-spacing:-.4px;line-height:1.15}
 .meta-desc{font-size:10px;color:var(--t3);margin-top:4px;line-height:1.5}
+.meta-st{font-size:10px;font-weight:700;margin-top:7px;line-height:1.4}
+.meta-st.ok{color:var(--green)} .meta-st.bad{color:var(--red)}
+.metas-empty{font-size:13px;font-style:italic;color:var(--t4);padding:6px 0 2px}
 
 /* ── CALENDÁRIO ───────────────────────────────────────── */
 .cal-modal{max-width:520px}
@@ -671,7 +678,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <div class="sb-footer-btns">
         <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
         <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openCal()" title="calendário">CAL</button>
-        <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openMetas()" title="metas financeiras">META</button>
         <button class="icon-btn icon-btn-yr" onclick="openAnnual()" title="resumo anual">ANO</button>
       </div>
       <div class="u-pill-wrap">
@@ -682,7 +688,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         </button>
         <div class="u-menu hidden" id="uMenu">
           <button onclick="openCal()">calendário</button>
-          <button onclick="openMetas()">metas financeiras</button>
           <button onclick="openProfileModal()">editar perfil</button>
           <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
@@ -721,12 +726,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       </div>
     </div>
 
-    <div class="note-bar">
-      <div class="note-card">
-        <input class="note-inp" id="noteInp" type="text" placeholder="nota do mês…" oninput="schedNotesSave()" />
-      </div>
-    </div>
-
     <div class="carry-bar hidden" id="carryBar">
       <div class="carry-card">
         <span class="carry-txt">este mês está em branco<em>quer trazer os itens fixos do último mês preenchido?</em></span>
@@ -743,12 +742,18 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-income">
           <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
           <div id="rows-income-fixed"></div>
-          <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
+          <div class="grp-ft">
+            <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
+            <div class="pager hidden" id="pager-income-fixed"></div>
+          </div>
         </div>
         <div class="group group-income">
           <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
           <div id="rows-income-extra"></div>
-          <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
+          <div class="grp-ft">
+            <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
+            <div class="pager hidden" id="pager-income-extra"></div>
+          </div>
         </div>
       </div>
       <!-- coluna direita: gastos -->
@@ -756,12 +761,18 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-expense">
           <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
           <div id="rows-exp-fixed"></div>
-          <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
+          <div class="grp-ft">
+            <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
+            <div class="pager hidden" id="pager-exp-fixed"></div>
+          </div>
         </div>
         <div class="group group-expense">
           <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
           <div id="rows-exp-extra"></div>
-          <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
+          <div class="grp-ft">
+            <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
+            <div class="pager hidden" id="pager-exp-extra"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -770,7 +781,10 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <div class="sav-in">
         <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
         <div id="rows-savings"></div>
-        <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+        <div class="grp-ft">
+          <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
+          <div class="pager hidden" id="pager-savings"></div>
+        </div>
         <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
           <div class="goal-row hidden" id="goalDisplay">
             <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
@@ -783,6 +797,20 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
             <button class="goal-ok" onclick="saveGoal()">ok</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="metas-wrap">
+      <div class="metas-in">
+        <div class="metas-hd">
+          <span class="metas-nm">metas do salário</span>
+          <div class="metas-sal-row">
+            <span class="metas-sal-lb">seu salário</span>
+            <span class="goal-pfx">R$</span>
+            <input type="number" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5000" oninput="metasInput()" />
+          </div>
+        </div>
+        <div class="metas-grid" id="metasGrid"></div>
       </div>
     </div>
 
@@ -830,24 +858,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <div class="m-actions">
       <button class="m-cancel" onclick="closeDelMonth()">cancelar</button>
       <button class="m-ok m-danger" onclick="confirmDelMonth()">excluir tudo</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ MODAL METAS FINANCEIRAS ══════════════════════════ -->
-<div class="overlay hidden" id="metasOverlay" onclick="if(event.target===this)closeMetas()">
-  <div class="modal metas-modal" onclick="event.stopPropagation()">
-    <div class="m-title">metas financeiras</div>
-    <div class="m-field">
-      <label>Seu salário mensal</label>
-      <div class="val-wrap">
-        <span class="val-pfx">R$</span>
-        <input class="m-in" id="metasSal" type="number" placeholder="0,00" min="0" step="0.01" oninput="calcMetas()" />
-      </div>
-    </div>
-    <div class="metas-grid" id="metasGrid"></div>
-    <div class="m-actions" style="margin-top:18px">
-      <button class="m-ok" onclick="closeMetas()">fechar</button>
     </div>
   </div>
 </div>
@@ -960,7 +970,7 @@ const CATS=[
 ];
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
-let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null, heroVal=null;
+let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null,  heroVal=null;
 let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
 let carrySourceKey=null;
@@ -1285,19 +1295,36 @@ function switchMonth(){
   const y=parseInt(document.getElementById('yearSel').value);
   curMonth=mkKey(y,m);
   monthLocal(curMonth);
+  pages={};
   renderMonthPills();
-  renderAll(); drawChart(); loadNote(curMonth);
+  renderAll(); drawChart();
 }
 
-// ── Render ────────────────────────────────────────────
+// ── Render (com paginação) ────────────────────────────
+const PAGE_SZ = k => k==='savings' ? 2 : 4;
+let pages = {};
+function flipPage(key,dir){ pages[key]=(pages[key]||0)+dir; renderRows(key); }
 function renderRows(key){
   const d=monthLocal(curMonth);
   const items=d[key]||[];
+  const sz=PAGE_SZ(key);
+  const nP=Math.max(1,Math.ceil(items.length/sz));
+  const pg=Math.min(Math.max(pages[key]||0,0),nP-1);
+  pages[key]=pg;
+  const pager=document.getElementById('pager-'+key);
+  if(pager){
+    if(nP>1){
+      pager.classList.remove('hidden');
+      pager.innerHTML=`<button class="pg-btn" onclick="flipPage('${key}',-1)"${pg===0?' disabled':''}>‹</button><span class="pg-lbl">${pg+1}/${nP}</span><button class="pg-btn" onclick="flipPage('${key}',1)"${pg===nP-1?' disabled':''}>›</button>`;
+    } else { pager.classList.add('hidden'); pager.innerHTML=''; }
+  }
   if(!items.length){
     document.getElementById('rows-'+key).innerHTML='<div class="empty-state">nenhum lançamento</div>';
     return;
   }
-  document.getElementById('rows-'+key).innerHTML=items.map((it,i)=>{
+  const start=pg*sz;
+  document.getElementById('rows-'+key).innerHTML=items.slice(start,start+sz).map((it,j)=>{
+    const i=start+j;
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
     const dotStyle=cat?`style="background:${cat.color};width:7px;height:7px"`:'';
     const catLbl=cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'';
@@ -1357,6 +1384,7 @@ function recalc(){
     document.getElementById('pctL').textContent=pct.toFixed(0)+'% comprometido';
     document.getElementById('pctR').textContent=free.toFixed(0)+'% livre';
   } else { fi.style.width='0%'; fi.className='prog-fi'; document.getElementById('pctL').textContent='0% comprometido'; document.getElementById('pctR').textContent='100% livre'; }
+  renderMetas(eF,tE,sv,totalSaved);
   updateCarryBanner();
 }
 function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
@@ -1417,7 +1445,7 @@ function confirmModal(){
     if(d>=1&&d<=31) item.day=d;
   }
   if(editIdx>=0) arr[editIdx]=item;
-  else arr.push(item);
+  else { arr.push(item); pages[modalKey]=Math.ceil(arr.length/PAGE_SZ(modalKey))-1; }
   renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
 }
 
@@ -1472,7 +1500,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ closeModal(); closeAnnual(); closeCal(); closeMetas(); closeDelMonth(); }
+  if(e.key==='Escape'){ closeModal(); closeAnnual(); closeCal(); closeDelMonth(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -1696,18 +1724,6 @@ function trendEl(cur,prev,id,invert=false){
   el.textContent=(up?'↑':'↓')+Math.abs(pct)+'% vs ant.';
 }
 
-// ── Notas mensais ─────────────────────────────────────
-function loadNote(mk){
-  const el=document.getElementById('noteInp'); if(el) el.value=(allMonths[mk]?.note)||'';
-}
-function schedNotesSave(){
-  clearTimeout(noteTimer);
-  noteTimer=setTimeout(()=>{
-    monthLocal(curMonth).note=document.getElementById('noteInp')?.value||'';
-    schedSave();
-  },600);
-}
-
 // ── Meta de reserva ───────────────────────────────────
 function goalKey(){ return 'margem-goal-'+(curUser?.id||''); }
 function loadGoal(){ return parseFloat(localStorage.getItem(goalKey())||'0')||0; }
@@ -1803,35 +1819,45 @@ async function confirmDelMonth(){
   await sb.from('financial_data').delete().eq('user_id',curUser.id).eq('month_key',curMonth);
   monthLocal(curMonth);
   sessionStorage.removeItem('carry-decided-'+curMonth);
-  renderAll(); drawChart(); loadNote(curMonth);
+  renderAll(); drawChart();
   toast('mês excluído ✓');
 }
 
-// ── Metas financeiras ──────────────────────────────────
-function openMetas(){
-  document.getElementById('uMenu')?.classList.add('hidden');
-  const saved=localStorage.getItem('margem-salary');
-  if(saved) document.getElementById('metasSal').value=saved;
-  calcMetas();
-  document.getElementById('metasOverlay').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('metasSal').focus(),60);
+// ── Metas do salário (seção incorporada) ───────────────
+function metasInput(){
+  localStorage.setItem('margem-salary',document.getElementById('metasSal').value);
+  recalc();
 }
-function closeMetas(){ document.getElementById('metasOverlay').classList.add('hidden'); }
-function calcMetas(){
-  const s=parseFloat(document.getElementById('metasSal').value)||0;
-  if(s) localStorage.setItem('margem-salary',s);
-  const rules=[
-    {lbl:'patrimônio-alvo',        val:s*36,  desc:'salário × 36 — meta de patrimônio acumulado ao longo da vida'},
-    {lbl:'investimento mensal',    val:s*.2,  desc:'salário × 20% — quanto investir por mês para chegar ao patrimônio-alvo'},
-    {lbl:'reserva de emergência',  val:s*6,   desc:'salário × 6 — primeira meta de reserva de emergência'},
-    {lbl:'gasto mensal máximo',    val:s*.3,  desc:'salário × 30% — teto de gastos mensais para manter equilíbrio'},
-    {lbl:'despesas fixas máximas', val:s/2,   desc:'salário ÷ 2 — máximo recomendado de comprometimentos fixos'},
+function renderMetas(eF,tE,sv,totalSaved){
+  const grid=document.getElementById('metasGrid');
+  if(!grid) return;
+  const saved=localStorage.getItem('margem-salary')||'';
+  const inp=document.getElementById('metasSal');
+  if(inp&&document.activeElement!==inp) inp.value=saved;
+  const s=parseFloat(saved)||0;
+  if(!s){
+    grid.innerHTML='<div class="metas-empty">informe seu salário ali em cima e veja na hora quanto guardar, quanto pode gastar e onde você está em cada meta.</div>';
+    return;
+  }
+  const pctOf=(v,alvo)=>alvo>0?Math.min(Math.round(v/alvo*100),999):0;
+  const rows=[
+    {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% do salário — teto de gastos do mês',
+     ok:tE<=s*.3, st:tE<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-tE)}`:`passou ${fmt(tE-s*.3)} do teto`},
+    {lbl:'despesas fixas máximas', alvo:s/2, desc:'metade do salário — máximo em compromissos fixos',
+     ok:eF<=s/2, st:eF<=s/2?`✓ fixos sob controle — folga de ${fmt(s/2-eF)}`:`fixos estouraram ${fmt(eF-s/2)}`},
+    {lbl:'investimento mensal', alvo:s*.2, desc:'20% do salário — quanto guardar todo mês',
+     ok:sv>=s*.2, st:sv>=s*.2?`✓ meta do mês batida (${fmt(sv)})`:`faltam ${fmt(s*.2-sv)} este mês`},
+    {lbl:'reserva de emergência', alvo:s*6, desc:'6 salários — sua primeira grande meta',
+     ok:totalSaved>=s*6, st:`${pctOf(totalSaved,s*6)}% — ${fmt(totalSaved)} guardados`},
+    {lbl:'patrimônio-alvo', alvo:s*36, desc:'36 salários — meta de patrimônio de longo prazo',
+     ok:totalSaved>=s*36, st:`${pctOf(totalSaved,s*36)}% do caminho`},
   ];
-  document.getElementById('metasGrid').innerHTML=rules.map(r=>`
-    <div class="meta-row">
+  grid.innerHTML=rows.map(r=>`
+    <div class="meta-row ${r.ok?'ok':'bad'}">
       <div class="meta-lbl">${r.lbl}</div>
-      <div class="meta-val${s?'':' empty'}">${s?fmt(r.val):'—'}</div>
+      <div class="meta-val">${fmt(r.alvo)}</div>
       <div class="meta-desc">${r.desc}</div>
+      <div class="meta-st ${r.ok?'ok':'bad'}">${r.st}</div>
     </div>`).join('');
 }
 
