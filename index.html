@@ -42,6 +42,8 @@ html[data-dark] {
   --shadow-sm:3px 3px 0 rgba(0,0,0,.42),1px 1px 0 rgba(0,0,0,.22);
   --shadow-blue:3px 3px 0 rgba(245,158,11,.52),1px 1px 0 rgba(245,158,11,.26);
   --shadow-red:3px 3px 0 rgba(220,50,75,.7),1px 1px 0 rgba(220,50,75,.35);
+  --green:#4ade80; --red:#f87171; --purple:#c084fc;
+  --green-bg:rgba(74,222,128,.13); --red-bg:rgba(248,113,113,.13); --purple-bg:rgba(192,132,252,.13);
 }
 html{scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -421,11 +423,57 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .chart-in{padding:18px 16px}
   .ann-modal{padding:20px}
   .ann-table td,.ann-table th{padding:6px;font-size:12px}
+  .icon-btn-extra{display:none}
   /* bottom sheet */
   .overlay{align-items:flex-end;padding:0}
   .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1)}
   .modal::before{content:'';display:block;width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
 }
+
+/* ── DAY BADGE ────────────────────────────────────────── */
+.item-day-badge{font-size:8px;font-weight:600;color:var(--blue);background:var(--blue-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(180,83,9,.12)}
+html[data-dark] .item-day-badge{border-color:rgba(245,158,11,.18)}
+
+/* ── CARRY-OVER MODAL ─────────────────────────────────── */
+.carry-modal{max-width:340px}
+.carry-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
+.carry-msg strong{color:var(--t1);font-weight:700}
+
+/* ── DELETE CONFIRM ───────────────────────────────────── */
+.del-confirm-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
+.m-ok.m-danger{background:var(--red);border-color:var(--red);box-shadow:3px 3px 0 rgba(159,18,57,.4)}
+html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
+.m-ok.m-danger:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ── METAS FINANCEIRAS ────────────────────────────────── */
+.metas-modal{max-width:420px}
+.metas-grid{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.meta-row{background:var(--surf2);border-radius:12px 8px 12px 10px;padding:14px 16px;border:1.5px solid var(--bdr-soft);position:relative;overflow:hidden}
+.meta-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:0 2px 2px 0;opacity:.6}
+.meta-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--t4);margin-bottom:4px}
+.meta-val{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;letter-spacing:-.4px;line-height:1.15}
+.meta-val.empty{color:var(--t4);font-size:16px;font-family:inherit;font-weight:400;font-style:italic;letter-spacing:0}
+.meta-desc{font-size:10px;color:var(--t3);margin-top:4px;line-height:1.5}
+
+/* ── CALENDÁRIO ───────────────────────────────────────── */
+.cal-modal{max-width:520px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:6px}
+.cal-wd{font-size:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--t4);text-align:center;padding:4px 0 8px}
+.cal-cell{min-height:52px;padding:5px 4px 4px;display:flex;flex-direction:column;gap:2px;border-radius:7px;border:1px solid transparent;transition:border-color .14s;overflow:hidden}
+.cal-cell:not(.cal-empty){background:var(--bg)}
+.cal-cell.cal-today{border-color:var(--blue);background:var(--blue-bg)}
+.cal-cell.cal-empty{background:none;border-color:transparent}
+.cal-day-num{font-size:11px;font-weight:600;color:var(--t3);text-align:center;line-height:1;margin-bottom:2px}
+.cal-day-num.is-today{color:var(--blue);font-weight:700}
+.cal-chip{font-size:7px;padding:1px 3px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.5}
+.cal-chip-inc{background:var(--green-bg);color:var(--green)}
+.cal-chip-exp{background:var(--red-bg);color:var(--red)}
+.cal-noday-sec{margin-top:18px;padding-top:14px;border-top:1px solid var(--bdr-soft)}
+.cal-noday-lb{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--t4);margin-bottom:10px}
+.cal-noday-item{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--t2);padding:7px 0;border-bottom:1px solid var(--bdr-soft)}
+.cal-noday-item:last-child{border-bottom:none}
+.cal-noday-item span{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:13px}
+.cal-empty-msg{text-align:center;color:var(--t4);font-style:italic;padding:28px 0;font-size:14px}
 </style>
 </head>
 <body>
@@ -562,6 +610,8 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
     <div class="sb-footer">
       <div class="sb-footer-btns">
         <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
+        <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openCal()" title="calendário">CAL</button>
+        <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openMetas()" title="metas financeiras">META</button>
         <button class="icon-btn icon-btn-yr" onclick="openAnnual()" title="resumo anual">ANO</button>
       </div>
       <div class="u-pill-wrap">
@@ -571,7 +621,10 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
           <span class="pill-v">▾</span>
         </button>
         <div class="u-menu hidden" id="uMenu">
+          <button onclick="openCal()">calendário</button>
+          <button onclick="openMetas()">metas financeiras</button>
           <button onclick="openProfileModal()">editar perfil</button>
+          <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
         </div>
       </div>
@@ -696,6 +749,59 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   </div>
 </div>
 
+<!-- ══ MODAL CARRY-OVER ══════════════════════════════════ -->
+<div class="overlay hidden" id="carryOverlay" onclick="if(event.target===this)cancelCarryOver()">
+  <div class="modal carry-modal" onclick="event.stopPropagation()">
+    <div class="m-title">novo mês — itens fixos</div>
+    <p class="carry-msg">importar os itens fixos de <strong id="carryFromLbl"></strong> para este mês?</p>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="cancelCarryOver()">começar vazio</button>
+      <button class="m-ok" onclick="confirmCarryOver()">importar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL EXCLUIR MÊS ════════════════════════════════ -->
+<div class="overlay hidden" id="delMonthOverlay" onclick="if(event.target===this)closeDelMonth()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">excluir mês</div>
+    <p class="del-confirm-msg" id="delMonthMsg"></p>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="closeDelMonth()">cancelar</button>
+      <button class="m-ok m-danger" onclick="confirmDelMonth()">excluir tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL METAS FINANCEIRAS ══════════════════════════ -->
+<div class="overlay hidden" id="metasOverlay" onclick="if(event.target===this)closeMetas()">
+  <div class="modal metas-modal" onclick="event.stopPropagation()">
+    <div class="m-title">metas financeiras</div>
+    <div class="m-field">
+      <label>Seu salário mensal</label>
+      <div class="val-wrap">
+        <span class="val-pfx">R$</span>
+        <input class="m-in" id="metasSal" type="number" placeholder="0,00" min="0" step="0.01" oninput="calcMetas()" />
+      </div>
+    </div>
+    <div class="metas-grid" id="metasGrid"></div>
+    <div class="m-actions" style="margin-top:18px">
+      <button class="m-ok" onclick="closeMetas()">fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL CALENDÁRIO ══════════════════════════════════ -->
+<div class="ann-overlay hidden" id="calOverlay" onclick="if(event.target===this)closeCal()">
+  <div class="ann-modal cal-modal">
+    <div class="ann-hd">
+      <span class="ann-title" id="calTitle">calendário</span>
+      <button class="ann-close" onclick="closeCal()">×</button>
+    </div>
+    <div id="calContent"></div>
+  </div>
+</div>
+
 <!-- ══ MODAL PERFIL ══════════════════════════════════════ -->
 <div class="overlay hidden" id="profileOverlay" onclick="profileOverlayClick(event)">
   <div class="modal" onclick="event.stopPropagation()">
@@ -756,6 +862,10 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
       <input class="m-in" id="mParcelas" type="number" placeholder="ex: 12" min="2" max="60" oninput="updateParcelHint()" />
       <div class="parc-hint hidden" id="parcelHint"></div>
     </div>
+    <div class="m-field hidden" id="dayWrap">
+      <label>Dia do vencimento <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
+      <input class="m-in" id="mDay" type="number" placeholder="ex: 5" min="1" max="31" />
+    </div>
     <div class="m-actions">
       <button class="m-cancel" onclick="closeModal()">cancelar</button>
       <button class="m-ok" id="mOkBtn" onclick="confirmModal()">adicionar →</button>
@@ -774,18 +884,25 @@ const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp
 const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
 const PROF_KEY = 'margem-profiles';
 const CATS=[
-  {id:'food',   lb:'alimentação', color:'#f97316'},
-  {id:'transp', lb:'transporte',  color:'#0891b2'},
-  {id:'home',   lb:'moradia',     color:'#7c3aed'},
-  {id:'health', lb:'saúde',       color:'#dc2626'},
-  {id:'fun',    lb:'lazer',       color:'#d97706'},
-  {id:'other',  lb:'outros',      color:'#64748b'},
+  {id:'food',    lb:'alimentação',  color:'#f97316'},
+  {id:'transp',  lb:'transporte',   color:'#0891b2'},
+  {id:'home',    lb:'moradia',      color:'#7c3aed'},
+  {id:'health',  lb:'saúde',        color:'#dc2626'},
+  {id:'fun',     lb:'lazer',        color:'#d97706'},
+  {id:'edu',     lb:'educação',     color:'#2563eb'},
+  {id:'cloth',   lb:'vestuário',    color:'#ec4899'},
+  {id:'pet',     lb:'pet',          color:'#84cc16'},
+  {id:'sub',     lb:'assinaturas',  color:'#6366f1'},
+  {id:'beauty',  lb:'beleza',       color:'#f43f5e'},
+  {id:'finance', lb:'financeiro',   color:'#0d9488'},
+  {id:'other',   lb:'outros',       color:'#64748b'},
 ];
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
 let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null, noteTimer=null, heroVal=null;
 let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
+let carrySourceKey=null;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 let chartYear = new Date().getFullYear();
@@ -1037,20 +1154,37 @@ function schedSave(){
   },1000);
 }
 
-// ── Carry-over ────────────────────────────────────────
-function carryOver(target){
-  const d=monthLocal(target);
-  if(d['income-fixed'].length||d['exp-fixed'].length) return false;
+// ── Carry-over (opt-in prompt) ────────────────────────
+function checkCarryOverPrompt(target){
+  const d=allMonths[target];
+  if(!d||d['income-fixed'].length||d['exp-fixed'].length) return;
+  if(sessionStorage.getItem('carry-decided-'+target)) return;
   const prev=Object.keys(allMonths).filter(k=>k<target).sort().reverse();
   for(const pk of prev){
     const p=allMonths[pk];
     if(p?.['income-fixed']?.length||p?.['exp-fixed']?.length){
-      if(p['income-fixed']?.length) d['income-fixed']=p['income-fixed'].map(i=>({...i}));
-      if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].map(i=>({...i}));
-      return true;
+      const [py,pm]=pk.split('-').map(Number);
+      const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      document.getElementById('carryFromLbl').textContent=mns[pm-1]+'/'+String(py).slice(2);
+      carrySourceKey=pk;
+      document.getElementById('carryOverlay').classList.remove('hidden');
+      return;
     }
   }
-  return false;
+}
+function confirmCarryOver(){
+  sessionStorage.setItem('carry-decided-'+curMonth,'1');
+  const d=monthLocal(curMonth);
+  const p=allMonths[carrySourceKey];
+  if(p['income-fixed']?.length) d['income-fixed']=p['income-fixed'].map(i=>({...i}));
+  if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].map(i=>({...i}));
+  cancelCarryOver();
+  renderRows('income-fixed'); renderRows('exp-fixed'); recalc(); drawChart(); schedSave();
+  toast('itens fixos importados ✓');
+}
+function cancelCarryOver(){
+  sessionStorage.setItem('carry-decided-'+curMonth,'1');
+  document.getElementById('carryOverlay').classList.add('hidden');
 }
 
 // ── Meses ─────────────────────────────────────────────
@@ -1085,14 +1219,14 @@ function selectMonthPill(m){
 }
 
 function switchMonth(){
+  document.getElementById('carryOverlay').classList.add('hidden');
   const m=parseInt(document.getElementById('monthSel').value);
   const y=parseInt(document.getElementById('yearSel').value);
   curMonth=mkKey(y,m);
   monthLocal(curMonth);
   renderMonthPills();
-  const copied=carryOver(curMonth);
   renderAll(); drawChart(); loadNote(curMonth);
-  if(copied) schedSave();
+  checkCarryOverPrompt(curMonth);
 }
 
 // ── Render ────────────────────────────────────────────
@@ -1107,9 +1241,11 @@ function renderRows(key){
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
     const dotStyle=cat?`style="background:${cat.color};width:7px;height:7px"`:'';
     const catLbl=cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'';
+    const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     return `<div class="item">
       <span class="item-dot" ${dotStyle}></span>
       <span class="item-desc">${esc(it.desc)}${catLbl}</span>
+      ${dayBadge}
       <span class="item-val">${fmt(it.value)}</span>
       <div class="item-btns">
         <button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>
@@ -1171,6 +1307,9 @@ function openModal(key, idx=-1){
   // categoria: só em gastos fixos e esporádicos
   const hasCat=['exp-fixed','exp-extra'].includes(key);
   document.getElementById('catWrap').classList.toggle('hidden',!hasCat);
+  // dia do vencimento: só em itens fixos
+  const hasDay=['income-fixed','exp-fixed'].includes(key);
+  document.getElementById('dayWrap').classList.toggle('hidden',!hasDay);
 
   const editing = idx >= 0;
   document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
@@ -1179,9 +1318,11 @@ function openModal(key, idx=-1){
     document.getElementById('mDesc').value = item.desc;
     document.getElementById('mVal').value  = item.value;
     selCat = item.cat || null;
+    if(hasDay) document.getElementById('mDay').value = item.day||'';
   } else {
     selCat = null;
     document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
+    if(hasDay) document.getElementById('mDay').value='';
   }
   if(hasCat) renderCatPills();
   buildDescSuggestions(key);
@@ -1202,6 +1343,10 @@ function confirmModal(){
   const arr=monthLocal(curMonth)[modalKey];
   const item={desc,value:val};
   if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
+  if(['income-fixed','exp-fixed'].includes(modalKey)){
+    const d=parseInt(document.getElementById('mDay').value);
+    if(d>=1&&d<=31) item.day=d;
+  }
   if(editIdx>=0) arr[editIdx]=item;
   else arr.push(item);
   renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
@@ -1258,7 +1403,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ closeModal(); closeAnnual(); }
+  if(e.key==='Escape'){ closeModal(); closeAnnual(); closeCal(); closeMetas(); closeDelMonth(); cancelCarryOver(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -1572,6 +1717,104 @@ function drawCatBreak(){
   const total=Object.values(totals).reduce((a,b)=>a+b,0)||1;
   document.getElementById('catSegBar').innerHTML=CATS.filter(c=>totals[c.id]).map(c=>`<div class="cat-seg" style="width:${(totals[c.id]/total*100).toFixed(1)}%;background:${c.color}"></div>`).join('');
   document.getElementById('catLegend').innerHTML=CATS.filter(c=>totals[c.id]).map(c=>`<div class="cat-leg-it"><div class="cat-leg-dot" style="background:${c.color}"></div>${c.lb} · ${fmt(totals[c.id])} (${Math.round(totals[c.id]/total*100)}%)</div>`).join('');
+}
+
+// ── Excluir mês ───────────────────────────────────────
+function openDelMonth(){
+  document.getElementById('uMenu').classList.add('hidden');
+  const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const [y,m]=curMonth.split('-').map(Number);
+  document.getElementById('delMonthMsg').innerHTML=`Excluir todos os dados de <strong>${mns[m-1]} ${y}</strong>?<br><span style="color:var(--t4);font-size:12px;margin-top:4px;display:block">Esta ação não pode ser desfeita.</span>`;
+  document.getElementById('delMonthOverlay').classList.remove('hidden');
+}
+function closeDelMonth(){ document.getElementById('delMonthOverlay').classList.add('hidden'); }
+async function confirmDelMonth(){
+  closeDelMonth();
+  delete allMonths[curMonth];
+  await sb.from('financial_data').delete().eq('user_id',curUser.id).eq('month_key',curMonth);
+  monthLocal(curMonth);
+  sessionStorage.removeItem('carry-decided-'+curMonth);
+  renderAll(); drawChart(); loadNote(curMonth);
+  toast('mês excluído ✓');
+}
+
+// ── Metas financeiras ──────────────────────────────────
+function openMetas(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  const saved=localStorage.getItem('margem-salary');
+  if(saved) document.getElementById('metasSal').value=saved;
+  calcMetas();
+  document.getElementById('metasOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('metasSal').focus(),60);
+}
+function closeMetas(){ document.getElementById('metasOverlay').classList.add('hidden'); }
+function calcMetas(){
+  const s=parseFloat(document.getElementById('metasSal').value)||0;
+  if(s) localStorage.setItem('margem-salary',s);
+  const rules=[
+    {lbl:'patrimônio-alvo',        val:s*36,  desc:'salário × 36 — meta de patrimônio acumulado ao longo da vida'},
+    {lbl:'investimento mensal',    val:s*.2,  desc:'salário × 20% — quanto investir por mês para chegar ao patrimônio-alvo'},
+    {lbl:'reserva de emergência',  val:s*6,   desc:'salário × 6 — primeira meta de reserva de emergência'},
+    {lbl:'gasto mensal máximo',    val:s*.3,  desc:'salário × 30% — teto de gastos mensais para manter equilíbrio'},
+    {lbl:'despesas fixas máximas', val:s/2,   desc:'salário ÷ 2 — máximo recomendado de comprometimentos fixos'},
+  ];
+  document.getElementById('metasGrid').innerHTML=rules.map(r=>`
+    <div class="meta-row">
+      <div class="meta-lbl">${r.lbl}</div>
+      <div class="meta-val${s?'':' empty'}">${s?fmt(r.val):'—'}</div>
+      <div class="meta-desc">${r.desc}</div>
+    </div>`).join('');
+}
+
+// ── Calendário de vencimentos ──────────────────────────
+function openCal(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  const [y,m]=curMonth.split('-').map(Number);
+  const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  document.getElementById('calTitle').textContent=mns[m-1]+' '+y;
+  buildCal(y,m);
+  document.getElementById('calOverlay').classList.remove('hidden');
+}
+function closeCal(){ document.getElementById('calOverlay').classList.add('hidden'); }
+function buildCal(y,m){
+  const d=monthLocal(curMonth);
+  const byDay={};
+  ['income-fixed','exp-fixed'].forEach(k=>{
+    (d[k]||[]).filter(i=>i.day).forEach(i=>{
+      if(!byDay[i.day]) byDay[i.day]=[];
+      byDay[i.day].push({...i,_k:k});
+    });
+  });
+  const noDayItems=[
+    ...(d['income-fixed']||[]).filter(i=>!i.day).map(i=>({...i,_k:'income-fixed'})),
+    ...(d['exp-fixed']||[]).filter(i=>!i.day).map(i=>({...i,_k:'exp-fixed'}))
+  ];
+  const firstDay=new Date(y,m-1,1).getDay();
+  const daysInMonth=new Date(y,m,0).getDate();
+  const now=new Date();
+  const todayNum=(now.getFullYear()===y&&now.getMonth()===m-1)?now.getDate():null;
+  const wds=['dom','seg','ter','qua','qui','sex','sáb'];
+  let html='<div class="cal-grid">';
+  wds.forEach(w=>{ html+=`<div class="cal-wd">${w}</div>`; });
+  for(let i=0;i<firstDay;i++) html+='<div class="cal-cell cal-empty"></div>';
+  for(let day=1;day<=daysInMonth;day++){
+    const isToday=day===todayNum;
+    const items=byDay[day]||[];
+    html+=`<div class="cal-cell${isToday?' cal-today':''}">
+      <div class="cal-day-num${isToday?' is-today':''}">${day}</div>
+      ${items.map(it=>`<div class="cal-chip ${it._k==='income-fixed'?'cal-chip-inc':'cal-chip-exp'}" title="${esc(it.desc)}">${esc(it.desc.length>9?it.desc.slice(0,8)+'…':it.desc)}</div>`).join('')}
+    </div>`;
+  }
+  html+='</div>';
+  if(noDayItems.length){
+    html+=`<div class="cal-noday-sec"><div class="cal-noday-lb">sem data definida</div>${
+      noDayItems.map(it=>`<div class="cal-noday-item"><span class="${it._k==='income-fixed'?'c-green':'c-red'}">${esc(it.desc)}</span><span>${fmt(it.value)}</span></div>`).join('')
+    }</div>`;
+  }
+  if(!Object.keys(byDay).length&&!noDayItems.length){
+    html+='<div class="cal-empty-msg">nenhum item fixo cadastrado neste mês</div>';
+  }
+  document.getElementById('calContent').innerHTML=html;
 }
 
 // ── Boot ──────────────────────────────────────────────
