@@ -360,14 +360,10 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .goal-bar-tr{flex:1;height:3px;background:var(--bdr);border-radius:99px;overflow:hidden}
 .goal-bar-fi{height:100%;background:var(--purple);border-radius:99px;transition:width .5s ease}
 .goal-lbl{font-size:11px;color:var(--t4);font-weight:500;white-space:nowrap}
-.goal-set{background:none;border:none;font-family:inherit;font-size:11px;color:var(--t4);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
-.goal-set:hover{color:var(--t2)}
-.goal-edit-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.goal-hint{font-size:11px;font-style:italic;color:var(--t4)}
 .goal-pfx{font-size:12px;color:var(--t4)}
 .goal-input{flex:1;border:1.5px solid var(--bdr);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--t1);outline:none;transition:border-color .15s;-webkit-appearance:none}
 .goal-input:focus{border-color:var(--blue)}
-.goal-ok{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
-.goal-ok:hover{background:var(--blue-d)}
 
 /* ── CATEGORIAS ───────────────────────────────────────── */
 .cat-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
@@ -790,12 +786,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
             <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
             <span class="goal-lbl" id="goalLbl"></span>
           </div>
-          <button class="goal-set" id="goalSetBtn" onclick="toggleGoalEdit()">+ definir meta de reserva</button>
-          <div class="goal-edit-row hidden" id="goalEdit">
-            <span class="goal-pfx">R$</span>
-            <input type="number" class="goal-input" id="goalInput" placeholder="ex: 10000" />
-            <button class="goal-ok" onclick="saveGoal()">ok</button>
-          </div>
+          <span class="goal-hint" id="goalHint">informe seu salário em “metas do salário” para acompanhar aqui a reserva de emergência</span>
         </div>
       </div>
     </div>
@@ -1724,33 +1715,23 @@ function trendEl(cur,prev,id,invert=false){
   el.textContent=(up?'↑':'↓')+Math.abs(pct)+'% vs ant.';
 }
 
-// ── Meta de reserva ───────────────────────────────────
-function goalKey(){ return 'margem-goal-'+(curUser?.id||''); }
-function loadGoal(){ return parseFloat(localStorage.getItem(goalKey())||'0')||0; }
+// ── Meta de reserva (= reserva de emergência, 6× salário) ──
 function updateGoalDisplay(totalSaved){
-  const goal=loadGoal();
-  const btn=document.getElementById('goalSetBtn');
+  const s=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const goal=s*6;
   const disp=document.getElementById('goalDisplay');
-  if(!goal){ if(btn) btn.textContent='+ definir meta de reserva'; if(disp) disp.classList.add('hidden'); return; }
-  if(btn) btn.textContent='editar meta ('+fmt(goal)+')';
+  const hint=document.getElementById('goalHint');
+  if(!goal){
+    if(disp) disp.classList.add('hidden');
+    if(hint) hint.classList.remove('hidden');
+    return;
+  }
+  if(hint) hint.classList.add('hidden');
   if(disp) disp.classList.remove('hidden');
   const pct=Math.min(totalSaved/goal*100,100);
   const fi=document.getElementById('goalFi'), lb=document.getElementById('goalLbl');
   if(fi) fi.style.width=pct.toFixed(1)+'%';
-  if(lb) lb.textContent=Math.round(pct)+'% da meta — '+fmt(totalSaved)+' de '+fmt(goal);
-}
-function toggleGoalEdit(){
-  const ed=document.getElementById('goalEdit');
-  const hidden=ed.classList.contains('hidden');
-  ed.classList.toggle('hidden',!hidden);
-  if(hidden){ document.getElementById('goalInput').value=loadGoal()||''; setTimeout(()=>document.getElementById('goalInput').focus(),60); }
-}
-function saveGoal(){
-  const val=parseFloat(document.getElementById('goalInput').value)||0;
-  localStorage.setItem(goalKey(),String(val));
-  document.getElementById('goalEdit').classList.add('hidden');
-  const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
-  updateGoalDisplay(totalSaved); toast('meta salva ✓');
+  if(lb) lb.textContent=Math.round(pct)+'% da reserva de emergência — '+fmt(totalSaved)+' de '+fmt(goal);
 }
 
 // ── Resumo anual ──────────────────────────────────────
