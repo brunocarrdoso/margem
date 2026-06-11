@@ -538,6 +538,8 @@ html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:r
 .loan-sum-val{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--t1)}
 .loan-pp{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
 .loan-pp-chip{font-size:11px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid rgba(217,119,6,.25);border-radius:9px;padding:4px 10px}
+.loan-part-btn{background:none;border:1.5px dashed var(--bdr);color:var(--t3);font-size:10px;font-weight:700;border-radius:8px 5px 9px 6px;padding:4px 9px;cursor:pointer;font-family:inherit;transition:all .15s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+.loan-part-btn:hover{border-style:solid;border-color:var(--ink);color:var(--t1);transform:translateY(-1px)}
 .loan-act-wrap{display:inline-flex;gap:4px;align-items:center;vertical-align:middle}
 .loan-act-wrap .edit-btn,.loan-act-wrap .del-btn{opacity:.7}
 .loan-act-wrap .edit-btn:hover,.loan-act-wrap .del-btn:hover{opacity:1}
@@ -1009,6 +1011,26 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <div class="m-actions">
       <button class="m-cancel" onclick="closeCover()">cancelar</button>
       <button class="m-ok" onclick="confirmCover()">resgatar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL RECEBIMENTO PARCIAL ════════════════════════ -->
+<div class="overlay hidden" id="partialOverlay" onclick="if(event.target===this)closePartial()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">recebimento parcial</div>
+    <p class="mini-msg" id="partialMsg"></p>
+    <div class="m-field">
+      <label>Quanto te pagaram?</label>
+      <div class="val-wrap">
+        <span class="val-pfx">R$</span>
+        <input class="m-in" id="partialVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);partialHintUpd()" />
+      </div>
+      <div class="parc-hint" id="partialHint"></div>
+    </div>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="closePartial()">cancelar</button>
+      <button class="m-ok" onclick="confirmPartial()">receber</button>
     </div>
   </div>
 </div>
@@ -1603,6 +1625,7 @@ function renderLoans(){
         <div class="item-btns"><button class="edit-btn" onclick="unrecvLoan('${mk}',${idx})" title="desfazer recebimento">↩</button></div>`
       :`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>
         <div class="item-btns">
+          <button class="edit-btn" onclick="openPartial('${mk}',${idx})" title="recebimento parcial">½</button>
           <button class="edit-btn" onclick="editLoan('${mk}',${idx})" title="editar">✎</button>
           <button class="del-btn" onclick="delLoan('${mk}',${idx})" title="remover">×</button>
         </div>`;
@@ -1650,6 +1673,42 @@ async function delLoan(mk,idx){
   await saveMonth(mk);
 }
 
+// ── Recebimento parcial ───────────────────────────────
+let partialRef=null;
+function openPartial(mk,idx){
+  const it=allMonths[mk].loans[idx];
+  partialRef={mk,idx};
+  document.getElementById('partialMsg').innerHTML=`<strong>${esc(it.desc)}</strong> te deve <strong>${fmt(it.value)}</strong> — registra quanto já caiu, o resto continua em aberto.`;
+  document.getElementById('partialVal').value='';
+  document.getElementById('partialHint').textContent='';
+  document.getElementById('partialOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('partialVal').focus(),60);
+}
+function partialHintUpd(){
+  if(!partialRef) return;
+  const it=allMonths[partialRef.mk].loans[partialRef.idx];
+  const amt=parseMoney(document.getElementById('partialVal').value)||0;
+  document.getElementById('partialHint').textContent =
+    amt<=0 ? '' : (amt>=it.value-0.004 ? 'isso quita tudo ✓' : `ficam em aberto ${fmt(it.value-amt)}`);
+}
+function closePartial(){ document.getElementById('partialOverlay').classList.add('hidden'); partialRef=null; }
+async function confirmPartial(){
+  if(!partialRef) return;
+  const {mk,idx}=partialRef;
+  const it=allMonths[mk].loans[idx];
+  const amt=parseMoney(document.getElementById('partialVal').value);
+  if(!amt||amt<=0){ document.getElementById('partialVal').focus(); return; }
+  closePartial();
+  if(amt>=it.value-0.004){ recvLoan(mk,idx); return; }
+  it.value=Math.round((it.value-amt)*100)/100;
+  const part={desc:it.desc, value:amt, recv:curMonth};
+  if(it.viaCard) part.viaCard=true;
+  allMonths[mk].loans.push(part);
+  renderLoans(); refreshLoansTab(); recalc(); drawChart();
+  await saveMonth(mk);
+  toast(fmt(amt)+' recebidos — '+fmt(it.value)+' em aberto');
+}
+
 // ── Aba de empréstimos ────────────────────────────────
 function openLoansTab(){
   document.getElementById('uMenu')?.classList.add('hidden');
@@ -1683,7 +1742,7 @@ function buildLoansTab(){
     const rows=ordered.map(({mk,idx,it})=>{
       const st=it.recv
         ?`<span class="loan-paid-badge">✓ ${mkLbl(it.recv)}</span><button class="edit-btn" onclick="unrecvLoan('${mk}',${idx})" title="desfazer">↩</button>`
-        :(mk<=curMonth?`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>`
+        :(mk<=curMonth?`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button><button class="loan-part-btn" onclick="openPartial('${mk}',${idx})">parcial</button>`
                       :`<span class="loan-from" style="margin:0">mês futuro</span>`);
       return `<tr${it.recv?' style="opacity:.55"':''}>
         <td>${mkLbl(mk)}</td>
@@ -1971,7 +2030,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -1987,6 +2046,7 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='npPin2') doSaveNewPin();
     else if(f?.id==='fixSavInput') saveFixSav();
     else if(f?.id==='tpName') confirmModal();
+    else if(f?.id==='partialVal') confirmPartial();
   }
 });
 
