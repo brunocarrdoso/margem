@@ -219,6 +219,7 @@ html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
   .mp{font-size:12px;padding:7px 6px}
   .stats-row{padding:36px 40px 0}
   .carry-bar{padding:18px 40px 0}
+  .due-bar{padding:16px 40px 0}
   .cols{padding:18px 40px 0}
   .metas-wrap{padding:14px 40px 0}
   .sav-wrap{padding:14px 40px 0}
@@ -432,6 +433,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .scard-avail{grid-column:span 2}
   .scard-avail-val{font-size:28px;letter-spacing:-.8px}
   .carry-bar{padding:10px 14px 0}
+  .due-bar{padding:10px 14px 0}
   .carry-card{padding:14px 16px}
   .cols{padding:10px 14px 0;grid-template-columns:1fr;gap:10px}
   .col{gap:10px}
@@ -585,6 +587,29 @@ html[data-dark] .pay-tp{color:#c084fc}
 .carry-btn-p:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
 .carry-btn-g{background:none;border:2px solid var(--bdr);color:var(--t3);border-radius:10px 6px 12px 8px;padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
 .carry-btn-g:hover{border-color:var(--t3);color:var(--t1)}
+
+/* ── COMENTÁRIO DO MÊS ───────────────────────────────── */
+.month-mood{font-size:10px;font-style:italic;color:rgba(245,200,122,.8);margin-top:10px;border-top:1px dashed rgba(245,185,100,.25);padding-top:8px;line-height:1.5;animation:itemIn .4s cubic-bezier(.22,1,.36,1) backwards}
+
+/* ── PRÓXIMOS VENCIMENTOS ────────────────────────────── */
+.due-bar{padding:14px 20px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;animation:dropIn .5s .04s cubic-bezier(.22,1,.36,1) both}
+.due-lb{display:inline-flex;background:var(--pop);color:#241c12;border:1.5px solid var(--ink);padding:3px 9px 4px;border-radius:4px 2px 5px 3px;transform:rotate(-1.4deg);box-shadow:2px 2px 0 var(--ink-sh);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.due-chips{display:flex;gap:6px;flex-wrap:wrap}
+.due-chip{font-size:11px;font-weight:600;padding:4px 11px;border-radius:9px;border:1px solid}
+.due-chip.exp{color:var(--red);background:var(--red-bg);border-color:rgba(159,18,57,.25)}
+.due-chip.inc{color:var(--green);background:var(--green-bg);border-color:rgba(22,101,52,.25)}
+html[data-dark] .due-chip.exp{border-color:rgba(248,113,113,.3)}
+html[data-dark] .due-chip.inc{border-color:rgba(74,222,128,.3)}
+
+/* ── LINHA DE FATURA NO CARD DE GASTOS ───────────────── */
+.card-fatura{align-self:flex-start;margin-top:8px;font-size:10px;font-weight:700;color:#b45309;background:rgba(217,119,6,.1);border:1px dashed rgba(217,119,6,.45);border-radius:8px 5px 9px 6px;padding:3px 10px 4px;cursor:pointer;font-family:inherit;transition:all .15s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+.card-fatura:hover{border-style:solid;border-color:var(--ink);transform:translateY(-1px) rotate(-.6deg);box-shadow:2px 2px 0 var(--ink-sh)}
+html[data-dark] .card-fatura{color:#fbbf24;background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4)}
+
+/* ── CARIMBO DE CONQUISTA ────────────────────────────── */
+#stampPop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:400;pointer-events:none}
+.stamp-inner{background:var(--pop);border:3px solid var(--ink);border-radius:14px 8px 16px 10px;padding:18px 36px;font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,5vw,32px);font-weight:900;letter-spacing:-.5px;color:#241c12;box-shadow:7px 7px 0 var(--ink-sh);transform:rotate(-4deg);animation:stampHit .55s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
+@keyframes stampHit{0%{opacity:0;transform:scale(2.4) rotate(9deg)}55%{opacity:1;transform:scale(.9) rotate(-5.5deg)}75%{transform:scale(1.04) rotate(-3.4deg)}100%{transform:scale(1) rotate(-4deg)}}
 
 /* ── DAY BADGE ────────────────────────────────────────── */
 .item-day-badge{font-size:8px;font-weight:600;color:var(--blue);background:var(--blue-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(180,83,9,.12)}
@@ -826,6 +851,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="scard-lb">gastos</div>
         <div class="scard-val c-red" id="hExp">R$ 0,00</div>
         <div class="hst-tr" id="trExp"></div>
+        <button class="card-fatura hidden" id="faturaLine" onclick="openFatura()"></button>
       </div>
       <div class="scard">
         <div class="scard-lb">guardado</div>
@@ -840,8 +866,14 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
         </div>
         <div class="avail-pcts"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
+        <div class="month-mood hidden" id="monthMood"></div>
         <button class="cover-btn hidden" id="coverBtn" onclick="openCover()">usar o guardado pra cobrir</button>
       </div>
+    </div>
+
+    <div class="due-bar hidden" id="dueBar">
+      <span class="due-lb">vence logo</span>
+      <div class="due-chips" id="dueChips"></div>
     </div>
 
     <div class="carry-bar hidden" id="carryBar">
@@ -1035,6 +1067,20 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
   </div>
 </div>
 
+<!-- ══ CARIMBO DE CONQUISTA ═════════════════════════════ -->
+<div id="stampPop" class="hidden"><div class="stamp-inner" id="stampTxt"></div></div>
+
+<!-- ══ FATURA DO CARTÃO ═════════════════════════════════ -->
+<div class="ann-overlay hidden" id="faturaOverlay" onclick="if(event.target===this)closeFatura()">
+  <div class="ann-modal" style="max-width:430px">
+    <div class="ann-hd">
+      <span class="ann-title" id="faturaTitle">fatura do cartão</span>
+      <button class="ann-close" onclick="closeFatura()">×</button>
+    </div>
+    <div id="faturaContent"></div>
+  </div>
+</div>
+
 <!-- ══ MODAL CRÉDITO → PRÓXIMO MÊS ══════════════════════ -->
 <div class="overlay hidden" id="creditOverlay" onclick="if(event.target===this)creditKeep()">
   <div class="modal" onclick="event.stopPropagation()">
@@ -1152,6 +1198,13 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 const KEYS   = ['income-fixed','income-extra','exp-fixed','exp-extra','savings'];
 const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos','savings':'reserva','loans':'emprestado'};
 const PAYS=[{id:'credito',lb:'crédito'},{id:'debito',lb:'débito'},{id:'pix',lb:'pix'}];
+const EMPTY_NM={
+  'income-fixed':'nenhuma renda fixa — começa pelo salário',
+  'income-extra':'nada extra este mês… por enquanto',
+  'exp-fixed':'nenhum gasto fixo por aqui',
+  'exp-extra':'zero esporádicos — carteira fechada',
+  'savings':'nada guardado este mês — que tal um pouquinho?'
+};
 const PAY_COL={credito:'#d97706',debito:'#2563eb',pix:'#0d9488'};
 const MNS_S=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
@@ -1556,7 +1609,7 @@ function renderRows(key){
     } else { pager.classList.add('hidden'); pager.innerHTML=''; }
   }
   if(!items.length){
-    document.getElementById('rows-'+key).innerHTML='<div class="empty-state">nenhum lançamento</div>';
+    document.getElementById('rows-'+key).innerHTML='<div class="empty-state">'+(EMPTY_NM[key]||'nenhum lançamento')+'</div>';
     return;
   }
   const start=pg*sz;
@@ -1829,6 +1882,12 @@ function recalc(){
     li.classList.toggle('hidden',out<=0.005);
     if(out>0.005) li.innerHTML=`se todos pagarem, o mês fecha com <b>${fmt(av+out)}</b>`;
   }
+  const fat=creditItemsOf(curMonth).reduce((a,i)=>a+i.value,0);
+  const fl=document.getElementById('faturaLine');
+  if(fl){ fl.classList.toggle('hidden',fat<=0.004); if(fat>0.004) fl.textContent='cartão: '+fmt(fat); }
+  updateMood(av,tI,tE,svFlow);
+  updateDueBar();
+  checkStamps(av,tI,tE,svFlow,totalSaved);
   updateCarryBanner();
 }
 function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
@@ -2030,7 +2089,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2051,7 +2110,25 @@ document.addEventListener('keydown',e=>{
 });
 
 // ── Chart ─────────────────────────────────────────────
+let chartNowIdx=-1;
+const curBandPlugin={id:'curBand',beforeDatasetsDraw(c){
+  if(chartNowIdx<0) return;
+  const x=c.scales.x, area=c.chartArea, ctx=c.ctx;
+  if(!x||!area) return;
+  const cx=x.getPixelForValue(chartNowIdx), half=(x.width/12)/2*.92;
+  const dk=document.documentElement.hasAttribute('data-dark');
+  ctx.save();
+  ctx.fillStyle=dk?'rgba(232,169,60,.08)':'rgba(255,216,77,.18)';
+  ctx.fillRect(cx-half,area.top,half*2,area.bottom-area.top);
+  // fitinha colada no topo da coluna do mês atual
+  ctx.translate(cx,area.top+2); ctx.rotate(-0.06);
+  ctx.fillStyle=dk?'rgba(180,140,55,.5)':'rgba(200,165,80,.85)';
+  ctx.fillRect(-15,-5,30,9);
+  ctx.restore();
+}};
 function drawChart(){
+  const nowD=new Date();
+  chartNowIdx = chartYear===nowD.getFullYear() ? nowD.getMonth() : -1;
   const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   // sempre mostra os 12 meses do chartYear
   const labels=mns.map(m=>m+' '+String(chartYear).slice(2));
@@ -2091,7 +2168,10 @@ function drawChart(){
         tooltip:{...tip,callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}
       },
       scales:{
-        x:{grid:{color:grid},ticks:{color:tick,font:{family:ff,size:10}}},
+        x:{grid:{color:grid},ticks:{
+          color:c=>c.index===chartNowIdx?(dk?'#f5b942':'#b45309'):tick,
+          font:c=>({family:ff,size:10,weight:c.index===chartNowIdx?'700':'400'})
+        }},
         y:{grid:{color:grid},ticks:{color:tick,font:{family:ff,size:10},callback:v=>{
           if(v===0) return '0';
           const a=Math.abs(v),s=v<0?'-':'';
@@ -2101,7 +2181,7 @@ function drawChart(){
     }
   };
   if(chart){chart.data=cfg.data;chart.options=cfg.options;chart.update();}
-  else{chart=new Chart(cv,{type:'bar',...cfg});}
+  else{chart=new Chart(cv,{type:'bar',...cfg,plugins:[curBandPlugin]});}
 }
 function changeChartYear(delta){
   chartYear+=delta;
@@ -2326,6 +2406,104 @@ function updateGoalDisplay(totalSaved){
   const fi=document.getElementById('goalFi'), lb=document.getElementById('goalLbl');
   if(fi) fi.style.width=pct.toFixed(1)+'%';
   if(lb) lb.textContent=Math.round(pct)+'% da reserva de emergência — '+fmt(totalSaved)+' de '+fmt(goal);
+}
+
+// ── Fatura do cartão ──────────────────────────────────
+function creditItemsOf(mk){
+  const d=allMonths[mk]||{};
+  return [...(d['exp-fixed']||[]),...(d['exp-extra']||[])].filter(i=>i.pay==='credito');
+}
+function openFatura(){
+  const items=creditItemsOf(curMonth);
+  const tot=items.reduce((a,i)=>a+i.value,0);
+  const tp=items.filter(i=>i.tp).reduce((a,i)=>a+i.value,0);
+  document.getElementById('faturaTitle').textContent='fatura — '+mkLbl(curMonth);
+  document.getElementById('faturaContent').innerHTML=items.length
+    ? `<table class="ann-table"><tbody>${items.map(i=>`<tr><td>${esc(i.desc)}${i.tp?` <span class="item-pay-badge pay-tp">${esc(i.tp)} paga</span>`:''}</td><td>${fmt(i.value)}</td></tr>`).join('')}</tbody>
+       <tfoot><tr><td>total no cartão</td><td>${fmt(tot)}</td></tr></tfoot></table>`+
+      (tp>0?`<div class="ann-avg">desse total, <span>${fmt(tp)}</span> é de outras pessoas (vão te pagar)</div>`:'')
+    : '<div class="cal-empty-msg">nada no cartão este mês</div>';
+  document.getElementById('faturaOverlay').classList.remove('hidden');
+}
+function closeFatura(){ document.getElementById('faturaOverlay').classList.add('hidden'); }
+
+// ── Comentário do mês ─────────────────────────────────
+function updateMood(av,tI,tE,svFlow){
+  const el=document.getElementById('monthMood'); if(!el) return;
+  let txt='';
+  if(tI||tE||svFlow){
+    const cy=curMonth.slice(0,4);
+    const avOf=k=>{const m=allMonths[k];if(!m)return 0;const la=loanAdj(k);
+      return sum(m['income-fixed'])+sum(m['income-extra'])-sum(m['exp-fixed'])-sum(m['exp-extra'])-sumFlow(m['savings'])-la.lent+la.recvd;};
+    const expOf=k=>{const m=allMonths[k];return m?sum(m['exp-fixed'])+sum(m['exp-extra']):0;};
+    const hasData=k=>{const m=allMonths[k];return m&&(sum(m['income-fixed'])+sum(m['income-extra'])+expOf(k)+sum(m['savings']))>0;};
+    const prevs=Object.keys(allMonths).filter(k=>k<curMonth&&hasData(k)).sort();
+    if(av<-0.005) txt='mês no vermelho — respira, dá pra ajustar';
+    else{
+      let streak=0;
+      for(let k=prevMonthKey(curMonth); hasData(k)&&avOf(k)>0.005; k=prevMonthKey(k)) streak++;
+      const yearPrevs=prevs.filter(k=>k.startsWith(cy));
+      const bestYear=av>0.005&&yearPrevs.length>=2&&yearPrevs.every(k=>avOf(k)<av);
+      const exps=prevs.map(expOf).filter(v=>v>0);
+      const avgExp=exps.length>=2?exps.reduce((a,b)=>a+b,0)/exps.length:0;
+      if(streak>=2&&av>0.005) txt=(streak+1)+'º mês seguido no azul ✓';
+      else if(bestYear) txt='seu melhor mês do ano até agora';
+      else if(avgExp&&tE>avgExp*1.25) txt='gastos '+Math.round((tE/avgExp-1)*100)+'% acima do seu normal';
+      else if(avgExp&&tE>0&&tE<avgExp*.8) txt='gastando '+Math.round((1-tE/avgExp)*100)+'% menos que o normal';
+      else if(tI>0&&svFlow>=tI*.2) txt='guardou '+Math.round(svFlow/tI*100)+'% da renda este mês';
+      else if(tI>0&&(tE+svFlow)/tI>.92) txt='mês apertado — pouco respiro';
+    }
+  }
+  el.textContent=txt;
+  el.classList.toggle('hidden',!txt);
+}
+
+// ── Próximos vencimentos (7 dias, só no mês corrente) ──
+function updateDueBar(){
+  const bar=document.getElementById('dueBar'); if(!bar) return;
+  if(curMonth!==nowKey()){ bar.classList.add('hidden'); return; }
+  const today=new Date().getDate();
+  const d=monthLocal(curMonth);
+  const items=[];
+  [['exp-fixed','exp'],['income-fixed','inc']].forEach(([k,t])=>{
+    (d[k]||[]).forEach(i=>{ if(i.day&&i.day>=today&&i.day<=today+7) items.push({desc:i.desc,day:i.day,t}); });
+  });
+  if(!items.length){ bar.classList.add('hidden'); return; }
+  items.sort((a,b)=>a.day-b.day);
+  document.getElementById('dueChips').innerHTML=items.map(i=>
+    `<span class="due-chip ${i.t}">${esc(i.desc)} · ${i.day===today?'hoje':'dia '+i.day}</span>`).join('');
+  bar.classList.remove('hidden');
+}
+
+// ── Carimbos de conquista ─────────────────────────────
+function stamp(txt){
+  const w=document.getElementById('stampPop'),t=document.getElementById('stampTxt');
+  if(!w||!t) return;
+  t.textContent=txt;
+  w.classList.remove('hidden'); w.style.opacity='1'; w.style.transition='';
+  clearTimeout(stamp._t);
+  stamp._t=setTimeout(()=>{
+    w.style.transition='opacity .45s'; w.style.opacity='0';
+    setTimeout(()=>{ w.classList.add('hidden'); w.style.transition=''; },470);
+  },1700);
+}
+function checkStamps(av,tI,tE,svFlow,totalSaved){
+  if(curMonth!==nowKey()) return; // só celebra o mês corrente de verdade
+  let seen;
+  try{ seen=JSON.parse(localStorage.getItem('margem-stamps')||'{}'); }catch(_){ seen={}; }
+  const fire=(k,txt)=>{
+    if(seen[k]) return;
+    seen[k]=1;
+    try{ localStorage.setItem('margem-stamps',JSON.stringify(seen)); }catch(_){}
+    stamp(txt);
+  };
+  const sal=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const totalItems=Object.values(allMonths).reduce((a,m)=>a+KEYS.reduce((x,k)=>x+(m[k]||[]).length,0)+(m.loans||[]).length,0);
+  if(totalItems===1) fire('primeiro','PRIMEIRO LANÇAMENTO ✦');
+  if(sal&&svFlow>=sal*.2-0.004) fire('invest-'+curMonth,'META DO MÊS ✓');
+  if(sal&&totalSaved>=sal*6) fire('emergencia','RESERVA COMPLETA ★');
+  const recvNow=Object.values(allMonths).some(m=>(m.loans||[]).some(l=>l.recv===curMonth));
+  if(recvNow&&loanOutstanding()<=0.004) fire('quitou-'+curMonth,'NINGUÉM TE DEVENDO ✓');
 }
 
 // ── Resumo anual ──────────────────────────────────────
