@@ -534,9 +534,11 @@ html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:r
 .pay-credito{color:#b45309;background:rgba(217,119,6,.12)}
 .pay-debito{color:#2563eb;background:rgba(37,99,235,.1)}
 .pay-pix{color:#0d9488;background:rgba(13,148,136,.12)}
+.pay-tp{color:#7c3aed;background:rgba(124,58,237,.1)}
 html[data-dark] .pay-credito{color:#fbbf24}
 html[data-dark] .pay-debito{color:#93c5fd}
 html[data-dark] .pay-pix{color:#2dd4bf}
+html[data-dark] .pay-tp{color:#c084fc}
 
 /* mini modal de confirmação */
 .mini-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
@@ -1063,6 +1065,16 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <label>Pago com <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
       <div class="cat-pills" id="payPills"></div>
     </div>
+    <div class="m-field hidden" id="tpWrap">
+      <div class="parc-row" onclick="toggleTp()">
+        <span class="parc-lbl">é de outra pessoa? <span style="font-weight:400;color:var(--t4)">(vão te pagar)</span></span>
+        <div class="t-sw" id="tpSwitch"></div>
+      </div>
+    </div>
+    <div class="m-field hidden" id="tpNameField">
+      <label>Quem vai te pagar?</label>
+      <input class="m-in" id="tpName" type="text" placeholder="ex: cleiton" autocomplete="off" />
+    </div>
     <div class="m-field hidden" id="parceladoWrap">
       <div class="parc-row" onclick="toggleParcelado()">
         <span class="parc-lbl">parcelado?</span>
@@ -1080,7 +1092,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     </div>
     <div class="m-actions">
       <button class="m-cancel" onclick="closeModal()">cancelar</button>
-      <button class="m-ok" id="mOkBtn" onclick="confirmModal()">adicionar →</button>
+      <button class="m-ok" id="mOkBtn" onclick="confirmModal()">adicionar</button>
     </div>
   </div>
 </div>
@@ -1118,7 +1130,7 @@ let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelad
 let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
 let carrySourceKey=null;
-let selPay=null, pendingCredit=null, editLoanMk=null;
+let selPay=null, pendingCredit=null, editLoanMk=null, isTp=false;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 let chartYear = new Date().getFullYear();
@@ -1411,7 +1423,7 @@ function confirmCarryOver(){
   const d=monthLocal(curMonth);
   const p=allMonths[carrySourceKey];
   if(p['income-fixed']?.length) d['income-fixed']=p['income-fixed'].map(i=>({...i}));
-  if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].map(i=>({...i}));
+  if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].map(i=>{const{tp,...rest}=i;return rest;});
   renderRows('income-fixed'); renderRows('exp-fixed'); recalc(); drawChart(); schedSave();
   toast('itens fixos importados ✓');
 }
@@ -1492,12 +1504,14 @@ function renderRows(key){
                  :(cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'');
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
+    const tpBadge=it.tp?`<span class="item-pay-badge pay-tp">${esc(it.tp)} paga</span>`:'';
     // ajustes e resgates (valor negativo) não passam pelo modal de edição
     const editBtn=(it.adj||it.value<0)?'':`<button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>`;
     const valTxt=(it.adj&&it.value>0?'+':'')+fmt(it.value);
     return `<div class="item">
       <span class="item-dot" ${dotStyle}></span>
       <span class="item-desc">${esc(it.desc)}${catLbl}</span>
+      ${tpBadge}
       ${payBadge}
       ${dayBadge}
       <span class="item-val"${it.value<0?' style="color:var(--red)"':''}>${valTxt}</span>
@@ -1540,6 +1554,7 @@ function renderLoans(){
   }
   wrap.innerHTML=list.slice(pg*sz,pg*sz+sz).map(({mk,idx,it})=>{
     const paid=!!it.recv;
+    const cardBadge=it.viaCard?`<span class="item-pay-badge pay-credito">no cartão</span>`:'';
     const from=mk!==curMonth?`<span class="loan-from">de ${mkLbl(mk)}</span>`:'';
     const action=paid
       ?`<span class="loan-paid-badge">✓ ${mkLbl(it.recv)}</span>
@@ -1552,6 +1567,7 @@ function renderLoans(){
     return `<div class="item loan-item${paid?' paid':''}">
       <span class="item-dot" style="background:${PAY_COL.credito};width:7px;height:7px"></span>
       <span class="item-desc">${esc(it.desc)}${from}</span>
+      ${cardBadge}
       <span class="item-val">${fmt(it.value)}</span>
       ${action}
     </div>`;
@@ -1628,7 +1644,7 @@ function buildLoansTab(){
         :`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>`;
       return `<tr${it.recv?' style="opacity:.55"':''}>
         <td>${mkLbl(mk)}</td>
-        <td style="text-align:left;font-weight:600">${esc(it.desc)}</td>
+        <td style="text-align:left;font-weight:600">${esc(it.desc)}${it.viaCard?' <span class="item-pay-badge pay-credito">no cartão</span>':''}</td>
         <td>${fmt(it.value)}</td>
         <td style="white-space:nowrap"><span class="loan-act-wrap">${st}
           <button class="edit-btn" onclick="editLoan('${mk}',${idx})" title="editar">✎</button>
@@ -1645,8 +1661,9 @@ function loanOutstanding(){
     .reduce((a,k)=>a+(allMonths[k].loans||[]).filter(l=>!l.recv).reduce((x,l)=>x+l.value,0),0);
 }
 // ajuste de saldo do mês: − emprestado no mês, + recebido no mês
+// viaCard não desconta: o gasto correspondente já saiu do saldo
 function loanAdj(mk){
-  const lent=sum(allMonths[mk]?.loans);
+  const lent=(allMonths[mk]?.loans||[]).reduce((a,l)=>a+(l.viaCard?0:l.value),0);
   const recvd=Object.keys(allMonths).reduce((a,k)=>a+(allMonths[k].loans||[]).filter(l=>l.recv===mk).reduce((x,l)=>x+l.value,0),0);
   return {lent,recvd};
 }
@@ -1727,13 +1744,19 @@ function openModal(key, idx=-1){
   document.getElementById('mOkBtn').textContent='adicionar';
   // parcelado: gastos esporádicos (parcelas nos próximos meses) e empréstimos (receber em partes)
   document.getElementById('parceladoWrap').classList.toggle('hidden', !['exp-extra','loans'].includes(key) || idx>=0);
-  document.querySelector('.parc-lbl').textContent = key==='loans' ? 'vão te pagar parcelado?' : 'parcelado?';
+  document.querySelector('#parceladoWrap .parc-lbl').textContent = key==='loans' ? 'vão te pagar parcelado?' : 'parcelado?';
   // categoria: só em gastos fixos e esporádicos
   const hasCat=['exp-fixed','exp-extra'].includes(key);
   document.getElementById('catWrap').classList.toggle('hidden',!hasCat);
   // forma de pagamento: só em gastos
   const hasPay=['exp-fixed','exp-extra'].includes(key);
   document.getElementById('payWrap').classList.toggle('hidden',!hasPay);
+  // gasto de outra pessoa (cria vínculo no emprestado) — só em gastos novos
+  isTp=false;
+  document.getElementById('tpSwitch').classList.remove('on');
+  document.getElementById('tpNameField').classList.add('hidden');
+  document.getElementById('tpName').value='';
+  document.getElementById('tpWrap').classList.toggle('hidden', !hasPay || idx>=0);
   // dia do vencimento: só em itens fixos
   const hasDay=['income-fixed','exp-fixed'].includes(key);
   document.getElementById('dayWrap').classList.toggle('hidden',!hasDay);
@@ -1766,6 +1789,7 @@ function confirmModal(){
   const val=parseMoney(document.getElementById('mVal').value);
   if(!desc){ document.getElementById('mDesc').focus(); return; }
   if(!val||val<=0){ document.getElementById('mVal').focus(); return; }
+  if(isTp && !document.getElementById('tpName').value.trim()){ document.getElementById('tpName').focus(); return; }
   if(isParcelado && editIdx<0){
     const n=parseInt(document.getElementById('mParcelas').value);
     if(!n||n<2||n>60){ document.getElementById('mParcelas').focus(); return; }
@@ -1778,6 +1802,8 @@ function confirmModal(){
   const item={desc,value:val};
   if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
   if(selPay&&['exp-fixed','exp-extra'].includes(modalKey)) item.pay=selPay;
+  if(isTp&&editIdx<0&&['exp-fixed','exp-extra'].includes(modalKey)) item.tp=document.getElementById('tpName').value.trim();
+  if(editIdx>=0&&['exp-fixed','exp-extra'].includes(modalKey)&&arr[editIdx].tp) item.tp=arr[editIdx].tp;
   if(['income-fixed','exp-fixed'].includes(modalKey)){
     const d=parseInt(document.getElementById('mDay').value);
     if(d>=1&&d<=31) item.day=d;
@@ -1800,6 +1826,13 @@ function pushItem(item){
   else { arr.push(item); pages[modalKey]=Math.ceil(arr.length/PAGE_SZ(modalKey))-1; }
   if(modalKey==='loans'){ renderLoans(); refreshLoansTab(); if(crossMonth) saveMonth(editLoanMk); }
   else renderRows(modalKey);
+  // gasto de outra pessoa: cria o "a receber" vinculado (viaCard não desconta de novo — o gasto já descontou)
+  if(item.tp && editIdx<0 && ['exp-fixed','exp-extra'].includes(modalKey)){
+    const dl=monthLocal(curMonth); dl.loans=dl.loans||[];
+    dl.loans.push({desc:item.tp, value:item.value, viaCard:true});
+    renderLoans(); refreshLoansTab();
+    toast('gasto + a receber de '+item.tp+' ✓');
+  }
   recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
 }
 function creditKeep(){
@@ -1812,12 +1845,22 @@ async function creditPushNext(){
   document.getElementById('creditOverlay').classList.add('hidden');
   if(!pendingCredit) return;
   const nk=nextKeyOf(curMonth);
-  monthLocal(nk)['exp-extra'].push(pendingCredit);
+  const nm=monthLocal(nk);
+  nm['exp-extra'].push(pendingCredit);
+  // o "a receber" vai junto pro mês da fatura
+  if(pendingCredit.tp){ nm.loans=nm.loans||[]; nm.loans.push({desc:pendingCredit.tp, value:pendingCredit.value, viaCard:true}); }
   pendingCredit=null;
   await saveMonth(nk);
   closeModal();
   drawChart();
   toast('lançado em '+mkLbl(nk)+' ✓');
+}
+
+function toggleTp(){
+  isTp=!isTp;
+  document.getElementById('tpSwitch').classList.toggle('on',isTp);
+  document.getElementById('tpNameField').classList.toggle('hidden',!isTp);
+  if(isTp) setTimeout(()=>document.getElementById('tpName').focus(),60);
 }
 
 function toggleParcelado(){
@@ -1864,7 +1907,12 @@ async function createInstallments(desc,val,n){
     const inst={desc:`${desc} (${i+1}/${n})`,value:val};
     if(selCat) inst.cat=selCat;
     if(selPay) inst.pay=selPay;
-    monthLocal(mk)[modalKey].push(inst);
+    const tpn=isTp?document.getElementById('tpName').value.trim():'';
+    if(tpn) inst.tp=tpn;
+    const mm=monthLocal(mk);
+    mm[modalKey].push(inst);
+    // parcela de outra pessoa: "a receber" correspondente em cada mês
+    if(tpn){ mm.loans=mm.loans||[]; mm.loans.push({desc:`${tpn} (${i+1}/${n})`, value:val, viaCard:true}); }
     keysToSave.push(mk);
   }
   const rows=keysToSave.map(k=>({
@@ -1874,7 +1922,7 @@ async function createInstallments(desc,val,n){
   }));
   await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
   btn.disabled=false;
-  renderRows(modalKey); recalc(); drawChart(); drawCatBreak(); closeModal();
+  renderRows(modalKey); renderLoans(); refreshLoansTab(); recalc(); drawChart(); drawCatBreak(); closeModal();
   toast(`${n} parcelas criadas ✓`);
 }
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
@@ -1895,6 +1943,7 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
     else if(f?.id==='npPin2') doSaveNewPin();
     else if(f?.id==='fixSavInput') saveFixSav();
+    else if(f?.id==='tpName') confirmModal();
   }
 });
 
