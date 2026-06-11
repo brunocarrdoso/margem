@@ -2111,19 +2111,32 @@ document.addEventListener('keydown',e=>{
 
 // ── Chart ─────────────────────────────────────────────
 let chartNowIdx=-1;
-const curBandPlugin={id:'curBand',beforeDatasetsDraw(c){
+// círculo rabiscado à mão em volta do rótulo do mês atual (fora da área de dados)
+const curBandPlugin={id:'curBand',afterDraw(c){
   if(chartNowIdx<0) return;
-  const x=c.scales.x, area=c.chartArea, ctx=c.ctx;
-  if(!x||!area) return;
-  const cx=x.getPixelForValue(chartNowIdx), half=(x.width/12)/2*.92;
+  const xs=c.scales.x; if(!xs) return;
+  const ctx=c.ctx;
+  const cx=xs.getPixelForValue(chartNowIdx);
+  const cy=(xs.top+xs.bottom)/2+1;
   const dk=document.documentElement.hasAttribute('data-dark');
+  const rx=Math.max(24,Math.min(34,(xs.width/12)/2*.95)), ry=11;
   ctx.save();
-  ctx.fillStyle=dk?'rgba(232,169,60,.08)':'rgba(255,216,77,.18)';
-  ctx.fillRect(cx-half,area.top,half*2,area.bottom-area.top);
-  // fitinha colada no topo da coluna do mês atual
-  ctx.translate(cx,area.top+2); ctx.rotate(-0.06);
-  ctx.fillStyle=dk?'rgba(180,140,55,.5)':'rgba(200,165,80,.85)';
-  ctx.fillRect(-15,-5,30,9);
+  ctx.strokeStyle=dk?'rgba(245,158,11,.85)':'rgba(180,83,9,.8)';
+  ctx.lineCap='round';
+  for(let pass=0;pass<2;pass++){
+    ctx.beginPath();
+    ctx.lineWidth=pass?1.1:1.7;
+    ctx.globalAlpha=pass?.5:.95;
+    const rot=pass?0.16:-0.07;
+    const start=-0.4+pass*0.9, end=start+Math.PI*2+0.55;
+    for(let a=start;a<=end;a+=0.2){
+      const w=1+0.07*Math.sin(a*3.2+pass*2)+0.05*Math.sin(a*5.1);
+      const px=cx+Math.cos(a+rot)*rx*w;
+      const py=cy+Math.sin(a+rot)*ry*(1+0.09*Math.sin(a*2.7+pass));
+      a===start?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  }
   ctx.restore();
 }};
 function drawChart(){
