@@ -514,6 +514,20 @@ html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:r
 .loan-paid-badge{font-size:9px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 8px 3px;border-radius:10px;flex-shrink:0;white-space:nowrap;animation:stampIn .35s cubic-bezier(.22,1,.36,1) both}
 .loan-item.paid .item-desc,.loan-item.paid .item-val{opacity:.55}
 .loan-item.paid .item-val{text-decoration:line-through;text-decoration-thickness:1.5px}
+.loan-if{font-size:10px;font-style:italic;color:var(--t3);margin-top:9px;border-top:1px dashed var(--bdr-soft);padding-top:8px;line-height:1.5}
+.loan-if b{color:var(--green);font-weight:700;font-style:normal}
+
+/* ── ABA DE EMPRÉSTIMOS ───────────────────────────────── */
+.loans-modal{max-width:560px}
+.loan-sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.loan-sum{background:var(--surf2);border:1.5px solid var(--bdr-soft);border-radius:12px 8px 12px 10px;padding:12px 14px}
+.loan-sum-lb{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--t4);margin-bottom:4px;line-height:1.4}
+.loan-sum-val{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--t1)}
+.loan-pp{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.loan-pp-chip{font-size:11px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid rgba(217,119,6,.25);border-radius:9px;padding:4px 10px}
+.loan-act-wrap{display:inline-flex;gap:4px;align-items:center;vertical-align:middle}
+.loan-act-wrap .edit-btn,.loan-act-wrap .del-btn{opacity:.7}
+.loan-act-wrap .edit-btn:hover,.loan-act-wrap .del-btn:hover{opacity:1}
 
 /* ── BADGE FORMA DE PAGAMENTO ─────────────────────────── */
 .item-pay-badge{font-size:8px;font-weight:700;padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;letter-spacing:.3px;text-transform:uppercase}
@@ -751,6 +765,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <div class="sb-footer-btns">
         <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
         <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openCal()" title="calendário">CAL</button>
+        <button class="icon-btn icon-btn-yr icon-btn-extra" onclick="openLoansTab()" title="empréstimos">EMP</button>
         <button class="icon-btn icon-btn-yr" onclick="openAnnual()" title="resumo anual">ANO</button>
       </div>
       <div class="u-pill-wrap">
@@ -761,6 +776,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         </button>
         <div class="u-menu hidden" id="uMenu">
           <button onclick="openCal()">calendário</button>
+          <button onclick="openLoansTab()">empréstimos</button>
           <button onclick="openProfileModal()">editar perfil</button>
           <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
@@ -869,19 +885,20 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
             <button class="sav-fix-btn" id="fixSavBtn" onclick="toggleFixSav()">corrigir saldo (rendimentos)</button>
             <div class="sav-fix-row hidden" id="fixSavEdit">
               <span class="goal-pfx">R$</span>
-              <input type="number" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" step="0.01" />
+              <input type="text" inputmode="decimal" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" autocomplete="off" />
               <button class="sav-fix-ok" onclick="saveFixSav()">ok</button>
             </div>
           </div>
         </div>
       </div>
       <div class="loan-in">
-        <div class="sav-hd"><span class="loan-nm">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
+        <div class="sav-hd"><span class="loan-nm" onclick="openLoansTab()" style="cursor:pointer" title="ver todos os empréstimos">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
         <div id="rows-loans"></div>
         <div class="grp-ft">
           <button class="add-trig" onclick="openModal('loans')">+ emprestar</button>
           <div class="pager hidden" id="pager-loans"></div>
         </div>
+        <div class="loan-if hidden" id="loanIf"></div>
       </div>
     </div>
 
@@ -892,7 +909,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div class="metas-sal-row">
             <span class="metas-sal-lb">seu salário</span>
             <span class="goal-pfx">R$</span>
-            <input type="number" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5000" oninput="metasInput()" />
+            <input type="text" inputmode="decimal" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5000" autocomplete="off" oninput="metasInput()" />
           </div>
         </div>
         <div class="metas-grid" id="metasGrid"></div>
@@ -944,6 +961,17 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <button class="m-cancel" onclick="closeDelMonth()">cancelar</button>
       <button class="m-ok m-danger" onclick="confirmDelMonth()">excluir tudo</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ ABA DE EMPRÉSTIMOS ═══════════════════════════════ -->
+<div class="ann-overlay hidden" id="loansOverlay" onclick="if(event.target===this)closeLoansTab()">
+  <div class="ann-modal loans-modal">
+    <div class="ann-hd">
+      <span class="ann-title">empréstimos</span>
+      <button class="ann-close" onclick="closeLoansTab()">×</button>
+    </div>
+    <div id="loansContent"></div>
   </div>
 </div>
 
@@ -1024,7 +1052,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <label id="mValLabel">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
-        <input class="m-in" id="mVal" type="number" placeholder="0,00" min="0" step="0.01" oninput="if(isParcelado)updateParcelHint()" />
+        <input class="m-in" id="mVal" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" oninput="if(isParcelado)updateParcelHint()" />
       </div>
     </div>
     <div class="m-field hidden" id="catWrap">
@@ -1090,7 +1118,7 @@ let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelad
 let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
 let carrySourceKey=null;
-let selPay=null, pendingCredit=null;
+let selPay=null, pendingCredit=null, editLoanMk=null;
 let dark = localStorage.getItem('margem-dark')==='1';
 let selectedColor = AV_COL[0];
 let chartYear = new Date().getFullYear();
@@ -1100,6 +1128,8 @@ const fmt    = n=>'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximu
 const sum    = a=>(a||[]).reduce((s,i)=>s+i.value,0);
 // fluxo do mês: ignora itens de ajuste (correção de rendimento não mexe no saldo do mês)
 const sumFlow = a=>(a||[]).reduce((s,i)=>s+(i.adj?0:i.value),0);
+// aceita "1.870,50", "1870,5" e "1870.5"
+const parseMoney = v=>{const s=String(v??'').trim();if(!s)return NaN;return parseFloat(s.includes(',')?s.replace(/\./g,'').replace(',','.'):s);};
 const savedUpTo = mk=>Object.keys(allMonths).filter(k=>k<=mk).reduce((a,k)=>a+sum(allMonths[k]['savings']),0);
 const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
@@ -1515,7 +1545,10 @@ function renderLoans(){
       ?`<span class="loan-paid-badge">✓ ${mkLbl(it.recv)}</span>
         <div class="item-btns"><button class="edit-btn" onclick="unrecvLoan('${mk}',${idx})" title="desfazer recebimento">↩</button></div>`
       :`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>
-        <div class="item-btns"><button class="del-btn" onclick="delLoan('${mk}',${idx})" title="remover">×</button></div>`;
+        <div class="item-btns">
+          <button class="edit-btn" onclick="editLoan('${mk}',${idx})" title="editar">✎</button>
+          <button class="del-btn" onclick="delLoan('${mk}',${idx})" title="remover">×</button>
+        </div>`;
     return `<div class="item loan-item${paid?' paid':''}">
       <span class="item-dot" style="background:${PAY_COL.credito};width:7px;height:7px"></span>
       <span class="item-desc">${esc(it.desc)}${from}</span>
@@ -1537,21 +1570,74 @@ function createLoanParts(desc,val,n){
   renderLoans(); recalc(); drawChart(); schedSave(); closeModal();
   toast(`emprestado em ${n}x ✓`);
 }
+function editLoan(mk,idx){ editLoanMk=mk; openModal('loans',idx); }
+function refreshLoansTab(){
+  const ov=document.getElementById('loansOverlay');
+  if(ov&&!ov.classList.contains('hidden')) buildLoansTab();
+}
 async function recvLoan(mk,idx){
   allMonths[mk].loans[idx].recv=curMonth;
-  renderLoans(); recalc(); drawChart();
+  renderLoans(); refreshLoansTab(); recalc(); drawChart();
   await saveMonth(mk);
   toast('R$ de volta no bolso ✓');
 }
 async function unrecvLoan(mk,idx){
   delete allMonths[mk].loans[idx].recv;
-  renderLoans(); recalc(); drawChart();
+  renderLoans(); refreshLoansTab(); recalc(); drawChart();
   await saveMonth(mk);
 }
 async function delLoan(mk,idx){
   allMonths[mk].loans.splice(idx,1);
-  renderLoans(); recalc(); drawChart();
+  renderLoans(); refreshLoansTab(); recalc(); drawChart();
   await saveMonth(mk);
+}
+
+// ── Aba de empréstimos ────────────────────────────────
+function openLoansTab(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  buildLoansTab();
+  document.getElementById('loansOverlay').classList.remove('hidden');
+}
+function closeLoansTab(){ document.getElementById('loansOverlay').classList.add('hidden'); }
+function buildLoansTab(){
+  const all=[];
+  Object.keys(allMonths).sort().forEach(mk=>{
+    (allMonths[mk].loans||[]).forEach((it,idx)=>all.push({mk,idx,it}));
+  });
+  const pend=all.filter(e=>!e.it.recv);
+  const recvd=all.filter(e=>e.it.recv);
+  const totPend=pend.reduce((a,e)=>a+e.it.value,0);
+  const totRecv=recvd.reduce((a,e)=>a+e.it.value,0);
+  // por pessoa (só pendentes) — agrupa "joão (1/3)" como "joão"
+  const byP={};
+  pend.forEach(e=>{const n=e.it.desc.replace(/\s*\(\d+\/\d+\)\s*$/,'');byP[n]=(byP[n]||0)+e.it.value;});
+  let html=`<div class="loan-sum-grid">
+    <div class="loan-sum"><div class="loan-sum-lb">a receber</div><div class="loan-sum-val c-amber">${fmt(totPend)}</div></div>
+    <div class="loan-sum"><div class="loan-sum-lb">já recebido</div><div class="loan-sum-val c-green">${fmt(totRecv)}</div></div>
+    <div class="loan-sum"><div class="loan-sum-lb">se todos pagarem, o mês fecha com</div><div class="loan-sum-val">${fmt((heroVal||0)+loanOutstanding())}</div></div>
+  </div>`;
+  if(Object.keys(byP).length)
+    html+=`<div class="loan-pp">${Object.entries(byP).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<span class="loan-pp-chip">${esc(n)} · ${fmt(v)}</span>`).join('')}</div>`;
+  if(!all.length){
+    html+='<div class="cal-empty-msg">nenhum empréstimo registrado</div>';
+  } else {
+    const ordered=[...pend.sort((a,b)=>a.mk<b.mk?1:-1),...recvd.sort((a,b)=>a.mk<b.mk?1:-1)];
+    const rows=ordered.map(({mk,idx,it})=>{
+      const st=it.recv
+        ?`<span class="loan-paid-badge">✓ ${mkLbl(it.recv)}</span><button class="edit-btn" onclick="unrecvLoan('${mk}',${idx})" title="desfazer">↩</button>`
+        :`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>`;
+      return `<tr${it.recv?' style="opacity:.55"':''}>
+        <td>${mkLbl(mk)}</td>
+        <td style="text-align:left;font-weight:600">${esc(it.desc)}</td>
+        <td>${fmt(it.value)}</td>
+        <td style="white-space:nowrap"><span class="loan-act-wrap">${st}
+          <button class="edit-btn" onclick="editLoan('${mk}',${idx})" title="editar">✎</button>
+          <button class="del-btn" onclick="delLoan('${mk}',${idx})" title="remover">×</button></span></td>
+      </tr>`;
+    }).join('');
+    html+=`<table class="ann-table"><thead><tr><th style="text-align:left">mês</th><th style="text-align:left">pra quem</th><th>valor</th><th>status</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+  document.getElementById('loansContent').innerHTML=html;
 }
 // total a receber até o mês visível
 function loanOutstanding(){
@@ -1618,6 +1704,12 @@ function recalc(){
     cb.classList.toggle('hidden',!showCover);
     if(showCover) cb.textContent='usar o guardado pra cobrir ('+fmt(Math.min(-av,totalSaved))+')';
   }
+  const li=document.getElementById('loanIf');
+  if(li){
+    const out=loanOutstanding();
+    li.classList.toggle('hidden',out<=0.005);
+    if(out>0.005) li.innerHTML=`se todos pagarem, o mês fecha com <b>${fmt(av+out)}</b>`;
+  }
   updateCarryBanner();
 }
 function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
@@ -1625,6 +1717,7 @@ function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(ke
 // ── Modal ─────────────────────────────────────────────
 function openModal(key, idx=-1){
   modalKey=key; editIdx=idx;
+  if(idx<0) editLoanMk=null;
   // reset parcelado state
   isParcelado=false;
   document.getElementById('tSwitch').classList.remove('on');
@@ -1650,9 +1743,9 @@ function openModal(key, idx=-1){
   const editing = idx >= 0;
   document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
   if(editing){
-    const item = key==='loans' ? (monthLocal(curMonth).loans||[])[idx] : monthLocal(curMonth)[key][idx];
+    const item = key==='loans' ? ((editLoanMk?allMonths[editLoanMk]:monthLocal(curMonth)).loans||[])[idx] : monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
-    document.getElementById('mVal').value  = item.value;
+    document.getElementById('mVal').value  = String(item.value).replace('.',',');
     selCat = item.cat || null;
     selPay = item.pay || null;
     if(hasDay) document.getElementById('mDay').value = item.day||'';
@@ -1667,10 +1760,10 @@ function openModal(key, idx=-1){
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
-function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; }
+function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; editLoanMk=null; }
 function confirmModal(){
   const desc=document.getElementById('mDesc').value.trim();
-  const val=parseFloat(document.getElementById('mVal').value);
+  const val=parseMoney(document.getElementById('mVal').value);
   if(!desc){ document.getElementById('mDesc').focus(); return; }
   if(!val||val<=0){ document.getElementById('mVal').focus(); return; }
   if(isParcelado && editIdx<0){
@@ -1680,7 +1773,7 @@ function confirmModal(){
     else createInstallments(desc,val,n);
     return;
   }
-  const d0=monthLocal(curMonth);
+  const d0=(modalKey==='loans'&&editIdx>=0&&editLoanMk)?allMonths[editLoanMk]:monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
   const item={desc,value:val};
   if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
@@ -1700,11 +1793,13 @@ function confirmModal(){
   pushItem(item);
 }
 function pushItem(item){
-  const d0=monthLocal(curMonth);
+  const crossMonth = modalKey==='loans'&&editIdx>=0&&editLoanMk&&editLoanMk!==curMonth;
+  const d0=(modalKey==='loans'&&editIdx>=0&&editLoanMk)?allMonths[editLoanMk]:monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
   if(editIdx>=0) arr[editIdx]=item;
   else { arr.push(item); pages[modalKey]=Math.ceil(arr.length/PAGE_SZ(modalKey))-1; }
-  if(modalKey==='loans') renderLoans(); else renderRows(modalKey);
+  if(modalKey==='loans'){ renderLoans(); refreshLoansTab(); if(crossMonth) saveMonth(editLoanMk); }
+  else renderRows(modalKey);
   recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
 }
 function creditKeep(){
@@ -1742,7 +1837,7 @@ function updateParcelHint(){
   const hint=document.getElementById('parcelHint');
   if(!n||n<2){hint.classList.add('hidden');return;}
   if(modalKey==='loans'){
-    const val=parseFloat(document.getElementById('mVal').value);
+    const val=parseMoney(document.getElementById('mVal').value);
     hint.textContent=val>0?`${n}x de ${fmt(val/n)}`:`${n} partes`;
     hint.classList.remove('hidden');
     return;
@@ -1785,7 +1880,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2038,12 +2133,12 @@ function toggleFixSav(){
   const hidden=ed.classList.contains('hidden');
   ed.classList.toggle('hidden',!hidden);
   if(hidden){
-    document.getElementById('fixSavInput').value=savedUpTo(curMonth).toFixed(2);
+    document.getElementById('fixSavInput').value=savedUpTo(curMonth).toFixed(2).replace('.',',');
     setTimeout(()=>{const i=document.getElementById('fixSavInput');i.focus();i.select();},60);
   }
 }
 function saveFixSav(){
-  const real=parseFloat(document.getElementById('fixSavInput').value);
+  const real=parseMoney(document.getElementById('fixSavInput').value);
   if(isNaN(real)){ document.getElementById('fixSavInput').focus(); return; }
   const diff=Math.round((real-savedUpTo(curMonth))*100)/100;
   document.getElementById('fixSavEdit').classList.add('hidden');
@@ -2154,7 +2249,8 @@ async function confirmDelMonth(){
 
 // ── Metas do salário (seção incorporada) ───────────────
 function metasInput(){
-  localStorage.setItem('margem-salary',document.getElementById('metasSal').value);
+  const n=parseMoney(document.getElementById('metasSal').value);
+  localStorage.setItem('margem-salary', isNaN(n)?'':String(n));
   recalc();
 }
 function renderMetas(eF,tE,sv,totalSaved){
@@ -2162,7 +2258,7 @@ function renderMetas(eF,tE,sv,totalSaved){
   if(!grid) return;
   const saved=localStorage.getItem('margem-salary')||'';
   const inp=document.getElementById('metasSal');
-  if(inp&&document.activeElement!==inp) inp.value=saved;
+  if(inp&&document.activeElement!==inp) inp.value=saved.replace('.',',');
   const s=parseFloat(saved)||0;
   if(!s){
     grid.innerHTML='<div class="metas-empty">informe seu salário ali em cima e veja na hora quanto guardar, quanto pode gastar e onde você está em cada meta.</div>';
