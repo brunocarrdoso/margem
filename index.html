@@ -887,7 +887,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
             <button class="sav-fix-btn" id="fixSavBtn" onclick="toggleFixSav()">corrigir saldo (rendimentos)</button>
             <div class="sav-fix-row hidden" id="fixSavEdit">
               <span class="goal-pfx">R$</span>
-              <input type="text" inputmode="decimal" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" autocomplete="off" />
+              <input type="text" inputmode="numeric" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" autocomplete="off" oninput="moneyMask(this)" />
               <button class="sav-fix-ok" onclick="saveFixSav()">ok</button>
             </div>
           </div>
@@ -911,7 +911,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div class="metas-sal-row">
             <span class="metas-sal-lb">seu salário</span>
             <span class="goal-pfx">R$</span>
-            <input type="text" inputmode="decimal" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5000" autocomplete="off" oninput="metasInput()" />
+            <input type="text" inputmode="numeric" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5.000,00" autocomplete="off" oninput="moneyMask(this);metasInput()" />
           </div>
         </div>
         <div class="metas-grid" id="metasGrid"></div>
@@ -1054,7 +1054,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <label id="mValLabel">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
-        <input class="m-in" id="mVal" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" oninput="if(isParcelado)updateParcelHint()" />
+        <input class="m-in" id="mVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);if(isParcelado)updateParcelHint()" />
       </div>
     </div>
     <div class="m-field hidden" id="catWrap">
@@ -1136,12 +1136,18 @@ let selectedColor = AV_COL[0];
 let chartYear = new Date().getFullYear();
 
 // ── Helpers ──────────────────────────────────────────
-const fmt    = n=>'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt    = n=>{n=Math.round(n*100)/100;if(n===0)n=0;return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});};
 const sum    = a=>(a||[]).reduce((s,i)=>s+i.value,0);
 // fluxo do mês: ignora itens de ajuste (correção de rendimento não mexe no saldo do mês)
 const sumFlow = a=>(a||[]).reduce((s,i)=>s+(i.adj?0:i.value),0);
 // aceita "1.870,50", "1870,5" e "1870.5"
 const parseMoney = v=>{const s=String(v??'').trim();if(!s)return NaN;return parseFloat(s.includes(',')?s.replace(/\./g,'').replace(',','.'):s);};
+const numBR = v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+// máscara de moeda: dígitos preenchem dos centavos (187050 → 1.870,50), igual app de banco
+function moneyMask(el){
+  const digits=String(el.value).replace(/\D/g,'').replace(/^0+(?=\d)/,'').slice(0,13);
+  el.value=digits?numBR(parseInt(digits,10)/100):'';
+}
 const savedUpTo = mk=>Object.keys(allMonths).filter(k=>k<=mk).reduce((a,k)=>a+sum(allMonths[k]['savings']),0);
 const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
@@ -1641,7 +1647,8 @@ function buildLoansTab(){
     const rows=ordered.map(({mk,idx,it})=>{
       const st=it.recv
         ?`<span class="loan-paid-badge">✓ ${mkLbl(it.recv)}</span><button class="edit-btn" onclick="unrecvLoan('${mk}',${idx})" title="desfazer">↩</button>`
-        :`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>`;
+        :(mk<=curMonth?`<button class="loan-recv-btn" onclick="recvLoan('${mk}',${idx})">recebi</button>`
+                      :`<span class="loan-from" style="margin:0">mês futuro</span>`);
       return `<tr${it.recv?' style="opacity:.55"':''}>
         <td>${mkLbl(mk)}</td>
         <td style="text-align:left;font-weight:600">${esc(it.desc)}${it.viaCard?' <span class="item-pay-badge pay-credito">no cartão</span>':''}</td>
@@ -1768,7 +1775,7 @@ function openModal(key, idx=-1){
   if(editing){
     const item = key==='loans' ? ((editLoanMk?allMonths[editLoanMk]:monthLocal(curMonth)).loans||[])[idx] : monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
-    document.getElementById('mVal').value  = String(item.value).replace('.',',');
+    document.getElementById('mVal').value  = numBR(item.value);
     selCat = item.cat || null;
     selPay = item.pay || null;
     if(hasDay) document.getElementById('mDay').value = item.day||'';
@@ -2182,7 +2189,7 @@ function toggleFixSav(){
   const hidden=ed.classList.contains('hidden');
   ed.classList.toggle('hidden',!hidden);
   if(hidden){
-    document.getElementById('fixSavInput').value=savedUpTo(curMonth).toFixed(2).replace('.',',');
+    document.getElementById('fixSavInput').value=numBR(savedUpTo(curMonth));
     setTimeout(()=>{const i=document.getElementById('fixSavInput');i.focus();i.select();},60);
   }
 }
@@ -2307,7 +2314,7 @@ function renderMetas(eF,tE,sv,totalSaved){
   if(!grid) return;
   const saved=localStorage.getItem('margem-salary')||'';
   const inp=document.getElementById('metasSal');
-  if(inp&&document.activeElement!==inp) inp.value=saved.replace('.',',');
+  if(inp&&document.activeElement!==inp) inp.value=saved?numBR(parseFloat(saved)):'';
   const s=parseFloat(saved)||0;
   if(!s){
     grid.innerHTML='<div class="metas-empty">informe seu salário ali em cima e veja na hora quanto guardar, quanto pode gastar e onde você está em cada meta.</div>';
