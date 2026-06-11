@@ -505,7 +505,6 @@ html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:r
 .loan-in::after{content:'$';position:absolute;top:6px;right:18px;font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:900;font-style:italic;color:var(--amber);opacity:.1;line-height:1;transform:rotate(9deg);pointer-events:none;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s}
 .loan-in:hover::after{transform:rotate(-7deg) scale(1.18);opacity:.22}
 .loan-nm::before{content:'';display:inline-block;width:5px;height:5px;border-radius:0;background:var(--amber);flex-shrink:0;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(36,28,18,.25)}
-.loan-hint{font-size:10px;font-style:italic;color:var(--t4);margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:9px;line-height:1.5}
 .loan-from{font-size:9px;font-weight:600;letter-spacing:.3px;margin-top:2px;line-height:1.2;color:var(--t4);white-space:nowrap}
 .loan-recv-btn{background:var(--pop);border:1.5px solid var(--ink);color:#241c12;border-radius:8px 5px 9px 6px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 var(--ink-sh);transition:all .15s cubic-bezier(.22,1,.36,1);flex-shrink:0;white-space:nowrap}
 .loan-recv-btn:hover{transform:translateY(-1px) rotate(-1deg);box-shadow:3px 3px 0 var(--ink-sh)}
@@ -858,7 +857,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <button class="add-trig" onclick="openModal('loans')">+ emprestar</button>
           <div class="pager hidden" id="pager-loans"></div>
         </div>
-        <div class="loan-hint">sai do saldo do mês do empréstimo e volta no mês em que te pagarem</div>
       </div>
     </div>
 
@@ -989,7 +987,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <label id="mValLabel">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
-        <input class="m-in" id="mVal" type="number" placeholder="0,00" min="0" step="0.01" />
+        <input class="m-in" id="mVal" type="number" placeholder="0,00" min="0" step="0.01" oninput="if(isParcelado)updateParcelHint()" />
       </div>
     </div>
     <div class="m-field hidden" id="catWrap">
@@ -1482,6 +1480,19 @@ function renderLoans(){
     </div>`;
   }).join('');
 }
+// divide o empréstimo em N partes — cada uma com seu "recebi"
+function createLoanParts(desc,val,n){
+  const d=monthLocal(curMonth);
+  d.loans=d.loans||[];
+  const part=Math.round(val/n*100)/100;
+  for(let i=0;i<n;i++){
+    const v=i===n-1 ? Math.round((val-part*(n-1))*100)/100 : part;
+    d.loans.push({desc:`${desc} (${i+1}/${n})`,value:v});
+  }
+  pages['loans']=Math.max(0,Math.ceil(loanEntries().length/PAGE_SZ('loans'))-1);
+  renderLoans(); recalc(); drawChart(); schedSave(); closeModal();
+  toast(`emprestado em ${n}x ✓`);
+}
 async function recvLoan(mk,idx){
   allMonths[mk].loans[idx].recv=curMonth;
   renderLoans(); recalc(); drawChart();
@@ -1570,8 +1581,9 @@ function openModal(key, idx=-1){
   document.getElementById('parcelHint').classList.add('hidden');
   document.getElementById('mValLabel').textContent='Valor';
   document.getElementById('mOkBtn').textContent='adicionar';
-  // show parcelado toggle only for exp-extra on new items
-  document.getElementById('parceladoWrap').classList.toggle('hidden', key!=='exp-extra' || idx>=0);
+  // parcelado: gastos esporádicos (parcelas nos próximos meses) e empréstimos (receber em partes)
+  document.getElementById('parceladoWrap').classList.toggle('hidden', !['exp-extra','loans'].includes(key) || idx>=0);
+  document.querySelector('.parc-lbl').textContent = key==='loans' ? 'vão te pagar parcelado?' : 'parcelado?';
   // categoria: só em gastos fixos e esporádicos
   const hasCat=['exp-fixed','exp-extra'].includes(key);
   document.getElementById('catWrap').classList.toggle('hidden',!hasCat);
@@ -1613,7 +1625,9 @@ function confirmModal(){
   if(isParcelado && editIdx<0){
     const n=parseInt(document.getElementById('mParcelas').value);
     if(!n||n<2||n>60){ document.getElementById('mParcelas').focus(); return; }
-    createInstallments(desc,val,n); return;
+    if(modalKey==='loans') createLoanParts(desc,val,n);
+    else createInstallments(desc,val,n);
+    return;
   }
   const d0=monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
@@ -1662,10 +1676,12 @@ async function creditPushNext(){
 
 function toggleParcelado(){
   isParcelado=!isParcelado;
+  const isLoan=modalKey==='loans';
   document.getElementById('tSwitch').classList.toggle('on',isParcelado);
   document.getElementById('parcelasField').classList.toggle('hidden',!isParcelado);
-  document.getElementById('mValLabel').textContent=isParcelado?'Valor por parcela':'Valor';
-  document.getElementById('mOkBtn').textContent=isParcelado?'criar parcelas':'adicionar';
+  document.getElementById('mValLabel').textContent=(isParcelado&&!isLoan)?'Valor por parcela':'Valor';
+  document.getElementById('mOkBtn').textContent=(isParcelado&&!isLoan)?'criar parcelas':'adicionar';
+  document.querySelector('#parcelasField label').textContent=isLoan?'Em quantas vezes?':'Número de parcelas';
   if(isParcelado) setTimeout(()=>document.getElementById('mParcelas').focus(),60);
   else document.getElementById('parcelHint').classList.add('hidden');
 }
@@ -1674,6 +1690,12 @@ function updateParcelHint(){
   const n=parseInt(document.getElementById('mParcelas').value);
   const hint=document.getElementById('parcelHint');
   if(!n||n<2){hint.classList.add('hidden');return;}
+  if(modalKey==='loans'){
+    const val=parseFloat(document.getElementById('mVal').value);
+    hint.textContent=val>0?`${n}x de ${fmt(val/n)}`:`${n} partes`;
+    hint.classList.remove('hidden');
+    return;
+  }
   const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   const [sy,sm]=curMonth.split('-').map(Number);
   const endTotalM=(sm-1)+(n-1);
