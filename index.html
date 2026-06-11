@@ -529,6 +529,20 @@ html[data-dark] .pay-pix{color:#2dd4bf}
 .mini-msg strong{color:var(--t1);font-weight:700}
 #creditOverlay{z-index:120}
 
+/* ── COBRIR MÊS NEGATIVO COM O GUARDADO ──────────────── */
+.cover-btn{margin-top:12px;background:var(--pop);border:2px solid var(--ink);border-radius:9px 6px 10px 7px;padding:9px 12px;font-family:inherit;font-size:11px;font-weight:700;color:#241c12;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.5);transition:all .15s cubic-bezier(.22,1,.36,1);width:100%;animation:stampIn .4s cubic-bezier(.22,1,.36,1) both;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cover-btn:hover{transform:translateY(-1px) rotate(-.5deg);box-shadow:4px 4px 0 rgba(0,0,0,.5)}
+.cover-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 rgba(0,0,0,.4)}
+
+/* ── CORRIGIR SALDO DA RESERVA ───────────────────────── */
+.sav-fix-wrap{margin-top:6px}
+.sav-fix-btn{background:none;border:none;font-family:inherit;font-size:11px;color:var(--t4);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;transition:color .15s}
+.sav-fix-btn:hover{color:var(--purple)}
+.sav-fix-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.sav-fix-ok{background:var(--pop);border:1.5px solid var(--ink);border-radius:8px 5px 9px 6px;padding:6px 14px;font-family:inherit;font-size:12px;font-weight:700;color:#241c12;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);transition:all .15s}
+.sav-fix-ok:hover{transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
+.sav-fix-ok:active{transform:translateY(1px);box-shadow:none}
+
 /* ── BANNER IMPORTAR MÊS ──────────────────────────────── */
 .carry-bar{padding:14px 20px 0}
 .carry-card{background:var(--surf);border:2px dashed var(--ink);border-radius:14px 10px 16px 12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow-sm);transform:rotate(-0.2deg);animation:dropIn .5s cubic-bezier(.22,1,.36,1) both}
@@ -782,6 +796,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <div class="prog-tr"><div class="prog-fi" id="progFi"></div></div>
         </div>
         <div class="avail-pcts"><span id="pctL">0% comprometido</span><span id="pctR">100% livre</span></div>
+        <button class="cover-btn hidden" id="coverBtn" onclick="openCover()">usar o guardado pra cobrir</button>
       </div>
     </div>
 
@@ -850,6 +865,14 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
             <span class="goal-lbl" id="goalLbl"></span>
           </div>
           <span class="goal-hint" id="goalHint">informe seu salário em “metas do salário” para acompanhar aqui a reserva de emergência</span>
+          <div class="sav-fix-wrap">
+            <button class="sav-fix-btn" id="fixSavBtn" onclick="toggleFixSav()">corrigir saldo (rendimentos)</button>
+            <div class="sav-fix-row hidden" id="fixSavEdit">
+              <span class="goal-pfx">R$</span>
+              <input type="number" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" step="0.01" />
+              <button class="sav-fix-ok" onclick="saveFixSav()">ok</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="loan-in">
@@ -920,6 +943,18 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <div class="m-actions">
       <button class="m-cancel" onclick="closeDelMonth()">cancelar</button>
       <button class="m-ok m-danger" onclick="confirmDelMonth()">excluir tudo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL RESGATE DO GUARDADO ════════════════════════ -->
+<div class="overlay hidden" id="coverOverlay" onclick="if(event.target===this)closeCover()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">cobrir com o guardado</div>
+    <p class="mini-msg" id="coverMsg"></p>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="closeCover()">cancelar</button>
+      <button class="m-ok" onclick="confirmCover()">resgatar</button>
     </div>
   </div>
 </div>
@@ -1063,6 +1098,9 @@ let chartYear = new Date().getFullYear();
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n=>'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const sum    = a=>(a||[]).reduce((s,i)=>s+i.value,0);
+// fluxo do mês: ignora itens de ajuste (correção de rendimento não mexe no saldo do mês)
+const sumFlow = a=>(a||[]).reduce((s,i)=>s+(i.adj?0:i.value),0);
+const savedUpTo = mk=>Object.keys(allMonths).filter(k=>k<=mk).reduce((a,k)=>a+sum(allMonths[k]['savings']),0);
 const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
 const ini    = n=>n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -1419,18 +1457,22 @@ function renderRows(key){
   document.getElementById('rows-'+key).innerHTML=items.slice(start,start+sz).map((it,j)=>{
     const i=start+j;
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
-    const dotStyle=cat?`style="background:${cat.color};width:7px;height:7px"`:'';
-    const catLbl=cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'';
+    const dotStyle=it.adj?`style="background:var(--purple);width:7px;height:7px"`:(cat?`style="background:${cat.color};width:7px;height:7px"`:'');
+    const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
+                 :(cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'');
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
+    // ajustes e resgates (valor negativo) não passam pelo modal de edição
+    const editBtn=(it.adj||it.value<0)?'':`<button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>`;
+    const valTxt=(it.adj&&it.value>0?'+':'')+fmt(it.value);
     return `<div class="item">
       <span class="item-dot" ${dotStyle}></span>
       <span class="item-desc">${esc(it.desc)}${catLbl}</span>
       ${payBadge}
       ${dayBadge}
-      <span class="item-val">${fmt(it.value)}</span>
+      <span class="item-val"${it.value<0?' style="color:var(--red)"':''}>${valTxt}</span>
       <div class="item-btns">
-        <button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>
+        ${editBtn}
         <button class="del-btn" onclick="removeItem('${key}',${i})" title="remover">×</button>
       </div>
     </div>`;
@@ -1535,8 +1577,9 @@ function renderAll(){ KEYS.forEach(renderRows); renderLoans(); recalc(); drawCat
 function recalc(){
   const d=monthLocal(curMonth);
   const iF=sum(d['income-fixed']),iX=sum(d['income-extra']),eF=sum(d['exp-fixed']),eX=sum(d['exp-extra']),sv=sum(d['savings']);
+  const svFlow=sumFlow(d['savings']);
   const {lent,recvd}=loanAdj(curMonth);
-  const tI=iF+iX,tE=eF+eX,av=tI-tE-sv-lent+recvd;
+  const tI=iF+iX,tE=eF+eX,av=tI-tE-svFlow-lent+recvd;
   setTot('tot-income-fixed',iF);
   setTot('tot-income-extra',iX);
   setTot('tot-exp-fixed',eF);
@@ -1546,7 +1589,7 @@ function recalc(){
   const hn=document.getElementById('heroN');
   animateNumber(hn, heroVal??av, av); heroVal=av;
   document.getElementById('scardAvail').classList.toggle('neg', av<0);
-  const totalSaved=Object.keys(allMonths).filter(k=>k<=curMonth).reduce((acc,k)=>acc+sum(allMonths[k]['savings']),0);
+  const totalSaved=savedUpTo(curMonth);
   animateNumber(document.getElementById('hInc'), prevInc??tI, tI, 400);
   animateNumber(document.getElementById('hExp'), prevExp??tE, tE, 400);
   animateNumber(document.getElementById('hSav'), prevSav??totalSaved, totalSaved, 400);
@@ -1562,13 +1605,19 @@ function recalc(){
   updateGoalDisplay(totalSaved);
   const fi=document.getElementById('progFi');
   if(tI+recvd>0){
-    const pct=Math.min((tE+sv+lent)/(tI+recvd)*100,100),free=Math.max(100-pct,0);
+    const pct=Math.min((tE+svFlow+lent)/(tI+recvd)*100,100),free=Math.max(100-pct,0);
     fi.style.width=pct.toFixed(1)+'%';
     fi.className='prog-fi'+(pct>90?' danger':pct>70?' warn':'');
     document.getElementById('pctL').textContent=pct.toFixed(0)+'% comprometido';
     document.getElementById('pctR').textContent=free.toFixed(0)+'% livre';
   } else { fi.style.width='0%'; fi.className='prog-fi'; document.getElementById('pctL').textContent='0% comprometido'; document.getElementById('pctR').textContent='100% livre'; }
-  renderMetas(eF,tE,sv,totalSaved);
+  renderMetas(eF,tE,svFlow,totalSaved);
+  const cb=document.getElementById('coverBtn');
+  if(cb){
+    const showCover=av<-0.005 && totalSaved>0.005;
+    cb.classList.toggle('hidden',!showCover);
+    if(showCover) cb.textContent='usar o guardado pra cobrir ('+fmt(Math.min(-av,totalSaved))+')';
+  }
   updateCarryBanner();
 }
 function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
@@ -1736,7 +1785,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -1750,6 +1799,7 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='rEmail') doResetPassword();
     else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
     else if(f?.id==='npPin2') doSaveNewPin();
+    else if(f?.id==='fixSavInput') saveFixSav();
   }
 });
 
@@ -1768,7 +1818,7 @@ function drawChart(){
     const sv=sum(m['savings']);
     const la=loanAdj(k);
     if(ti||te||sv||la.lent||la.recvd) hasAnyData=true;
-    inc.push(ti); exp.push(te); sav.push(sv); avl.push(ti-te-sv-la.lent+la.recvd);
+    inc.push(ti); exp.push(te); sav.push(sv); avl.push(ti-te-sumFlow(m['savings'])-la.lent+la.recvd);
   }
   const yLbl=document.getElementById('chartYearLbl');
   if(yLbl) yLbl.textContent=chartYear;
@@ -1961,6 +2011,50 @@ function trendEl(cur,prev,id,invert=false){
   el.textContent=(up?'↑':'↓')+Math.abs(pct)+'% vs ant.';
 }
 
+// ── Resgate do guardado (mês negativo) ────────────────
+let coverAmt=0;
+function openCover(){
+  const deficit=Math.max(0,-(heroVal||0));
+  coverAmt=Math.round(Math.min(deficit,savedUpTo(curMonth))*100)/100;
+  if(coverAmt<=0) return;
+  const partial=coverAmt<deficit-0.005;
+  document.getElementById('coverMsg').innerHTML=
+    `tirar <strong>${fmt(coverAmt)}</strong> do guardado pra cobrir o saldo negativo deste mês?`+
+    (partial?`<br><span style="font-size:11px;color:var(--t4)">o guardado cobre só parte — ainda faltam ${fmt(deficit-coverAmt)}</span>`:'');
+  document.getElementById('coverOverlay').classList.remove('hidden');
+}
+function closeCover(){ document.getElementById('coverOverlay').classList.add('hidden'); }
+function confirmCover(){
+  closeCover();
+  monthLocal(curMonth)['savings'].push({desc:'resgate — cobrir o mês',value:-coverAmt});
+  pages['savings']=Math.ceil(monthLocal(curMonth)['savings'].length/PAGE_SZ('savings'))-1;
+  renderRows('savings'); recalc(); drawChart(); schedSave();
+  toast('resgate feito ✓');
+}
+
+// ── Corrigir saldo da reserva (rendimentos) ───────────
+function toggleFixSav(){
+  const ed=document.getElementById('fixSavEdit');
+  const hidden=ed.classList.contains('hidden');
+  ed.classList.toggle('hidden',!hidden);
+  if(hidden){
+    document.getElementById('fixSavInput').value=savedUpTo(curMonth).toFixed(2);
+    setTimeout(()=>{const i=document.getElementById('fixSavInput');i.focus();i.select();},60);
+  }
+}
+function saveFixSav(){
+  const real=parseFloat(document.getElementById('fixSavInput').value);
+  if(isNaN(real)){ document.getElementById('fixSavInput').focus(); return; }
+  const diff=Math.round((real-savedUpTo(curMonth))*100)/100;
+  document.getElementById('fixSavEdit').classList.add('hidden');
+  if(!diff){ toast('saldo já está certo ✓'); return; }
+  const d=monthLocal(curMonth);
+  d['savings'].push({desc:'correção de rendimento',value:diff,adj:true});
+  pages['savings']=Math.ceil(d['savings'].length/PAGE_SZ('savings'))-1;
+  renderRows('savings'); recalc(); drawChart(); schedSave();
+  toast('saldo corrigido pra '+fmt(real)+' ✓');
+}
+
 // ── Meta de reserva (= reserva de emergência, 6× salário) ──
 function updateGoalDisplay(totalSaved){
   const s=parseFloat(localStorage.getItem('margem-salary'))||0;
@@ -1994,7 +2088,7 @@ function openAnnual(){
       rows+=`<tr><td>${mns[m-1]}</td>${dash}${dash}${dash}${dash}</tr>`; continue;
     }
     const la=loanAdj(mk);
-    const ti=sum(d['income-fixed'])+sum(d['income-extra']),te=sum(d['exp-fixed'])+sum(d['exp-extra']),sv=sum(d['savings']),av=ti-te-sv-la.lent+la.recvd;
+    const ti=sum(d['income-fixed'])+sum(d['income-extra']),te=sum(d['exp-fixed'])+sum(d['exp-extra']),sv=sum(d['savings']),av=ti-te-sumFlow(d['savings'])-la.lent+la.recvd;
     totI+=ti; totE+=te; totS+=sv; count++;
     rows+=`<tr><td>${mns[m-1]}</td><td class="c-green">${fmt(ti)}</td><td class="c-red">${fmt(te)}</td><td class="c-purple">${fmt(sv)}</td><td class="${av<0?'c-red':'c-green'}">${fmt(av)}</td></tr>`;
   }
