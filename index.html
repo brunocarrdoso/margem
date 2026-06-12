@@ -641,6 +641,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .meta-desc{font-size:10px;color:var(--t3);margin-top:4px;line-height:1.5}
 .meta-st{font-size:10px;font-weight:700;margin-top:7px;line-height:1.4}
 .meta-st.ok{color:var(--green)} .meta-st.bad{color:var(--red)}
+.meta-day{font-size:10px;font-style:italic;color:var(--t3);margin-top:6px;border-top:1px dashed var(--bdr-soft);padding-top:6px;line-height:1.5}
 .metas-empty{font-size:13px;font-style:italic;color:var(--t4);padding:6px 0 2px}
 
 /* ── CALENDÁRIO ───────────────────────────────────────── */
@@ -1078,6 +1079,30 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <button class="ann-close" onclick="closeFatura()">×</button>
     </div>
     <div id="faturaContent"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL APLICAR NOS PRÓXIMOS MESES ═════════════════ -->
+<div class="overlay hidden" id="propOverlay" onclick="if(event.target===this)propKeep()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">item fixo</div>
+    <p class="mini-msg" id="propMsg"></p>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="propKeep()">só neste mês</button>
+      <button class="m-ok" onclick="propApply()">até dezembro</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL REMOVER DOS PRÓXIMOS MESES ═════════════════ -->
+<div class="overlay hidden" id="delPropOverlay" onclick="if(event.target===this)delPropCancel()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">remover item fixo</div>
+    <p class="mini-msg" id="delPropMsg"></p>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="delPropOne()">só deste mês</button>
+      <button class="m-ok m-danger" onclick="delPropAll()">deste até dezembro</button>
+    </div>
   </div>
 </div>
 
@@ -1890,7 +1915,21 @@ function recalc(){
   checkStamps(av,tI,tE,svFlow,totalSaved);
   updateCarryBanner();
 }
-function removeItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
+function doRemoveItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
+function removeItem(key,i){
+  if(['exp-fixed','income-fixed'].includes(key)){
+    const it=monthLocal(curMonth)[key][i];
+    const low=it.desc.trim().toLowerCase();
+    const hits=monthsUntilDec(curMonth).reduce((a,mk)=>a+((allMonths[mk]?.[key])||[]).filter(x=>x.desc.trim().toLowerCase()===low).length,0);
+    if(hits>0){
+      pendingDel={key,i,desc:it.desc};
+      document.getElementById('delPropMsg').innerHTML=`<strong>${esc(it.desc)}</strong> também está em ${hits} ${hits===1?'mês seguinte':'meses seguintes'}. remover daqui pra frente ou só deste mês?`;
+      document.getElementById('delPropOverlay').classList.remove('hidden');
+      return;
+    }
+  }
+  doRemoveItem(key,i);
+}
 
 // ── Modal ─────────────────────────────────────────────
 function openModal(key, idx=-1){
@@ -1981,6 +2020,8 @@ function confirmModal(){
 }
 function pushItem(item){
   const crossMonth = modalKey==='loans'&&editIdx>=0&&editLoanMk&&editLoanMk!==curMonth;
+  const wasNewFixed = editIdx<0 && ['exp-fixed','income-fixed'].includes(modalKey);
+  const propKey=modalKey;
   const d0=(modalKey==='loans'&&editIdx>=0&&editLoanMk)?allMonths[editLoanMk]:monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
   if(editIdx>=0) arr[editIdx]=item;
@@ -1995,6 +2036,70 @@ function pushItem(item){
     toast('gasto + a receber de '+item.tp+' ✓');
   }
   recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
+  if(wasNewFixed) maybeOfferPropagate(item,propKey);
+}
+
+// ── Propagação de itens fixos pros meses seguintes ─────
+let pendingProp=null, pendingDel=null;
+function monthsUntilDec(fromMk){
+  const [y,m]=fromMk.split('-').map(Number);
+  const out=[];
+  for(let mm=m+1;mm<=12;mm++) out.push(`${y}-${String(mm).padStart(2,'0')}`);
+  return out;
+}
+function maybeOfferPropagate(item,key){
+  const rest=monthsUntilDec(curMonth);
+  if(!rest.length) return;
+  pendingProp={item:{...item},key};
+  delete pendingProp.item.tp; // o "a receber" não se repete sozinho
+  document.getElementById('propMsg').innerHTML=`<strong>${esc(item.desc)}</strong> é fixo — aplicar também de ${mkLbl(rest[0])} até ${mkLbl(rest[rest.length-1])}?`;
+  document.getElementById('propOverlay').classList.remove('hidden');
+}
+function propKeep(){ document.getElementById('propOverlay').classList.add('hidden'); pendingProp=null; }
+async function propApply(){
+  document.getElementById('propOverlay').classList.add('hidden');
+  if(!pendingProp) return;
+  const {item,key}=pendingProp; pendingProp=null;
+  const rest=monthsUntilDec(curMonth);
+  const low=item.desc.trim().toLowerCase();
+  const touched=[];
+  rest.forEach(mk=>{
+    const arr=monthLocal(mk)[key];
+    if(arr.some(x=>x.desc.trim().toLowerCase()===low)) return; // já existe lá
+    arr.push({...item});
+    touched.push(mk);
+  });
+  if(touched.length&&curUser){
+    const rows=touched.map(k=>({user_id:curUser.id,month_key:k,data:allMonths[k],updated_at:new Date().toISOString()}));
+    await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
+  }
+  drawChart(); recalc();
+  toast('aplicado até dez ✓');
+}
+function delPropCancel(){ document.getElementById('delPropOverlay').classList.add('hidden'); pendingDel=null; }
+function delPropOne(){
+  document.getElementById('delPropOverlay').classList.add('hidden');
+  if(pendingDel){ doRemoveItem(pendingDel.key,pendingDel.i); pendingDel=null; }
+}
+async function delPropAll(){
+  document.getElementById('delPropOverlay').classList.add('hidden');
+  if(!pendingDel) return;
+  const {key,i,desc}=pendingDel; pendingDel=null;
+  doRemoveItem(key,i);
+  const low=desc.trim().toLowerCase();
+  const touched=[];
+  monthsUntilDec(curMonth).forEach(mk=>{
+    const arr=allMonths[mk]?.[key]; if(!arr) return;
+    const before=arr.length;
+    allMonths[mk][key]=arr.filter(x=>x.desc.trim().toLowerCase()!==low);
+    if(allMonths[mk][key].length!==before) touched.push(mk);
+  });
+  if(touched.length&&curUser){
+    const rows=touched.map(k=>({user_id:curUser.id,month_key:k,data:allMonths[k],updated_at:new Date().toISOString()}));
+    await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
+  }
+  drawChart(); recalc();
+  toast('removido até dez ✓');
 }
 function creditKeep(){
   const ov=document.getElementById('creditOverlay');
@@ -2089,7 +2194,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2615,9 +2720,20 @@ function renderMetas(eF,tE,sv,totalSaved){
     return;
   }
   const pctOf=(v,alvo)=>alvo>0?Math.min(Math.round(v/alvo*100),999):0;
+  // ritmo diário: só faz sentido no mês corrente de verdade
+  let dayLine='';
+  if(curMonth===nowKey()){
+    const nd=new Date();
+    const dim=new Date(nd.getFullYear(),nd.getMonth()+1,0).getDate();
+    const hoje=nd.getDate(), restam=dim-hoje+1;
+    const teto=s*.3;
+    dayLine = tE<=teto
+      ? `dá pra gastar ${fmt((teto-tE)/restam)} por dia até o fim do mês`
+      : `sua média está em ${fmt(tE/hoje)} por dia`;
+  }
   const rows=[
     {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% do salário — teto de gastos do mês',
-     ok:tE<=s*.3, st:tE<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-tE)}`:`passou ${fmt(tE-s*.3)} do teto`},
+     ok:tE<=s*.3, st:tE<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-tE)}`:`passou ${fmt(tE-s*.3)} do teto`, extra:dayLine},
     {lbl:'despesas fixas máximas', alvo:s/2, desc:'metade do salário — máximo em compromissos fixos',
      ok:eF<=s/2, st:eF<=s/2?`✓ fixos sob controle — folga de ${fmt(s/2-eF)}`:`fixos estouraram ${fmt(eF-s/2)}`},
     {lbl:'investimento mensal', alvo:s*.2, desc:'20% do salário — quanto guardar todo mês',
@@ -2633,6 +2749,7 @@ function renderMetas(eF,tE,sv,totalSaved){
       <div class="meta-val">${fmt(r.alvo)}</div>
       <div class="meta-desc">${r.desc}</div>
       <div class="meta-st ${r.ok?'ok':'bad'}">${r.st}</div>
+      ${r.extra?`<div class="meta-day">${r.extra}</div>`:''}
     </div>`).join('');
 }
 
