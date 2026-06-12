@@ -611,6 +611,14 @@ html[data-dark] .card-fatura{color:#fbbf24;background:rgba(245,158,11,.12);borde
 .stamp-inner{background:var(--pop);border:3px solid var(--ink);border-radius:14px 8px 16px 10px;padding:18px 36px;font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,5vw,32px);font-weight:900;letter-spacing:-.5px;color:#241c12;box-shadow:7px 7px 0 var(--ink-sh);transform:rotate(-4deg);animation:stampHit .55s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
 @keyframes stampHit{0%{opacity:0;transform:scale(2.4) rotate(9deg)}55%{opacity:1;transform:scale(.9) rotate(-5.5deg)}75%{transform:scale(1.04) rotate(-3.4deg)}100%{transform:scale(1) rotate(-4deg)}}
 
+
+/* ── SAZONAL ──────────────────────────────────────────── */
+.logo,.l-logo,.intro-logo{position:relative}
+html.season-dec .logo::after{content:'';position:absolute;top:-11px;left:-9px;width:20px;height:17px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 22'><path d='M4 15 C6 5 15 1 21 5 C19 9 17 12 16 15 Z' fill='%23c0392b' stroke='%232b2117' stroke-width='1.4'/><rect x='2' y='14' width='16' height='5' rx='2.5' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/><circle cx='21.5' cy='4.5' r='3' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/></svg>") no-repeat center/contain;transform:rotate(-14deg);pointer-events:none}
+html.season-dec .l-logo::after,html.season-dec .intro-logo::after{content:'';position:absolute;top:-20px;left:-12px;width:36px;height:30px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 22'><path d='M4 15 C6 5 15 1 21 5 C19 9 17 12 16 15 Z' fill='%23c0392b' stroke='%232b2117' stroke-width='1.4'/><rect x='2' y='14' width='16' height='5' rx='2.5' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/><circle cx='21.5' cy='4.5' r='3' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/></svg>") no-repeat center/contain;transform:rotate(-14deg);pointer-events:none}
+html.season-jun .logo::after{content:'';position:absolute;top:-10px;left:2px;width:62px;height:12px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 16'><path d='M0 2 Q48 8 96 2' stroke='%232b2117' stroke-width='1.2' fill='none'/><path d='M8 3.5l5 9 5-9z' fill='%23e8554d' stroke='%232b2117'/><path d='M26 5l5 9 5-9z' fill='%23ffd84d' stroke='%232b2117'/><path d='M44 5.6l5 9 5-9z' fill='%233f8f5f' stroke='%232b2117'/><path d='M62 5l5 9 5-9z' fill='%236b8fd9' stroke='%232b2117'/><path d='M80 3.5l5 9 5-9z' fill='%23d96bb8' stroke='%232b2117'/></svg>") no-repeat center/contain;pointer-events:none}
+html.season-jun .intro-card::after,html.season-jun .l-card::after{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:160px;height:22px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 16'><path d='M0 2 Q48 8 96 2' stroke='%232b2117' stroke-width='1.2' fill='none'/><path d='M8 3.5l5 9 5-9z' fill='%23e8554d' stroke='%232b2117'/><path d='M26 5l5 9 5-9z' fill='%23ffd84d' stroke='%232b2117'/><path d='M44 5.6l5 9 5-9z' fill='%233f8f5f' stroke='%232b2117'/><path d='M62 5l5 9 5-9z' fill='%236b8fd9' stroke='%232b2117'/><path d='M80 3.5l5 9 5-9z' fill='%23d96bb8' stroke='%232b2117'/></svg>") no-repeat center/contain;pointer-events:none}
+
 /* ── DAY BADGE ────────────────────────────────────────── */
 .item-day-badge{font-size:8px;font-weight:600;color:var(--blue);background:var(--blue-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(180,83,9,.12)}
 html[data-dark] .item-day-badge{border-color:rgba(245,158,11,.18)}
@@ -678,7 +686,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 <!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="loginScreen">
   <div class="l-card">
-    <div class="l-logo">mar<span>gem</span></div>
+    <div class="l-logo" onclick="logoEgg()">mar<span>gem</span></div>
     <p class="l-sub">planejador financeiro pessoal</p>
 
     <!-- Perfis salvos neste dispositivo -->
@@ -794,7 +802,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
   <aside class="sidebar">
     <div class="sb-head">
-      <div class="logo">mar<span>gem</span></div>
+      <div class="logo" onclick="logoEgg()">mar<span>gem</span></div>
       <div class="save-dot" id="saveDot"></div>
     </div>
     <nav class="sb-nav">
@@ -2036,6 +2044,7 @@ function pushItem(item){
     toast('gasto + a receber de '+item.tp+' ✓');
   }
   recalc(); drawChart(); drawCatBreak(); schedSave(); closeModal();
+  if(editIdx<0) memeCheck(item);
   if(wasNewFixed) maybeOfferPropagate(item,propKey);
 }
 
@@ -2706,6 +2715,7 @@ async function confirmDelMonth(){
 function metasInput(){
   const n=parseMoney(document.getElementById('metasSal').value);
   localStorage.setItem('margem-salary', isNaN(n)?'':String(n));
+  if(n===1000000 && Date.now()-(metasInput._eg||0)>8000){ metasInput._eg=Date.now(); stamp('SONHO GRANDE ✦'); }
   recalc();
 }
 function renderMetas(eF,tE,sv,totalSaved){
@@ -2804,8 +2814,69 @@ function buildCal(y,m){
   document.getElementById('calContent').innerHTML=html;
 }
 
+// ── Easter eggs ───────────────────────────────────────
+let eggN=0,eggT=0;
+function logoEgg(){
+  const now=Date.now();
+  if(now-eggT>1500) eggN=0;
+  eggT=now; eggN++;
+  const span=document.querySelector('#app .logo span')||document.querySelector('.l-logo span');
+  if(span){ span.style.animation='none'; void span.offsetWidth; span.style.animation='wiggle .4s ease-in-out'; }
+  if(eggN>=7){ eggN=0; moneyRain(); }
+}
+function moneyRain(){
+  stamp('RICO ✦');
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv=document.createElement('canvas');
+  cv.style.cssText='position:fixed;inset:0;z-index:450;pointer-events:none';
+  const dpr=devicePixelRatio||1;
+  cv.width=innerWidth*dpr; cv.height=innerHeight*dpr;
+  document.body.appendChild(cv);
+  const ctx=cv.getContext('2d'); ctx.scale(dpr,dpr);
+  const W=innerWidth,H=innerHeight,ink='#2b2117';
+  const P=[];
+  for(let i=0;i<72;i++){
+    P.push({x:Math.random()*W, y:-40-Math.random()*H*.9, v:2.4+Math.random()*2.8,
+      ph:Math.random()*6.28, r:Math.random()*6.28, vr:(Math.random()-.5)*.14,
+      coin:Math.random()<.45, sc:.7+Math.random()*.75});
+  }
+  const t0=performance.now();
+  (function tick(now){
+    ctx.clearRect(0,0,W,H);
+    let alive=false;
+    P.forEach(p=>{
+      p.y+=p.v; p.r+=p.vr; p.x+=Math.sin(p.y/36+p.ph)*.7;
+      if(p.y<H+40) alive=true;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.scale(p.sc,p.sc);
+      ctx.lineWidth=2; ctx.strokeStyle=ink;
+      if(p.coin){
+        ctx.fillStyle='#ffd84d';
+        ctx.beginPath(); ctx.arc(0,0,9,0,6.29); ctx.fill(); ctx.stroke();
+        ctx.fillStyle=ink; ctx.font='700 11px Georgia,serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText('$',0,1);
+      } else {
+        ctx.fillStyle='#8fbf8a';
+        ctx.beginPath(); ctx.roundRect(-15,-8.5,30,17,2.5); ctx.fill(); ctx.stroke();
+        ctx.lineWidth=1.2; ctx.strokeStyle='rgba(43,33,23,.55)';
+        ctx.beginPath(); ctx.arc(0,0,4.6,0,6.29); ctx.stroke();
+      }
+      ctx.restore();
+    });
+    if(alive&&now-t0<6500) requestAnimationFrame(tick); else cv.remove();
+  })(t0);
+}
+function memeCheck(item){
+  const cents=Math.round(item.value*100);
+  if(cents===66666) stamp('GASTO AMALDIÇOADO');
+  else if(cents===777) stamp('NÚMERO DA SORTE ✦');
+  if(item.desc.trim().toLowerCase()==='margem') toast('eu? que honra ✦');
+}
+
 // ── Boot ──────────────────────────────────────────────
 setTimeout(()=>document.getElementById('introSplash')?.remove(),2600);
+(()=>{const m=new Date().getMonth()+1;
+  if(m===12) document.documentElement.classList.add('season-dec');
+  else if(m===6) document.documentElement.classList.add('season-jun');})();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 applyDark(dark);
 loadProfilesLocal();
