@@ -271,7 +271,7 @@ html[data-dark] .scard-avail.neg{background:#380a12;border-color:#921028}
 .cols{padding:14px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .col{display:flex;flex-direction:column;gap:14px}
 /* cards de grupo */
-.group{background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;padding:22px 24px;box-shadow:var(--shadow-sm);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px)}
+.group{position:relative;overflow:visible;background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;padding:22px 24px;box-shadow:var(--shadow-sm);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px)}
 html[data-dark] .group{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(255,255,255,.022) 28px,rgba(255,255,255,.022) 29px)}
 .group-income{background-color:rgba(22,101,52,.04)}
 html[data-dark] .group-income{background-color:rgba(22,101,52,.08)}
@@ -519,8 +519,7 @@ html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:r
 }
 .loan-in:hover{animation:loanSwing .55s cubic-bezier(.22,1,.36,1) forwards;box-shadow:7px 7px 0 var(--ink-sh)}
 .loan-in::before{content:'';position:absolute;top:-9px;left:16%;width:40px;height:13px;background:rgba(217,119,6,.32);border-radius:3px;transform:rotate(-1.6deg)}
-.loan-in::after{content:'$';position:absolute;top:6px;right:18px;font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:900;font-style:italic;color:var(--amber);opacity:.1;line-height:1;transform:rotate(9deg);pointer-events:none;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s}
-.loan-in:hover::after{transform:rotate(-7deg) scale(1.18);opacity:.22}
+.loan-in::after{content:'';position:absolute;top:-9px;right:12%;width:42px;height:13px;background:rgba(217,119,6,.32);border-radius:3px;transform:rotate(1.8deg);pointer-events:none}
 .loan-nm::before{content:'';display:inline-block;width:5px;height:5px;border-radius:0;background:var(--amber);flex-shrink:0;transform:rotate(45deg);box-shadow:0 0 0 1px rgba(36,28,18,.25)}
 .loan-from{font-size:9px;font-weight:600;letter-spacing:.3px;margin-top:2px;line-height:1.2;color:var(--t4);white-space:nowrap}
 .loan-recv-btn{background:var(--pop);border:1.5px solid var(--ink);color:#241c12;border-radius:8px 5px 9px 6px;padding:4px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 var(--ink-sh);transition:all .15s cubic-bezier(.22,1,.36,1);flex-shrink:0;white-space:nowrap}
@@ -611,6 +610,21 @@ html[data-dark] .card-fatura{color:#fbbf24;background:rgba(245,158,11,.12);borde
 .stamp-inner{background:var(--pop);border:3px solid var(--ink);border-radius:14px 8px 16px 10px;padding:18px 36px;font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,5vw,32px);font-weight:900;letter-spacing:-.5px;color:#241c12;box-shadow:7px 7px 0 var(--ink-sh);transform:rotate(-4deg);animation:stampHit .55s cubic-bezier(.22,1,.36,1) both;white-space:nowrap}
 @keyframes stampHit{0%{opacity:0;transform:scale(2.4) rotate(9deg)}55%{opacity:1;transform:scale(.9) rotate(-5.5deg)}75%{transform:scale(1.04) rotate(-3.4deg)}100%{transform:scale(1) rotate(-4deg)}}
 
+
+/* ── FITAS DUPLAS nos quadros grandes ─────────────────── */
+.group::before,.group::after{content:'';position:absolute;top:-9px;width:44px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}
+.group::before{left:9%;transform:rotate(-2deg)}
+.group::after{right:9%;transform:rotate(1.6deg)}
+.col:last-child .group::before{transform:rotate(1.8deg);left:7%}
+.col:last-child .group::after{transform:rotate(-1.5deg);right:11%}
+.sav-in::after{content:'';position:absolute;top:-9px;left:10%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-1.6deg);pointer-events:none}
+.metas-in::after{content:'';position:absolute;top:-9px;right:14%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.5deg);pointer-events:none}
+.chart-in::after{content:'';position:absolute;top:-9px;right:18%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.4deg);pointer-events:none}
+
+/* ── MARCAS D'ÁGUA temáticas ──────────────────────────── */
+.wm{position:absolute;top:6px;right:18px;font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:900;font-style:italic;line-height:1;opacity:.09;pointer-events:none;transform:rotate(9deg);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s;user-select:none}
+.group:hover .wm,.sav-in:hover .wm,.loan-in:hover .wm,.metas-in:hover .wm,.chart-in:hover .wm{transform:rotate(-7deg) scale(1.18);opacity:.2}
+@media(max-width:660px){.wm{font-size:46px;right:12px;top:4px}}
 
 /* ── SAZONAL ──────────────────────────────────────────── */
 .logo,.l-logo,.intro-logo{position:relative}
@@ -899,6 +913,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <!-- coluna esquerda: ganhos + guardado -->
       <div class="col">
         <div class="group group-income">
+          <span class="wm" style="color:var(--green)">+</span>
           <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
           <div id="rows-income-fixed"></div>
           <div class="grp-ft">
@@ -907,6 +922,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           </div>
         </div>
         <div class="group group-income">
+          <span class="wm" style="color:var(--green)">≈</span>
           <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
           <div id="rows-income-extra"></div>
           <div class="grp-ft">
@@ -918,6 +934,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <!-- coluna direita: gastos -->
       <div class="col">
         <div class="group group-expense">
+          <span class="wm" style="color:var(--red)">−</span>
           <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
           <div id="rows-exp-fixed"></div>
           <div class="grp-ft">
@@ -926,6 +943,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           </div>
         </div>
         <div class="group group-expense">
+          <span class="wm" style="color:var(--amber)">?</span>
           <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
           <div id="rows-exp-extra"></div>
           <div class="grp-ft">
@@ -938,6 +956,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
     <div class="sav-wrap">
       <div class="sav-in">
+        <span class="wm" style="color:var(--purple)">$</span>
         <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
         <div id="rows-savings"></div>
         <div class="grp-ft">
@@ -961,6 +980,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         </div>
       </div>
       <div class="loan-in">
+        <span class="wm" style="color:var(--amber)">&amp;</span>
         <div class="sav-hd"><span class="loan-nm" onclick="openLoansTab()" style="cursor:pointer" title="ver todos os empréstimos">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
         <div id="rows-loans"></div>
         <div class="grp-ft">
@@ -973,6 +993,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
     <div class="metas-wrap">
       <div class="metas-in">
+        <span class="wm" style="color:var(--blue)">%</span>
         <div class="metas-hd">
           <span class="metas-nm">metas do salário</span>
           <div class="metas-sal-row">
@@ -987,6 +1008,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
     <div class="chart-sec">
       <div class="chart-in">
+        <span class="wm" style="color:var(--t3)">↑</span>
         <div class="chart-hd">
           <div class="chart-lb">evolução</div>
           <div class="chart-nav">
