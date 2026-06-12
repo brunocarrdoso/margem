@@ -611,20 +611,35 @@ html[data-dark] .card-fatura{color:#fbbf24;background:rgba(245,158,11,.12);borde
 @keyframes stampHit{0%{opacity:0;transform:scale(2.4) rotate(9deg)}55%{opacity:1;transform:scale(.9) rotate(-5.5deg)}75%{transform:scale(1.04) rotate(-3.4deg)}100%{transform:scale(1) rotate(-4deg)}}
 
 
-/* ── FITAS DUPLAS nos quadros grandes ─────────────────── */
-.group::before,.group::after{content:'';position:absolute;top:-9px;width:44px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}
-.group::before{left:9%;transform:rotate(-2deg)}
-.group::after{right:9%;transform:rotate(1.6deg)}
-.col:last-child .group::before{transform:rotate(1.8deg);left:7%}
-.col:last-child .group::after{transform:rotate(-1.5deg);right:11%}
-.sav-in::after{content:'';position:absolute;top:-9px;left:10%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-1.6deg);pointer-events:none}
-.metas-in::after{content:'';position:absolute;top:-9px;right:14%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.5deg);pointer-events:none}
-.chart-in::after{content:'';position:absolute;top:-9px;right:18%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.4deg);pointer-events:none}
+/* ── FITAS — cada quadro pendurado do seu jeito ────────── */
+.group::before,.group::after{content:'';position:absolute;background:var(--tape);border-radius:3px;pointer-events:none;height:13px}
+.col:first-child .group:first-child::before{top:-9px;left:6%;width:52px;transform:rotate(-2.6deg)}
+.col:first-child .group:first-child::after{top:-7px;right:13%;width:36px;transform:rotate(1.1deg)}
+.col:first-child .group:nth-child(2)::before{top:-10px;left:15%;width:40px;transform:rotate(2.3deg)}
+.col:first-child .group:nth-child(2)::after{top:-8px;right:5%;width:50px;transform:rotate(-1.9deg)}
+.col:last-child .group:first-child::before{top:-8px;left:11%;width:44px;transform:rotate(2deg)}
+.col:last-child .group:first-child::after{top:-10px;right:6%;width:46px;transform:rotate(-2.9deg)}
+.col:last-child .group:nth-child(2)::before{top:-9px;left:4%;width:38px;transform:rotate(-1.3deg)}
+.col:last-child .group:nth-child(2)::after{top:-8px;right:16%;width:54px;transform:rotate(2.5deg)}
+.sav-in::after{content:'';position:absolute;top:-10px;left:7%;width:50px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-2.4deg);pointer-events:none}
+.metas-in::after{content:'';position:absolute;top:-10px;right:7%;width:52px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(2.1deg);pointer-events:none}
+.chart-in::after{content:'';position:absolute;top:-8px;right:10%;width:40px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-2.2deg);pointer-events:none}
 
-/* ── MARCAS D'ÁGUA temáticas ──────────────────────────── */
-.wm{position:absolute;top:6px;right:18px;font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:900;font-style:italic;line-height:1;opacity:.09;pointer-events:none;transform:rotate(9deg);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s;user-select:none}
-.group:hover .wm,.sav-in:hover .wm,.loan-in:hover .wm,.metas-in:hover .wm,.chart-in:hover .wm{transform:rotate(-7deg) scale(1.18);opacity:.2}
-@media(max-width:660px){.wm{font-size:46px;right:12px;top:4px}}
+/* ── MARCAS D'ÁGUA — cada uma no seu canto ────────────── */
+.wm{position:absolute;font-family:'Playfair Display',Georgia,serif;font-weight:900;font-style:italic;line-height:1;opacity:.1;pointer-events:none;user-select:none;scale:1;transition:scale .4s cubic-bezier(.22,1,.36,1),opacity .3s}
+.group:hover .wm,.sav-in:hover .wm,.loan-in:hover .wm,.metas-in:hover .wm,.chart-in:hover .wm{scale:1.16;opacity:.2}
+.col:first-child .group:first-child .wm{bottom:14px;right:20px;font-size:64px;transform:rotate(-8deg)}
+.col:first-child .group:nth-child(2) .wm{bottom:10px;left:24px;font-size:74px;transform:rotate(6deg)}
+.col:last-child .group:first-child .wm{bottom:6px;right:24px;font-size:118px;transform:rotate(-12deg);opacity:.14}
+.col:last-child .group:nth-child(2) .wm{bottom:12px;left:26px;font-size:84px;transform:rotate(-9deg)}
+.sav-in .wm{right:26px;bottom:64px;font-size:72px;transform:rotate(7deg)}
+.loan-in .wm{right:22px;bottom:44px;font-size:78px;transform:rotate(-9deg)}
+.metas-in .wm{right:30px;bottom:14px;font-size:72px;transform:rotate(8deg)}
+.chart-in .wm{left:26px;bottom:18px;font-size:54px;transform:rotate(-7deg)}
+@media(max-width:660px){
+  .wm{font-size:50px!important}
+  .col:last-child .group:first-child .wm{font-size:86px!important}
+}
 
 /* ── SAZONAL ──────────────────────────────────────────── */
 .logo,.l-logo,.intro-logo{position:relative}
