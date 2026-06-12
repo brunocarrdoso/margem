@@ -694,7 +694,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <div class="user-grid" id="profileGrid"></div>
       <div class="u-new-wrap">
         <button class="u-new" onclick="showView('vNew')">
-          <div class="u-new-ic">✦</div>
+          <div class="u-new-ic">+</div>
           <span class="u-new-lb">nova conta</span>
         </button>
       </div>
@@ -2626,9 +2626,9 @@ function checkStamps(av,tI,tE,svFlow,totalSaved){
   };
   const sal=parseFloat(localStorage.getItem('margem-salary'))||0;
   const totalItems=Object.values(allMonths).reduce((a,m)=>a+KEYS.reduce((x,k)=>x+(m[k]||[]).length,0)+(m.loans||[]).length,0);
-  if(totalItems===1) fire('primeiro','PRIMEIRO LANÇAMENTO ✦');
+  if(totalItems===1) fire('primeiro','PRIMEIRO LANÇAMENTO!');
   if(sal&&svFlow>=sal*.2-0.004) fire('invest-'+curMonth,'META DO MÊS ✓');
-  if(sal&&totalSaved>=sal*6) fire('emergencia','RESERVA COMPLETA ★');
+  if(sal&&totalSaved>=sal*6) fire('emergencia','RESERVA COMPLETA!');
   const recvNow=Object.values(allMonths).some(m=>(m.loans||[]).some(l=>l.recv===curMonth));
   if(recvNow&&loanOutstanding()<=0.004) fire('quitou-'+curMonth,'NINGUÉM TE DEVENDO ✓');
 }
@@ -2715,7 +2715,7 @@ async function confirmDelMonth(){
 function metasInput(){
   const n=parseMoney(document.getElementById('metasSal').value);
   localStorage.setItem('margem-salary', isNaN(n)?'':String(n));
-  if(n===1000000 && Date.now()-(metasInput._eg||0)>8000){ metasInput._eg=Date.now(); stamp('SONHO GRANDE ✦'); }
+  if(n===1000000 && Date.now()-(metasInput._eg||0)>8000){ metasInput._eg=Date.now(); stamp('SONHO GRANDE!'); }
   recalc();
 }
 function renderMetas(eF,tE,sv,totalSaved){
@@ -2825,7 +2825,7 @@ function logoEgg(){
   if(eggN>=7){ eggN=0; moneyRain(); }
 }
 function moneyRain(){
-  stamp('RICO ✦');
+  stamp('RICO!');
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cv=document.createElement('canvas');
   cv.style.cssText='position:fixed;inset:0;z-index:450;pointer-events:none';
@@ -2868,8 +2868,8 @@ function moneyRain(){
 function memeCheck(item){
   const cents=Math.round(item.value*100);
   if(cents===66666) stamp('GASTO AMALDIÇOADO');
-  else if(cents===777) stamp('NÚMERO DA SORTE ✦');
-  if(item.desc.trim().toLowerCase()==='margem') toast('eu? que honra ✦');
+  else if(cents===777) stamp('NÚMERO DA SORTE!');
+  if(item.desc.trim().toLowerCase()==='margem') toast('eu? que honra!');
 }
 
 // ── Boot ──────────────────────────────────────────────
