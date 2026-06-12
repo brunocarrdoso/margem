@@ -688,10 +688,10 @@ html[data-dark] #postmark span{color:rgba(220,120,100,.55)}
 .scard:nth-child(3)::before{content:none}
 
 /* ── POST-IT (vence logo) ─────────────────────────────── */
-.due-bar{background:rgba(253,243,150,.72);border:1px solid rgba(200,170,60,.45);border-radius:2px 2px 16px 2px;box-shadow:2px 3px 0 rgba(120,90,20,.13);padding:11px 22px 11px 14px;position:relative;transform:rotate(-.35deg)}
-html[data-dark] .due-bar{background:rgba(253,243,150,.07);border-color:rgba(200,170,60,.25);box-shadow:2px 3px 0 rgba(0,0,0,.25)}
-.due-bar::after{content:'';position:absolute;right:-1px;bottom:-1px;border-style:solid;border-width:0 0 18px 18px;border-color:transparent transparent var(--bg) transparent}
-.due-bar::before{content:'';position:absolute;right:0;bottom:0;width:18px;height:18px;background:linear-gradient(315deg,transparent 50%,rgba(205,178,70,.85) 50%);box-shadow:-1px -1px 2px rgba(120,90,20,.18)}
+.due-bar{background:rgba(253,243,150,.72);border:1px solid rgba(200,170,60,.45);border-radius:2px;box-shadow:none;filter:drop-shadow(2px 3px 0 rgba(120,90,20,.18));padding:11px 22px 11px 14px;position:relative;transform:rotate(-.35deg);clip-path:polygon(0 0,100% 0,100% calc(100% - 17px),calc(100% - 17px) 100%,0 100%)}
+html[data-dark] .due-bar{background:rgba(253,243,150,.07);border-color:rgba(200,170,60,.25);filter:drop-shadow(2px 3px 0 rgba(0,0,0,.3))}
+
+.due-bar::before{content:'';position:absolute;right:0;bottom:0;width:17px;height:17px;background:linear-gradient(315deg,transparent 50%,rgba(205,178,70,.85) 50%);filter:drop-shadow(-1px -1px 1px rgba(120,90,20,.25))}
 html[data-dark] .due-bar::before{background:linear-gradient(315deg,transparent 50%,rgba(170,140,55,.5) 50%)}
 
 /* ── SETINHA DE CANETA no comentário do mês ───────────── */
@@ -704,15 +704,15 @@ html[data-dark] .grp-nm::after,html[data-dark] .sav-nm::after,html[data-dark] .l
 .group:hover .grp-nm::after,.sav-in:hover .sav-nm::after,.loan-in:hover .loan-nm::after,.metas-in:hover .metas-nm::after,.chart-in:hover .chart-lb::after{opacity:1}
 
 /* ── DISPONÍVEL = POST-IT (deliberadamente diferente) ─── */
-.scard-avail{background:#fbe87f;border:none;box-shadow:4px 5px 0 rgba(120,90,20,.28);border-radius:3px 3px 20px 3px;transform:rotate(.45deg)}
-html[data-dark] .scard-avail{background:#c9a73e;border:none;box-shadow:4px 5px 0 rgba(0,0,0,.45)}
+.scard-avail{background:#fbe87f;border:none;border-radius:3px;transform:rotate(.45deg);box-shadow:none;filter:drop-shadow(4px 5px 0 rgba(120,90,20,.28));clip-path:polygon(0 0,100% 0,100% calc(100% - 26px),calc(100% - 26px) 100%,0 100%)}
+html[data-dark] .scard-avail{background:#c9a73e;border:none;filter:drop-shadow(4px 5px 0 rgba(0,0,0,.45))}
 .scard:nth-child(4)::before{content:none}
-.scard-avail::after{content:'';position:absolute;right:0;bottom:0;width:28px;height:28px;background:linear-gradient(315deg,var(--bg) 50%,rgba(196,162,55,.95) 50%);box-shadow:-2px -2px 3px rgba(120,90,20,.22);pointer-events:none}
-html[data-dark] .scard-avail::after{background:linear-gradient(315deg,var(--bg) 50%,rgba(125,98,28,.95) 50%)}
-.scard-avail.neg{background:#f5b3a6;box-shadow:4px 5px 0 rgba(150,50,40,.3)}
+.scard-avail::after{content:'';position:absolute;right:0;bottom:0;width:26px;height:26px;background:linear-gradient(315deg,transparent 50%,rgba(196,162,55,.95) 50%);filter:drop-shadow(-1.5px -1.5px 1.5px rgba(120,90,20,.3));pointer-events:none}
+html[data-dark] .scard-avail::after{background:linear-gradient(315deg,transparent 50%,rgba(125,98,28,.95) 50%)}
+.scard-avail.neg{background:#f5b3a6;filter:drop-shadow(4px 5px 0 rgba(150,50,40,.3))}
 html[data-dark] .scard-avail.neg{background:#b06a52}
-.scard-avail.neg::after{background:linear-gradient(315deg,var(--bg) 50%,rgba(160,75,55,.92) 50%)}
-.scard:nth-child(4):hover{box-shadow:6px 7px 0 rgba(120,90,20,.32)}
+.scard-avail.neg::after{background:linear-gradient(315deg,transparent 50%,rgba(160,75,55,.92) 50%)}
+.scard:nth-child(4):hover{box-shadow:none;filter:drop-shadow(6px 7px 0 rgba(120,90,20,.32))}
 .scard-avail .scard-lb{background:var(--ink);color:var(--pop);border-color:var(--ink);letter-spacing:1px;box-shadow:2px 2px 0 rgba(120,90,20,.3)}
 .scard-avail-val{color:#241c12}
 .av-bar-scale{color:rgba(43,33,23,.45)}
