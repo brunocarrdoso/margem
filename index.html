@@ -52,15 +52,8 @@ html{scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
 input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background-color:var(--bg);
-  background-image:
-    linear-gradient(to right,transparent 9px,rgba(195,60,60,.20) 9px,rgba(195,60,60,.20) 10.5px,transparent 10.5px),
-    radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);
-  background-size:100% 100%,15px 15px;
-  background-attachment:fixed,scroll;color:var(--t1);font-size:14px;-webkit-font-smoothing:antialiased;min-height:100dvh;transition:background-color .2s,color .2s}
-html[data-dark] body{background-image:
-    linear-gradient(to right,transparent 9px,rgba(240,120,110,.26) 9px,rgba(240,120,110,.26) 10.5px,transparent 10.5px),
-    radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background-color:var(--bg);background-image:radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);background-size:15px 15px;color:var(--t1);font-size:14px;-webkit-font-smoothing:antialiased;min-height:100dvh;transition:background-color .2s,color .2s}
+html[data-dark] body{background-image:radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
 .ff-display{font-family:'Playfair Display',Georgia,serif}
 .ff-type{font-weight:600;letter-spacing:.3px}
 .ff-hand{font-style:italic}
@@ -146,6 +139,24 @@ html[data-dark] .intro-logo span{text-decoration-color:rgba(245,158,11,.25)}
 @keyframes introSub{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes introFade{to{opacity:0;visibility:hidden}}
 
+/* ── BORDA DE CADERNO (overlay: atravessa a página toda) ── */
+#nbEdge{position:fixed;top:0;bottom:0;left:0;width:56px;z-index:15;pointer-events:none;background:
+  linear-gradient(to right,transparent 9px,rgba(195,60,60,.16) 9px,rgba(195,60,60,.16) 10.5px,transparent 10.5px)}
+html[data-dark] #nbEdge{background:
+  linear-gradient(to right,transparent 9px,rgba(240,120,110,.17) 9px,rgba(240,120,110,.17) 10.5px,transparent 10.5px)}
+@media(min-width:901px){
+  #nbEdge{background:
+    linear-gradient(to right,transparent 42px,rgba(195,60,60,.16) 42px,rgba(195,60,60,.16) 43.5px,transparent 43.5px),
+    radial-gradient(circle at 19px 16%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 50%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 84%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px)}
+  html[data-dark] #nbEdge{background:
+    linear-gradient(to right,transparent 42px,rgba(240,120,110,.17) 42px,rgba(240,120,110,.17) 43.5px,transparent 43.5px),
+    radial-gradient(circle at 19px 16%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 50%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 84%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px)}
+}
+
 /* ── Grain texture ───────────────────────────── */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:500;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:160px 160px}
 html[data-dark] body::before{opacity:.1}
@@ -221,20 +232,6 @@ html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 
 /* ── DESKTOP ──────────────────────────────────────────── */
 @media(min-width:901px){
-  body{background-image:
-    linear-gradient(to right,transparent 42px,rgba(195,60,60,.20) 42px,rgba(195,60,60,.20) 43.5px,transparent 43.5px),
-    radial-gradient(circle at 19px 16%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 50%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 84%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);
-    background-size:100% 100%,100% 100%,100% 100%,100% 100%,15px 15px;
-    background-attachment:fixed,fixed,fixed,fixed,scroll}
-  html[data-dark] body{background-image:
-    linear-gradient(to right,transparent 42px,rgba(240,120,110,.26) 42px,rgba(240,120,110,.26) 43.5px,transparent 43.5px),
-    radial-gradient(circle at 19px 16%,rgba(0,0,0,.6) 0 5.5px,rgba(200,160,100,.38) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 50%,rgba(0,0,0,.6) 0 5.5px,rgba(200,160,100,.38) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 84%,rgba(0,0,0,.6) 0 5.5px,rgba(200,160,100,.38) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
   .sidebar{padding:0 40px;height:58px}
   .month-pills{gap:4px}
   .mp{font-size:12px;padding:7px 6px}
@@ -735,7 +732,7 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 /* ── ADESIVOS die-cut ─────────────────────────────────── */
 .stk{position:absolute;pointer-events:none;z-index:2;filter:drop-shadow(1.5px 2.5px 2px rgba(60,40,15,.3));background-repeat:no-repeat;background-position:center;background-size:contain}
 html[data-dark] .stk{filter:drop-shadow(1.5px 2.5px 2.5px rgba(0,0,0,.55)) brightness(.88) saturate(.92)}
-.stk-coin{top:-10px;left:calc(56% - 15px);width:30px;height:30px;transform:rotate(-10deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><circle cx='15' cy='15' r='13.4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><circle cx='15' cy='15' r='10' fill='%23ffd84d' stroke='%232b2117' stroke-width='1.7'/><circle cx='15' cy='15' r='7' fill='none' stroke='%232b2117' stroke-width='.8' opacity='.4'/><text x='15' y='19.4' font-family='Georgia,serif' font-size='12.5' font-weight='700' font-style='italic' text-anchor='middle' fill='%232b2117'>$</text></svg>")}
+.stk-nota{top:-17px;left:calc(58% - 11px);width:23px;height:43px;transform:rotate(-7deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 42'><rect x='1' y='1' width='20' height='40' rx='4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><rect x='4' y='4' width='14' height='34' rx='2' fill='%238fbf8a' stroke='%232b2117' stroke-width='1.5'/><circle cx='11' cy='21' r='4.6' fill='none' stroke='%232b2117' stroke-width='1'/><text x='11' y='24.4' font-family='Georgia,serif' font-size='8.5' font-weight='700' font-style='italic' text-anchor='middle' fill='%232b2117'>$</text></svg>")}
 .stk-alvo{top:-13px;right:27%;width:30px;height:30px;transform:rotate(8deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><circle cx='15' cy='15' r='13.4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><circle cx='15' cy='15' r='10' fill='%23e8554d' stroke='%232b2117' stroke-width='1.5'/><circle cx='15' cy='15' r='6.2' fill='%23fffdf7'/><circle cx='15' cy='15' r='2.8' fill='%23e8554d' stroke='%232b2117' stroke-width='.8'/></svg>")}
 .stk-raio{top:-13px;right:32%;width:27px;height:31px;transform:rotate(-7deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 30'><path d='M14.5 0.5 L3 17.5 h6.2 L7.5 29.5 L23 11.5 h-7 L18.5 0.5 Z' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1' stroke-linejoin='round'/><path d='M13.8 4 L7 15.8 h5 L10.6 25 L19 13 h-5.6 L16.2 4 Z' fill='%23ffd84d' stroke='%232b2117' stroke-width='1.4' stroke-linejoin='round'/></svg>")}
 
@@ -801,6 +798,8 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 </style>
 </head>
 <body>
+
+<div id="nbEdge" aria-hidden="true"></div>
 
 <!-- ══ INTRO ══════════════════════════════════════════ -->
 <div id="introSplash">
@@ -991,7 +990,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <button class="card-fatura hidden" id="faturaLine" onclick="openFatura()"></button>
       </div>
       <div class="scard">
-        <span class="stk stk-coin" aria-hidden="true"></span>
+        <span class="stk stk-nota" aria-hidden="true"></span>
         <div class="scard-lb">guardado</div>
         <div class="scard-val c-purple" id="hSav">R$ 0,00</div>
         <div class="hst-tr" id="trSav"></div>
