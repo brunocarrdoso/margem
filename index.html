@@ -52,8 +52,15 @@ html{scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
 input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background-color:var(--bg);background-image:radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);background-size:15px 15px;color:var(--t1);font-size:14px;-webkit-font-smoothing:antialiased;min-height:100dvh;transition:background-color .2s,color .2s}
-html[data-dark] body{background-image:radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background-color:var(--bg);
+  background-image:
+    linear-gradient(to right,transparent 36px,rgba(195,60,60,.20) 36px,rgba(195,60,60,.20) 37.5px,transparent 37.5px),
+    radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);
+  background-size:100% 100%,15px 15px;
+  background-attachment:fixed,scroll;color:var(--t1);font-size:14px;-webkit-font-smoothing:antialiased;min-height:100dvh;transition:background-color .2s,color .2s}
+html[data-dark] body{background-image:
+    linear-gradient(to right,transparent 36px,rgba(235,110,110,.13) 36px,rgba(235,110,110,.13) 37.5px,transparent 37.5px),
+    radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
 .ff-display{font-family:'Playfair Display',Georgia,serif}
 .ff-type{font-weight:600;letter-spacing:.3px}
 .ff-hand{font-style:italic}
@@ -210,16 +217,30 @@ html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 .icon-btn:hover{border-color:var(--t2);color:var(--t1);background:var(--surf2)}
 .sel{border:1.5px solid var(--bdr);background:var(--surf);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:500;color:var(--t2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;transition:border-color .14s;font-family:inherit}
 .sel:hover{border-color:var(--t3)}
-.main-content{flex:1;min-width:0}
+.main-content{flex:1;min-width:0;position:relative}
 
 /* ── DESKTOP ──────────────────────────────────────────── */
 @media(min-width:901px){
+  body{background-image:
+    linear-gradient(to right,transparent 42px,rgba(195,60,60,.20) 42px,rgba(195,60,60,.20) 43.5px,transparent 43.5px),
+    radial-gradient(circle at 19px 16%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 50%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 84%,rgba(120,90,50,.14) 0 5.5px,rgba(120,90,50,.30) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(rgba(120,80,20,.08) 1px,transparent 1.4px);
+    background-size:100% 100%,100% 100%,100% 100%,100% 100%,15px 15px;
+    background-attachment:fixed,fixed,fixed,fixed,scroll}
+  html[data-dark] body{background-image:
+    linear-gradient(to right,transparent 42px,rgba(235,110,110,.13) 42px,rgba(235,110,110,.13) 43.5px,transparent 43.5px),
+    radial-gradient(circle at 19px 16%,rgba(0,0,0,.4) 0 5.5px,rgba(190,150,90,.2) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 50%,rgba(0,0,0,.4) 0 5.5px,rgba(190,150,90,.2) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(circle at 19px 84%,rgba(0,0,0,.4) 0 5.5px,rgba(190,150,90,.2) 5.5px 6.5px,transparent 7.5px),
+    radial-gradient(rgba(255,200,100,.05) 1px,transparent 1.4px)}
   .sidebar{padding:0 40px;height:58px}
   .month-pills{gap:4px}
   .mp{font-size:12px;padding:7px 6px}
   .stats-row{padding:36px 40px 0}
   .carry-bar{padding:18px 40px 0}
-  .due-bar{padding:16px 40px 0}
+  .due-bar{margin:16px 40px 0}
   .cols{padding:18px 40px 0}
   .metas-wrap{padding:14px 40px 0}
   .sav-wrap{padding:14px 40px 0}
@@ -433,7 +454,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .scard-avail{grid-column:span 2}
   .scard-avail-val{font-size:28px;letter-spacing:-.8px}
   .carry-bar{padding:10px 14px 0}
-  .due-bar{padding:10px 14px 0}
+  .due-bar{margin:10px 14px 0}
   .carry-card{padding:14px 16px}
   .cols{padding:10px 14px 0;grid-template-columns:1fr;gap:10px}
   .col{gap:10px}
@@ -577,7 +598,10 @@ html[data-dark] .pay-tp{color:#c084fc}
 
 /* ── BANNER IMPORTAR MÊS ──────────────────────────────── */
 .carry-bar{padding:14px 20px 0}
-.carry-card{background:var(--surf);border:2px dashed var(--ink);border-radius:14px 10px 16px 12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow-sm);transform:rotate(-0.2deg);animation:dropIn .5s cubic-bezier(.22,1,.36,1) both}
+.carry-card{background:var(--surf2);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;transform:rotate(-0.25deg);animation:dropIn .5s cubic-bezier(.22,1,.36,1) backwards;
+  clip-path:polygon(0% 12%,1.5% 3%,4% 9%,7% 0%,10% 7%,14% 2%,18% 9%,22% 2%,27% 8%,32% 1%,37% 7%,43% 2%,49% 9%,55% 1%,61% 8%,67% 2%,73% 9%,79% 1%,85% 7%,90% 0%,94% 8%,97% 3%,100% 13%,100% 87%,98% 97%,95% 91%,91% 100%,87% 92%,82% 99%,76% 92%,70% 100%,64% 93%,58% 99%,52% 92%,46% 100%,40% 93%,34% 99%,28% 92%,22% 100%,17% 93%,12% 99%,8% 92%,4% 100%,1% 95%,0% 89%);
+  filter:drop-shadow(3px 3px 0 var(--ink-sh))}
+html[data-dark] .carry-card{background:var(--surf2)}
 .carry-txt{font-size:13px;font-weight:600;color:var(--t2)}
 .carry-txt em{font-style:normal;color:var(--t4);font-weight:400;display:block;font-size:11px;margin-top:2px}
 .carry-btns{display:flex;gap:8px;flex-wrap:wrap}
@@ -591,7 +615,7 @@ html[data-dark] .pay-tp{color:#c084fc}
 .month-mood{font-size:10px;font-style:italic;color:rgba(245,200,122,.8);margin-top:10px;border-top:1px dashed rgba(245,185,100,.25);padding-top:8px;line-height:1.5;animation:itemIn .4s cubic-bezier(.22,1,.36,1) backwards}
 
 /* ── PRÓXIMOS VENCIMENTOS ────────────────────────────── */
-.due-bar{padding:14px 20px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;animation:dropIn .5s .04s cubic-bezier(.22,1,.36,1) both}
+.due-bar{margin:14px 20px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;animation:dropIn .5s .04s cubic-bezier(.22,1,.36,1) backwards}
 .due-lb{display:inline-flex;background:var(--pop);color:#241c12;border:1.5px solid var(--ink);padding:3px 9px 4px;border-radius:4px 2px 5px 3px;transform:rotate(-1.4deg);box-shadow:2px 2px 0 var(--ink-sh);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
 .due-chips{display:flex;gap:6px;flex-wrap:wrap}
 .due-chip{font-size:11px;font-weight:600;padding:4px 11px;border-radius:9px;border:1px solid}
@@ -640,6 +664,44 @@ html[data-dark] .card-fatura{color:#fbbf24;background:rgba(245,158,11,.12);borde
   .wm{font-size:50px!important}
   .col:last-child .group:first-child .wm{font-size:86px!important}
 }
+
+/* ── CARIMBO POSTAL DO MÊS ────────────────────────────── */
+#postmark{position:absolute;top:2px;right:max(46px,24%);width:72px;height:72px;border:2px solid rgba(170,70,55,.55);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transform:rotate(-12deg);pointer-events:none;z-index:3;user-select:none}
+#postmark::before{content:'';position:absolute;inset:5px;border:1px solid rgba(160,74,60,.38);border-radius:50%}
+#postmark::after{content:'';position:absolute;top:24px;left:74px;width:64px;height:24px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 24'><g stroke='%23a04a3c' fill='none' stroke-width='1.5' opacity='.5'><path d='M0 4 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0 t12 0'/><path d='M0 12 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0 t12 0'/><path d='M0 20 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0 t12 0'/></g></svg>") no-repeat center/contain}
+#postmark span{font-size:13px;font-weight:700;letter-spacing:1.5px;color:rgba(170,70,55,.7);line-height:1;text-transform:uppercase}
+#postmark .pm2,#pmYr{font-size:9px;letter-spacing:2px}
+html[data-dark] #postmark{border-color:rgba(220,120,100,.4)}
+html[data-dark] #postmark::before{border-color:rgba(220,120,100,.32)}
+html[data-dark] #postmark span{color:rgba(220,120,100,.55)}
+@media(max-width:900px){#postmark{display:none}}
+
+/* ── ITENS COLADOS TORTOS ─────────────────────────────── */
+.item:nth-child(odd){transform:rotate(.25deg)}
+.item:nth-child(even){transform:rotate(-.3deg)}
+.item:nth-child(3n){transform:rotate(.4deg)}
+
+/* ── FIXAÇÕES VARIADAS: clipe e alfinete ──────────────── */
+.col:first-child .group:nth-child(2)::before{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 32'><path d='M4.5 9 V23.5 a2.8 2.8 0 0 0 5.6 0 V6.5 a4.2 4.2 0 0 0 -8.4 0 V22' fill='none' stroke='%23958c7e' stroke-width='1.9' stroke-linecap='round'/></svg>") no-repeat center/contain;width:15px;height:36px;top:-15px;left:30px;transform:rotate(6deg);border-radius:0}
+.col:first-child .group:nth-child(2)::after{content:none}
+.chart-in::before{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 32'><path d='M4.5 9 V23.5 a2.8 2.8 0 0 0 5.6 0 V6.5 a4.2 4.2 0 0 0 -8.4 0 V22' fill='none' stroke='%23958c7e' stroke-width='1.9' stroke-linecap='round'/></svg>") no-repeat center/contain;width:15px;height:36px;top:-16px;left:12%;transform:rotate(-5deg);border-radius:0}
+.scard:nth-child(3)::before{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 26'><path d='M12 17.5v6' stroke='%232b2117' stroke-width='1.8' stroke-linecap='round'/><circle cx='12' cy='10' r='7.5' fill='%23c0392b' stroke='%232b2117' stroke-width='1.6'/><circle cx='9.4' cy='7.6' r='2.2' fill='%23e8857a'/></svg>") no-repeat center/contain;width:23px;height:27px;top:-14px;left:calc(58% - 11px);transform:none;border-radius:0}
+
+/* ── POST-IT (vence logo) ─────────────────────────────── */
+.due-bar{background:rgba(253,243,150,.72);border:1px solid rgba(200,170,60,.45);border-radius:2px 2px 16px 2px;box-shadow:2px 3px 0 rgba(120,90,20,.13);padding:11px 22px 11px 14px;position:relative;transform:rotate(-.35deg)}
+html[data-dark] .due-bar{background:rgba(253,243,150,.07);border-color:rgba(200,170,60,.25);box-shadow:2px 3px 0 rgba(0,0,0,.25)}
+.due-bar::after{content:'';position:absolute;right:-1px;bottom:-1px;border-style:solid;border-width:0 0 18px 18px;border-color:transparent transparent var(--bg) transparent}
+.due-bar::before{content:'';position:absolute;right:0;bottom:0;width:18px;height:18px;background:linear-gradient(315deg,transparent 50%,rgba(205,178,70,.85) 50%);box-shadow:-1px -1px 2px rgba(120,90,20,.18)}
+html[data-dark] .due-bar::before{background:linear-gradient(315deg,transparent 50%,rgba(170,140,55,.5) 50%)}
+
+/* ── SETINHA DE CANETA no comentário do mês ───────────── */
+.month-mood::before{content:'';display:inline-block;width:20px;height:11px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 14'><path d='M1 2 q11 11 21 7' fill='none' stroke='%23f5c87a' stroke-width='1.6' stroke-linecap='round' opacity='.8'/><path d='M17.5 11.5 l5 -2 l-2.6 -4.4' fill='none' stroke='%23f5c87a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' opacity='.8'/></svg>") no-repeat center/contain;margin-right:7px;vertical-align:-2px}
+
+/* ── SUBLINHADO RABISCADO nos chips (hover do quadro) ─── */
+.grp-nm,.sav-nm,.loan-nm,.metas-nm,.chart-lb,.scard-lb{position:relative}
+.grp-nm::after,.sav-nm::after,.loan-nm::after,.metas-nm::after,.chart-lb::after{content:'';position:absolute;left:6px;right:6px;bottom:-9px;height:6px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23b45309' stroke-width='1.5' fill='none' opacity='.65'/></svg>") repeat-x left center/24px 6px;opacity:0;transition:opacity .25s}
+html[data-dark] .grp-nm::after,html[data-dark] .sav-nm::after,html[data-dark] .loan-nm::after,html[data-dark] .metas-nm::after,html[data-dark] .chart-lb::after{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23f5b942' stroke-width='1.5' fill='none' opacity='.65'/></svg>")}
+.group:hover .grp-nm::after,.sav-in:hover .sav-nm::after,.loan-in:hover .loan-nm::after,.metas-in:hover .metas-nm::after,.chart-in:hover .chart-lb::after{opacity:1}
 
 /* ── SAZONAL ──────────────────────────────────────────── */
 .logo,.l-logo,.intro-logo{position:relative}
@@ -879,6 +941,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
   <div class="main-content">
 
+    <div id="postmark" aria-hidden="true"><span id="pmMo"></span><span id="pmYr"></span></div>
     <div class="stats-row">
       <div class="scard">
         <div class="scard-lb">renda</div>
@@ -1630,6 +1693,8 @@ function renderMonthPills(){
   wrap.innerHTML=mShort.map((m,i)=>`<button class="mp${i===cur?' cur':''}" onclick="selectMonthPill(${i})">${m}</button>`).join('');
   const yl=document.getElementById('yrLbl');
   if(yl) yl.textContent=document.getElementById('yearSel')?.value||'';
+  const pm=document.getElementById('pmMo');
+  if(pm){ pm.textContent=mShort[cur].toUpperCase(); document.getElementById('pmYr').textContent=document.getElementById('yearSel')?.value||''; }
   // scroll active pill into view (mobile horizontal scroll)
   setTimeout(()=>{ const a=wrap.querySelector('.cur'); if(a) a.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'}); },60);
 }
