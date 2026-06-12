@@ -139,24 +139,6 @@ html[data-dark] .intro-logo span{text-decoration-color:rgba(245,158,11,.25)}
 @keyframes introSub{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes introFade{to{opacity:0;visibility:hidden}}
 
-/* ── BORDA DE CADERNO (overlay: atravessa a página toda) ── */
-#nbEdge{position:fixed;top:0;bottom:0;left:0;width:56px;z-index:15;pointer-events:none;background:
-  linear-gradient(to right,transparent 9px,rgba(195,60,60,.16) 9px,rgba(195,60,60,.16) 10.5px,transparent 10.5px)}
-html[data-dark] #nbEdge{background:
-  linear-gradient(to right,transparent 9px,rgba(240,120,110,.17) 9px,rgba(240,120,110,.17) 10.5px,transparent 10.5px)}
-@media(min-width:901px){
-  #nbEdge{background:
-    linear-gradient(to right,transparent 42px,rgba(195,60,60,.16) 42px,rgba(195,60,60,.16) 43.5px,transparent 43.5px),
-    radial-gradient(circle at 19px 16%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 50%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 84%,rgba(120,90,50,.13) 0 5.5px,rgba(120,90,50,.32) 5.5px 6.5px,transparent 7.5px)}
-  html[data-dark] #nbEdge{background:
-    linear-gradient(to right,transparent 42px,rgba(240,120,110,.17) 42px,rgba(240,120,110,.17) 43.5px,transparent 43.5px),
-    radial-gradient(circle at 19px 16%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 50%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px),
-    radial-gradient(circle at 19px 84%,rgba(0,0,0,.5) 0 5.5px,rgba(200,160,100,.34) 5.5px 6.5px,transparent 7.5px)}
-}
-
 /* ── Grain texture ───────────────────────────── */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:500;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:160px 160px}
 html[data-dark] body::before{opacity:.1}
@@ -682,7 +664,6 @@ html[data-dark] #postmark span{color:rgba(126,45,31,.9)}
 .col:first-child .group:nth-child(2)::before{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 32'><path d='M4.5 9 V23.5 a2.8 2.8 0 0 0 5.6 0 V6.5 a4.2 4.2 0 0 0 -8.4 0 V22' fill='none' stroke='%23958c7e' stroke-width='1.9' stroke-linecap='round'/></svg>") no-repeat center/contain;width:15px;height:36px;top:-15px;left:30px;transform:rotate(6deg);border-radius:0}
 .col:first-child .group:nth-child(2)::after{content:none}
 .chart-in::before{background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 32'><path d='M4.5 9 V23.5 a2.8 2.8 0 0 0 5.6 0 V6.5 a4.2 4.2 0 0 0 -8.4 0 V22' fill='none' stroke='%23958c7e' stroke-width='1.9' stroke-linecap='round'/></svg>") no-repeat center/contain;width:15px;height:36px;top:-16px;left:12%;transform:rotate(-5deg);border-radius:0}
-.scard:nth-child(3)::before{content:none}
 
 /* ── POST-IT (vence logo) ─────────────────────────────── */
 .due-bar{background:rgba(253,243,150,.72);border:1px solid rgba(200,170,60,.45);border-radius:2px;box-shadow:none;filter:drop-shadow(2px 3px 0 rgba(120,90,20,.18));padding:11px 22px 11px 14px;position:relative;transform:rotate(-.35deg);clip-path:polygon(0 0,100% 0,100% calc(100% - 17px),calc(100% - 17px) 100%,0 100%)}
@@ -732,7 +713,7 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 /* ── ADESIVOS die-cut ─────────────────────────────────── */
 .stk{position:absolute;pointer-events:none;z-index:2;filter:drop-shadow(1.5px 2.5px 2px rgba(60,40,15,.3));background-repeat:no-repeat;background-position:center;background-size:contain}
 html[data-dark] .stk{filter:drop-shadow(1.5px 2.5px 2.5px rgba(0,0,0,.55)) brightness(.88) saturate(.92)}
-.stk-nota{top:-17px;left:calc(58% - 11px);width:23px;height:43px;transform:rotate(-7deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 42'><rect x='1' y='1' width='20' height='40' rx='4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><rect x='4' y='4' width='14' height='34' rx='2' fill='%238fbf8a' stroke='%232b2117' stroke-width='1.5'/><circle cx='11' cy='21' r='4.6' fill='none' stroke='%232b2117' stroke-width='1'/><text x='11' y='24.4' font-family='Georgia,serif' font-size='8.5' font-weight='700' font-style='italic' text-anchor='middle' fill='%232b2117'>$</text></svg>")}
+.stk-nota{top:9px;right:14px;width:22px;height:41px;transform:rotate(-16deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 42'><rect x='1' y='1' width='20' height='40' rx='4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><rect x='4' y='4' width='14' height='34' rx='2' fill='%238fbf8a' stroke='%232b2117' stroke-width='1.5'/><circle cx='11' cy='21' r='4.6' fill='none' stroke='%232b2117' stroke-width='1'/><text x='11' y='24.4' font-family='Georgia,serif' font-size='8.5' font-weight='700' font-style='italic' text-anchor='middle' fill='%232b2117'>$</text></svg>")}
 .stk-alvo{top:-13px;right:27%;width:30px;height:30px;transform:rotate(8deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><circle cx='15' cy='15' r='13.4' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1'/><circle cx='15' cy='15' r='10' fill='%23e8554d' stroke='%232b2117' stroke-width='1.5'/><circle cx='15' cy='15' r='6.2' fill='%23fffdf7'/><circle cx='15' cy='15' r='2.8' fill='%23e8554d' stroke='%232b2117' stroke-width='.8'/></svg>")}
 .stk-raio{top:-13px;right:32%;width:27px;height:31px;transform:rotate(-7deg);background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 30'><path d='M14.5 0.5 L3 17.5 h6.2 L7.5 29.5 L23 11.5 h-7 L18.5 0.5 Z' fill='%23fffdf7' stroke='%23d0c7b4' stroke-width='1' stroke-linejoin='round'/><path d='M13.8 4 L7 15.8 h5 L10.6 25 L19 13 h-5.6 L16.2 4 Z' fill='%23ffd84d' stroke='%232b2117' stroke-width='1.4' stroke-linejoin='round'/></svg>")}
 
@@ -798,8 +779,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 </style>
 </head>
 <body>
-
-<div id="nbEdge" aria-hidden="true"></div>
 
 <!-- ══ INTRO ══════════════════════════════════════════ -->
 <div id="introSplash">
