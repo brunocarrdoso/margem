@@ -710,6 +710,15 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 .month-mood::before{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 14'><path d='M1 2 q11 11 21 7' fill='none' stroke='%232b2117' stroke-width='1.6' stroke-linecap='round' opacity='.6'/><path d='M17.5 11.5 l5 -2 l-2.6 -4.4' fill='none' stroke='%232b2117' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' opacity='.6'/></svg>")}
 .cover-btn{background:var(--ink);color:var(--pop);border-color:var(--ink);box-shadow:3px 3px 0 rgba(120,90,20,.4)}
 
+/* ── POSSO COMPRAR? — veredito ────────────────────────── */
+.buy-verdict{margin-top:4px;border-radius:13px 9px 12px 10px;padding:14px 16px;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink-sh);animation:stampIn .4s cubic-bezier(.22,1,.36,1) both}
+.buy-verdict .bv-tag{font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:900;letter-spacing:-.4px;display:block;margin-bottom:3px;line-height:1.05}
+.buy-verdict .bv-txt{font-size:12px;line-height:1.55;color:var(--t2)}
+.buy-verdict .bv-sub{font-size:10.5px;line-height:1.5;color:var(--t3);margin-top:6px;border-top:1px dashed var(--bdr-soft);padding-top:6px}
+.bv-sim{background:var(--green-bg)} .bv-sim .bv-tag{color:var(--green)}
+.bv-talvez{background:var(--amber-bg)} .bv-talvez .bv-tag{color:var(--amber)}
+.bv-nao{background:var(--red-bg)} .bv-nao .bv-tag{color:var(--red)}
+
 /* ── SAZONAL ──────────────────────────────────────────── */
 .logo,.l-logo,.intro-logo{position:relative}
 html.season-dec .logo::after{content:'';position:absolute;top:-11px;left:-9px;width:20px;height:17px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 22'><path d='M4 15 C6 5 15 1 21 5 C19 9 17 12 16 15 Z' fill='%23c0392b' stroke='%232b2117' stroke-width='1.4'/><rect x='2' y='14' width='16' height='5' rx='2.5' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/><circle cx='21.5' cy='4.5' r='3' fill='%23fffdf7' stroke='%232b2117' stroke-width='1.4'/></svg>") no-repeat center/contain;transform:rotate(-14deg);pointer-events:none}
@@ -924,6 +933,9 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <button class="icon-btn icon-btn-extra" onclick="openLoansTab()" title="empréstimos">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6.2 12h.01M17.8 12h.01"/></svg>
         </button>
+        <button class="icon-btn icon-btn-extra" onclick="openBuy()" title="posso comprar?">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg>
+        </button>
         <button class="icon-btn" onclick="openAnnual()" title="resumo anual">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg>
         </button>
@@ -937,6 +949,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="u-menu hidden" id="uMenu">
           <button onclick="openCal()">calendário</button>
           <button onclick="openLoansTab()">empréstimos</button>
+          <button onclick="openBuy()">posso comprar?</button>
           <button onclick="openProfileModal()">editar perfil</button>
           <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
@@ -1218,6 +1231,35 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <button class="m-cancel" onclick="delPropOne()">só deste mês</button>
       <button class="m-ok m-danger" onclick="delPropAll()">deste até dezembro</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ POSSO COMPRAR? ═══════════════════════════════════ -->
+<div class="overlay hidden" id="buyOverlay" onclick="if(event.target===this)closeBuy()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">posso comprar?</div>
+    <div class="m-field">
+      <label>O que você quer? <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
+      <input class="m-in" id="buyDesc" type="text" placeholder="ex: tênis novo" autocomplete="off" />
+    </div>
+    <div class="m-field">
+      <label>Quanto custa?</label>
+      <div class="val-wrap"><span class="val-pfx">R$</span>
+        <input class="m-in" id="buyVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);buyEval()" /></div>
+    </div>
+    <div class="m-field">
+      <label>Como pagaria?</label>
+      <div class="cat-pills" id="buyPays"></div>
+    </div>
+    <div class="m-field hidden" id="buyParcWrap">
+      <div class="parc-row" onclick="buyToggleParc()"><span class="parc-lbl">parcelar?</span><div class="t-sw" id="buyParcSw"></div></div>
+    </div>
+    <div class="m-field hidden" id="buyParcN">
+      <label>Em quantas vezes?</label>
+      <input class="m-in" id="buyParcVal" type="number" min="2" max="48" placeholder="ex: 6" oninput="buyEval()" />
+    </div>
+    <div id="buyVerdict" class="buy-verdict hidden"></div>
+    <div class="m-actions"><button class="m-ok" onclick="closeBuy()">fechar</button></div>
   </div>
 </div>
 
@@ -2011,7 +2053,7 @@ function recalc(){
     document.getElementById('pctL').textContent=pct.toFixed(0)+'% comprometido';
     document.getElementById('pctR').textContent=free.toFixed(0)+'% livre';
   } else { fi.style.width='0%'; fi.className='prog-fi'; document.getElementById('pctL').textContent='0% comprometido'; document.getElementById('pctR').textContent='100% livre'; }
-  renderMetas(eF,tE,svFlow,totalSaved);
+  renderMetas(eF,eX,svFlow,totalSaved);
   const cb=document.getElementById('coverBtn');
   if(cb){
     const showCover=av<-0.005 && totalSaved>0.005;
@@ -2312,7 +2354,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); propKeep(); delPropCancel(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2827,7 +2869,7 @@ function metasInput(){
   if(n===1000000 && Date.now()-(metasInput._eg||0)>8000){ metasInput._eg=Date.now(); stamp('SONHO GRANDE!'); }
   recalc();
 }
-function renderMetas(eF,tE,sv,totalSaved){
+function renderMetas(eF,eX,sv,totalSaved){
   const grid=document.getElementById('metasGrid');
   if(!grid) return;
   const saved=localStorage.getItem('margem-salary')||'';
@@ -2846,13 +2888,13 @@ function renderMetas(eF,tE,sv,totalSaved){
     const dim=new Date(nd.getFullYear(),nd.getMonth()+1,0).getDate();
     const hoje=nd.getDate(), restam=dim-hoje+1;
     const teto=s*.3;
-    dayLine = tE<=teto
-      ? `dá pra gastar ${fmt((teto-tE)/restam)} por dia até o fim do mês`
-      : `sua média está em ${fmt(tE/hoje)} por dia`;
+    dayLine = eX<=teto
+      ? `dá pra gastar ${fmt((teto-eX)/restam)} por dia até o fim do mês`
+      : `seus variáveis já estão em ${fmt(eX/hoje)} por dia`;
   }
   const rows=[
-    {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% do salário — teto de gastos do mês',
-     ok:tE<=s*.3, st:tE<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-tE)}`:`passou ${fmt(tE-s*.3)} do teto`, extra:dayLine},
+    {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% do salário — teto pros gastos variáveis (esporádicos)',
+     ok:eX<=s*.3, st:eX<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-eX)}`:`passou ${fmt(eX-s*.3)} do teto`, extra:dayLine},
     {lbl:'despesas fixas máximas', alvo:s/2, desc:'metade do salário — máximo em compromissos fixos',
      ok:eF<=s/2, st:eF<=s/2?`✓ fixos sob controle — folga de ${fmt(s/2-eF)}`:`fixos estouraram ${fmt(eF-s/2)}`},
     {lbl:'investimento mensal', alvo:s*.2, desc:'20% do salário — quanto guardar todo mês',
@@ -2870,6 +2912,98 @@ function renderMetas(eF,tE,sv,totalSaved){
       <div class="meta-st ${r.ok?'ok':'bad'}">${r.st}</div>
       ${r.extra?`<div class="meta-day">${r.extra}</div>`:''}
     </div>`).join('');
+}
+
+// ── Posso comprar? ────────────────────────────────────
+function monthAvail(k){
+  const m=allMonths[k]; if(!m) return 0;
+  const la=loanAdj(k);
+  return sum(m['income-fixed'])+sum(m['income-extra'])-sum(m['exp-fixed'])-sum(m['exp-extra'])-sumFlow(m['savings'])-la.lent+la.recvd;
+}
+function monthHasData(k){const m=allMonths[k];return !!m&&(sum(m['income-fixed'])+sum(m['income-extra'])+sum(m['exp-fixed'])+sum(m['exp-extra'])+sum(m['savings']))>0;}
+// folga mensal: média do que sobra nos meses com dados (fallback no mês atual)
+function folgaMensal(){
+  const ks=Object.keys(allMonths).filter(monthHasData);
+  if(!ks.length) return Math.max(heroVal||0,0);
+  return ks.map(monthAvail).reduce((a,b)=>a+b,0)/ks.length;
+}
+let buySelPay='debito', buyIsParc=false;
+function openBuy(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  buySelPay='debito'; buyIsParc=false;
+  document.getElementById('buyDesc').value='';
+  document.getElementById('buyVal').value='';
+  document.getElementById('buyParcVal').value='';
+  document.getElementById('buyParcSw').classList.remove('on');
+  document.getElementById('buyParcN').classList.add('hidden');
+  document.getElementById('buyParcWrap').classList.add('hidden');
+  document.getElementById('buyVerdict').classList.add('hidden');
+  renderBuyPays();
+  document.getElementById('buyOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('buyVal').focus(),60);
+}
+function closeBuy(){ document.getElementById('buyOverlay').classList.add('hidden'); }
+function renderBuyPays(){
+  document.getElementById('buyPays').innerHTML=PAYS.map(p=>{
+    const on=buySelPay===p.id,c=PAY_COL[p.id];
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="buyPick('${p.id}')">${p.lb}</div>`;
+  }).join('');
+}
+function buyPick(id){
+  buySelPay=id;
+  document.getElementById('buyParcWrap').classList.toggle('hidden',id!=='credito');
+  if(id!=='credito'){ buyIsParc=false; document.getElementById('buyParcSw').classList.remove('on'); document.getElementById('buyParcN').classList.add('hidden'); }
+  renderBuyPays(); buyEval();
+}
+function buyToggleParc(){
+  buyIsParc=!buyIsParc;
+  document.getElementById('buyParcSw').classList.toggle('on',buyIsParc);
+  document.getElementById('buyParcN').classList.toggle('hidden',!buyIsParc);
+  buyEval();
+  if(buyIsParc) setTimeout(()=>document.getElementById('buyParcVal').focus(),60);
+}
+function avaliarCompra(valor,metodo,parc){
+  const av=heroVal||0, saved=savedUpTo(curMonth), folga=folgaMensal();
+  // crédito parcelado
+  if(metodo==='credito'&&parc>1){
+    const pp=valor/parc;
+    const sub=`começa na fatura de ${mkLbl(nextKeyOf(curMonth))}, ${parc}x de ${fmt(pp)}`;
+    if(folga>=pp*1.05) return {n:'sim',t:`cabe no orçamento — cada parcela (${fmt(pp)}) cabe na sua folga de ~${fmt(folga)}/mês`,sub};
+    if(folga>=pp*0.85) return {n:'talvez',t:`dá pra encaixar, mas aperta — ${fmt(pp)}/mês contra folga de ${fmt(folga)}`,sub};
+    return {n:'nao',t:`pesado — cada parcela (${fmt(pp)}) passa da sua folga mensal de ${fmt(folga)}`,sub};
+  }
+  // crédito à vista → fatura do mês que vem
+  if(metodo==='credito'){
+    const nk=mkLbl(nextKeyOf(curMonth));
+    if(folga>=valor) return {n:'sim',t:`pode — cai na fatura de ${nk} e sua folga mensal (${fmt(folga)}) cobre`,sub:'dica: se apertar, dá pra parcelar'};
+    if(av>=valor) return {n:'sim',t:`tranquilo — você fecha este mês com ${fmt(av)}, sobra pra fatura de ${nk}`};
+    if(av+saved>=valor) return {n:'talvez',t:`cai em ${nk}; pra fechar a conta vai usar ${fmt(valor-Math.max(av,0))} do guardado`,sub:'parcelar deixaria mais leve'};
+    return {n:'nao',t:`arriscado — ${fmt(valor)} na fatura de ${nk} passa do que você tem`,sub:'considere parcelar ou esperar'};
+  }
+  // débito ou pix → sai do bolso agora
+  if(av>=valor) return {n:'sim',t:`pode comprar agora — ainda sobram ${fmt(av-valor)} este mês`};
+  if(av+saved>=valor){
+    const doG=valor-Math.max(av,0);
+    return {n:'talvez',t:`dá usando ${fmt(doG)} do guardado — ficam ${fmt(saved-doG)} na reserva`,sub:'tirar da reserva atrasa suas metas'};
+  }
+  const falta=valor-av-saved;
+  if(folga>0.5){
+    const meses=Math.ceil(falta/folga);
+    const d=new Date(); d.setMonth(d.getMonth()+meses);
+    return {n:'nao',t:`faltam ${fmt(falta)} — guardando ~${fmt(folga)}/mês, dá em ${meses} ${meses===1?'mês':'meses'}`,sub:`mira por ${MNS_S[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`};
+  }
+  return {n:'nao',t:`faltam ${fmt(falta)} e seu saldo não está sobrando pra juntar`,sub:'reveja os gastos antes'};
+}
+function buyEval(){
+  const out=document.getElementById('buyVerdict');
+  const v=parseMoney(document.getElementById('buyVal').value);
+  if(!v||v<=0){ out.classList.add('hidden'); return; }
+  const parc=buyIsParc?(parseInt(document.getElementById('buyParcVal').value)||1):1;
+  const r=avaliarCompra(v,buySelPay,parc);
+  const tags={sim:'pode!',talvez:'dá, com cuidado',nao:'ainda não'};
+  out.className='buy-verdict bv-'+r.n;
+  out.innerHTML=`<span class="bv-tag">${tags[r.n]}</span><span class="bv-txt">${r.t}</span>`+(r.sub?`<div class="bv-sub">${r.sub}</div>`:'');
+  out.classList.remove('hidden');
 }
 
 // ── Calendário de vencimentos ──────────────────────────
