@@ -2927,6 +2927,8 @@ function folgaMensal(){
   if(!ks.length) return Math.max(heroVal||0,0);
   return ks.map(monthAvail).reduce((a,b)=>a+b,0)/ks.length;
 }
+// disponível projetado de um mês: real se já tem lançamentos, senão a folga média
+function projAvail(k){ return monthHasData(k)?monthAvail(k):folgaMensal(); }
 let buySelPay='debito', buyIsParc=false;
 function openBuy(){
   document.getElementById('uMenu')?.classList.add('hidden');
@@ -2963,36 +2965,37 @@ function buyToggleParc(){
   if(buyIsParc) setTimeout(()=>document.getElementById('buyParcVal').focus(),60);
 }
 function avaliarCompra(valor,metodo,parc){
-  const av=heroVal||0, saved=savedUpTo(curMonth), folga=folgaMensal();
-  // crédito parcelado
+  const av=heroVal||0, saved=savedUpTo(curMonth);
+  // ── crédito parcelado: cada parcela cai num mês — checa o disponível real de cada um
   if(metodo==='credito'&&parc>1){
     const pp=valor/parc;
-    const sub=`começa na fatura de ${mkLbl(nextKeyOf(curMonth))}, ${parc}x de ${fmt(pp)}`;
-    if(folga>=pp*1.05) return {n:'sim',t:`cabe no orçamento — cada parcela (${fmt(pp)}) cabe na sua folga de ~${fmt(folga)}/mês`,sub};
-    if(folga>=pp*0.85) return {n:'talvez',t:`dá pra encaixar, mas aperta — ${fmt(pp)}/mês contra folga de ${fmt(folga)}`,sub};
-    return {n:'nao',t:`pesado — cada parcela (${fmt(pp)}) passa da sua folga mensal de ${fmt(folga)}`,sub};
+    let k=curMonth, pior=Infinity, piorK=null;
+    for(let i=0;i<parc;i++){ k=nextKeyOf(k); const a=projAvail(k); if(a<pior){ pior=a; piorK=k; } }
+    const sub=`${parc}x de ${fmt(pp)}, de ${mkLbl(nextKeyOf(curMonth))} em diante`;
+    if(pior<0) return {n:'nao',t:`${mkLbl(piorK)} já fecha no vermelho — não cabe mais uma parcela de ${fmt(pp)}`,sub};
+    if(pior>=pp*1.05) return {n:'sim',t:`cabe — o mês mais apertado (${mkLbl(piorK)}) ainda deixa ${fmt(pior)} pra parcela de ${fmt(pp)}`,sub};
+    if(pior>=pp*0.85) return {n:'talvez',t:`dá, mas aperta em ${mkLbl(piorK)} — só ${fmt(pior)} sobrando pra parcela de ${fmt(pp)}`,sub};
+    return {n:'nao',t:`pesado — em ${mkLbl(piorK)} só há ${fmt(pior)} pra uma parcela de ${fmt(pp)}`,sub};
   }
-  // crédito à vista → fatura do mês que vem
+  // ── crédito à vista: cai na fatura do mês que vem → olha o disponível daquele mês
   if(metodo==='credito'){
-    const nk=mkLbl(nextKeyOf(curMonth));
-    if(folga>=valor) return {n:'sim',t:`pode — cai na fatura de ${nk} e sua folga mensal (${fmt(folga)}) cobre`,sub:'dica: se apertar, dá pra parcelar'};
-    if(av>=valor) return {n:'sim',t:`tranquilo — você fecha este mês com ${fmt(av)}, sobra pra fatura de ${nk}`};
-    if(av+saved>=valor) return {n:'talvez',t:`cai em ${nk}; pra fechar a conta vai usar ${fmt(valor-Math.max(av,0))} do guardado`,sub:'parcelar deixaria mais leve'};
-    return {n:'nao',t:`arriscado — ${fmt(valor)} na fatura de ${nk} passa do que você tem`,sub:'considere parcelar ou esperar'};
+    const nkk=nextKeyOf(curMonth), nk=mkLbl(nkk), an=projAvail(nkk);
+    if(an>=valor) return {n:'sim',t:`pode — em ${nk}, quando cai a fatura, você terá ${fmt(an)} disponível`,sub:'dica: parcelar deixa ainda mais folgado'};
+    if(an+saved>=valor) return {n:'talvez',t:`cai em ${nk} (que terá ${fmt(an)}); faltam ${fmt(valor-Math.max(an,0))} que sairiam do guardado`,sub:'parcelar deixaria mais leve'};
+    return {n:'nao',t:`arriscado — ${nk} terá só ${fmt(an)} e a fatura de ${fmt(valor)} não cabe`,sub:'considere parcelar ou esperar'};
   }
-  // débito ou pix → sai do bolso agora
+  // ── débito ou pix: sai do bolso agora
   if(av>=valor) return {n:'sim',t:`pode comprar agora — ainda sobram ${fmt(av-valor)} este mês`};
   if(av+saved>=valor){
     const doG=valor-Math.max(av,0);
     return {n:'talvez',t:`dá usando ${fmt(doG)} do guardado — ficam ${fmt(saved-doG)} na reserva`,sub:'tirar da reserva atrasa suas metas'};
   }
-  const falta=valor-av-saved;
-  if(folga>0.5){
-    const meses=Math.ceil(falta/folga);
-    const d=new Date(); d.setMonth(d.getMonth()+meses);
-    return {n:'nao',t:`faltam ${fmt(falta)} — guardando ~${fmt(folga)}/mês, dá em ${meses} ${meses===1?'mês':'meses'}`,sub:`mira por ${MNS_S[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`};
-  }
-  return {n:'nao',t:`faltam ${fmt(falta)} e seu saldo não está sobrando pra juntar`,sub:'reveja os gastos antes'};
+  // ── quando dá: acumula o disponível projetado de cada mês à frente
+  const falta=valor-saved-Math.max(av,0);
+  let pool=saved+Math.max(av,0), k=curMonth, meses=0;
+  while(meses<48){ k=nextKeyOf(k); meses++; pool+=Math.max(projAvail(k),0); if(pool>=valor) break; }
+  if(pool>=valor) return {n:'nao',t:`faltam ${fmt(falta)} — juntando o que sobra a cada mês, dá até ${mkLbl(k)}`,sub:`${meses} ${meses===1?'mês':'meses'} no ritmo atual`};
+  return {n:'nao',t:`faltam ${fmt(falta)} e o que sobra por mês não chega lá tão cedo`,sub:'reveja os gastos antes'};
 }
 function buyEval(){
   const out=document.getElementById('buyVerdict');
