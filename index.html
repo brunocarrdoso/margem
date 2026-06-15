@@ -2929,6 +2929,12 @@ function folgaMensal(){
 }
 // disponível projetado de um mês: real se já tem lançamentos, senão a folga média
 function projAvail(k){ return monthHasData(k)?monthAvail(k):folgaMensal(); }
+// quanto ainda cabe no teto de gastos variáveis (30% do salário) do mês k; ∞ sem salário
+function ceilingRoom(k){
+  const s=parseFloat(localStorage.getItem('margem-salary'))||0;
+  if(!s) return Infinity;
+  return s*0.3 - sum((allMonths[k]||{})['exp-extra']);
+}
 let buySelPay='debito', buyIsParc=false;
 function openBuy(){
   document.getElementById('uMenu')?.classList.add('hidden');
@@ -2966,35 +2972,47 @@ function buyToggleParc(){
 }
 function avaliarCompra(valor,metodo,parc){
   const av=heroVal||0, saved=savedUpTo(curMonth);
-  // ── crédito parcelado: cada parcela cai num mês — checa o disponível real de cada um
+  const temSal=(parseFloat(localStorage.getItem('margem-salary'))||0)>0;
+  // ── crédito parcelado: checa caixa e teto de gastos de cada mês
   if(metodo==='credito'&&parc>1){
     const pp=valor/parc;
-    let k=curMonth, pior=Infinity, piorK=null;
-    for(let i=0;i<parc;i++){ k=nextKeyOf(k); const a=projAvail(k); if(a<pior){ pior=a; piorK=k; } }
+    let k=curMonth, piorC=Infinity,piorCK=null, piorR=Infinity,piorRK=null;
+    for(let i=0;i<parc;i++){ k=nextKeyOf(k);
+      const c=projAvail(k); if(c<piorC){ piorC=c; piorCK=k; }
+      const r=ceilingRoom(k); if(r<piorR){ piorR=r; piorRK=k; }
+    }
     const sub=`${parc}x de ${fmt(pp)}, de ${mkLbl(nextKeyOf(curMonth))} em diante`;
-    if(pior<0) return {n:'nao',t:`${mkLbl(piorK)} já fecha no vermelho — não cabe mais uma parcela de ${fmt(pp)}`,sub};
-    if(pior>=pp*1.05) return {n:'sim',t:`cabe — o mês mais apertado (${mkLbl(piorK)}) ainda deixa ${fmt(pior)} pra parcela de ${fmt(pp)}`,sub};
-    if(pior>=pp*0.85) return {n:'talvez',t:`dá, mas aperta em ${mkLbl(piorK)} — só ${fmt(pior)} sobrando pra parcela de ${fmt(pp)}`,sub};
-    return {n:'nao',t:`pesado — em ${mkLbl(piorK)} só há ${fmt(pior)} pra uma parcela de ${fmt(pp)}`,sub};
+    if(piorC<0) return {n:'nao',t:`${mkLbl(piorCK)} já fecha no vermelho — não cabe mais uma parcela de ${fmt(pp)}`,sub};
+    if(piorC<pp) return {n:'nao',t:`pesado — em ${mkLbl(piorCK)} só há ${fmt(piorC)} pra uma parcela de ${fmt(pp)}`,sub};
+    if(temSal&&piorR<pp) return {n:'talvez',t:`o caixa aguenta, mas em ${mkLbl(piorRK)} a parcela passa ${fmt(pp-piorR)} do seu teto de gastos`,sub};
+    if(piorC>=pp*1.05) return {n:'sim',t:`cabe — o mês mais apertado (${mkLbl(piorCK)}) ainda deixa ${fmt(piorC)}${temSal?' e respeita seu teto':''}`,sub};
+    return {n:'talvez',t:`dá, mas aperta em ${mkLbl(piorCK)} — só ${fmt(piorC)} sobrando pra parcela de ${fmt(pp)}`,sub};
   }
-  // ── crédito à vista: cai na fatura do mês que vem → olha o disponível daquele mês
+  // ── crédito à vista: cai na fatura do mês que vem
   if(metodo==='credito'){
-    const nkk=nextKeyOf(curMonth), nk=mkLbl(nkk), an=projAvail(nkk);
-    if(an>=valor) return {n:'sim',t:`pode — em ${nk}, quando cai a fatura, você terá ${fmt(an)} disponível`,sub:'dica: parcelar deixa ainda mais folgado'};
-    if(an+saved>=valor) return {n:'talvez',t:`cai em ${nk} (que terá ${fmt(an)}); faltam ${fmt(valor-Math.max(an,0))} que sairiam do guardado`,sub:'parcelar deixaria mais leve'};
+    const nkk=nextKeyOf(curMonth), nk=mkLbl(nkk), an=projAvail(nkk), room=ceilingRoom(nkk);
+    if(an>=valor){
+      if(temSal&&valor>room) return {n:'talvez',t:`o caixa de ${nk} cobre, mas a compra fica ${fmt(valor-room)} acima do teto de gastos daquele mês`,sub:'parcelar dilui melhor'};
+      return {n:'sim',t:`pode — em ${nk} (quando cai a fatura) você terá ${fmt(an)} disponível${temSal?' e dentro do teto':''}`,sub:'dica: parcelar deixa ainda mais folgado'};
+    }
+    if(an+saved>=valor) return {n:'talvez',t:`cai em ${nk} (que terá ${fmt(an)}); faltam ${fmt(valor-Math.max(an,0))} que sairiam do guardado`,sub:'mexer na reserva atrasa suas metas'};
     return {n:'nao',t:`arriscado — ${nk} terá só ${fmt(an)} e a fatura de ${fmt(valor)} não cabe`,sub:'considere parcelar ou esperar'};
   }
   // ── débito ou pix: sai do bolso agora
-  if(av>=valor) return {n:'sim',t:`pode comprar agora — ainda sobram ${fmt(av-valor)} este mês`};
+  const room=ceilingRoom(curMonth);
+  if(av>=valor){
+    if(temSal&&valor>room) return {n:'talvez',t:`você tem o dinheiro, mas isso fica ${fmt(valor-room)} acima do seu teto de gastos do mês`,sub:room>0?`ainda cabem ${fmt(room)} dentro do teto`:'você já passou do teto este mês'};
+    return {n:'sim',t:`pode comprar agora — sobram ${fmt(av-valor)} este mês${temSal?' e dentro do teto':''}`};
+  }
   if(av+saved>=valor){
     const doG=valor-Math.max(av,0);
     return {n:'talvez',t:`dá usando ${fmt(doG)} do guardado — ficam ${fmt(saved-doG)} na reserva`,sub:'tirar da reserva atrasa suas metas'};
   }
   // ── quando dá: acumula o disponível projetado de cada mês à frente
   const falta=valor-saved-Math.max(av,0);
-  let pool=saved+Math.max(av,0), k=curMonth, meses=0;
-  while(meses<48){ k=nextKeyOf(k); meses++; pool+=Math.max(projAvail(k),0); if(pool>=valor) break; }
-  if(pool>=valor) return {n:'nao',t:`faltam ${fmt(falta)} — juntando o que sobra a cada mês, dá até ${mkLbl(k)}`,sub:`${meses} ${meses===1?'mês':'meses'} no ritmo atual`};
+  let pool=saved+Math.max(av,0), kk=curMonth, meses=0;
+  while(meses<48){ kk=nextKeyOf(kk); meses++; pool+=Math.max(projAvail(kk),0); if(pool>=valor) break; }
+  if(pool>=valor) return {n:'nao',t:`faltam ${fmt(falta)} — juntando o que sobra a cada mês, dá até ${mkLbl(kk)}`,sub:`${meses} ${meses===1?'mês':'meses'} no ritmo atual`};
   return {n:'nao',t:`faltam ${fmt(falta)} e o que sobra por mês não chega lá tão cedo`,sub:'reveja os gastos antes'};
 }
 function buyEval(){
