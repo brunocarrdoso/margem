@@ -731,13 +731,17 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 .shop-it{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;cursor:pointer;transition:border-color .15s,background .15s;background:rgba(255,255,255,.28);user-select:none}
 html[data-dark] .shop-it{background:rgba(255,255,255,.03)}
 .shop-it:hover{border-color:var(--bdr)}
-.shop-ck{width:19px;height:19px;border:2px solid var(--t4);border-radius:6px 4px 6px 5px;flex-shrink:0;position:relative;transition:all .2s cubic-bezier(.22,1,.36,1)}
-.shop-it.done .shop-ck{background:var(--green);border-color:var(--green);transform:rotate(-6deg) scale(1.05)}
+.shop-ck{width:19px;height:19px;border:2px solid var(--t4);border-radius:6px 4px 6px 5px;flex-shrink:0;position:relative;transition:background .2s,border-color .2s}
+.shop-it.done .shop-ck{background:var(--green);border-color:var(--green);transform:rotate(-6deg)}
 .shop-it.done .shop-ck::after{content:'✓';position:absolute;inset:-1px;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.shop-t{flex:1;font-size:14px;color:var(--t1);transition:color .25s;line-height:1.3;position:relative}
-.shop-t::after{content:'';position:absolute;left:0;right:0;top:51%;height:2px;background:var(--t3);transform:scaleX(0);transform-origin:left;transition:transform .28s cubic-bezier(.22,1,.36,1)}
-.shop-it.done .shop-t{color:var(--t4)}
-.shop-it.done .shop-t::after{transform:scaleX(1)}
+.shop-it.just .shop-ck{animation:ckPop .42s cubic-bezier(.34,1.56,.64,1)}
+.shop-it.just .shop-ck::after{animation:ckIn .26s .06s both}
+@keyframes ckPop{0%{transform:rotate(0) scale(.6)}55%{transform:rotate(-10deg) scale(1.28)}100%{transform:rotate(-6deg) scale(1)}}
+@keyframes ckIn{0%{opacity:0;transform:scale(.2) rotate(8deg)}60%{opacity:1;transform:scale(1.2)}100%{transform:scale(1)}}
+.shop-t{flex:1;font-size:14px;color:var(--t1);transition:color .3s,transform .3s;line-height:1.3;position:relative}
+.shop-t::after{content:'';position:absolute;left:-2px;right:-2px;top:52%;height:2.5px;border-radius:2px;background:var(--green);transform:scaleX(0) rotate(-.6deg);transform-origin:left center;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.shop-it.done .shop-t{color:var(--t4);transform:translateX(3px)}
+.shop-it.done .shop-t::after{transform:scaleX(1) rotate(-.6deg)}
 .shop-del{background:none;border:none;color:var(--t4);font-size:17px;cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:0 2px}
 .shop-it:hover .shop-del{opacity:.8}
 .shop-empty{font-size:13px;font-style:italic;color:var(--t4);text-align:center;padding:22px 0}
@@ -3134,7 +3138,17 @@ function shopAdd(){
   const l=loadShop(); l.push({t,done:false}); saveShop(l);
   inp.value=''; renderShop(); inp.focus();
 }
-function shopToggle(i){ const l=loadShop(); if(l[i]){ l[i].done=!l[i].done; saveShop(l); renderShop(); } }
+function shopToggle(i){
+  const l=loadShop(); if(!l[i]) return;
+  l[i].done=!l[i].done; saveShop(l);
+  const el=document.querySelectorAll('#shopList .shop-it')[i];
+  if(el){
+    el.classList.toggle('done',l[i].done);
+    if(l[i].done){ el.classList.add('just'); setTimeout(()=>el.classList.remove('just'),480); }
+  }
+  const allDone=l.length>0 && l.every(x=>x.done);
+  document.getElementById('shopDone').classList.toggle('hidden',!allDone);
+}
 function shopDel(i){ const l=loadShop(); l.splice(i,1); saveShop(l); renderShop(); }
 function shopFinalize(){
   const v=parseMoney(document.getElementById('shopVal').value);
