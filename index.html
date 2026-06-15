@@ -718,6 +718,32 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 .bv-sim{background:var(--green-bg)} .bv-sim .bv-tag{color:var(--green)}
 .bv-talvez{background:var(--amber-bg)} .bv-talvez .bv-tag{color:var(--amber)}
 .bv-nao{background:var(--red-bg)} .bv-nao .bv-tag{color:var(--red)}
+.bv-add{margin-top:11px;width:100%;background:var(--ink);color:var(--pop);border:none;border-radius:9px 6px 10px 7px;padding:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);transition:transform .15s}
+.bv-add:hover{transform:translateY(-1px)}
+.bv-add:active{transform:translateY(1px);box-shadow:none}
+
+/* ── LISTA DE COMPRAS ─────────────────────────────────── */
+.shop-add{display:flex;gap:8px;margin-bottom:12px}
+.shop-add .m-in{flex:1}
+.shop-add-btn{width:46px;flex-shrink:0;border:2px solid var(--ink);background:var(--pop);color:#241c12;border-radius:11px 7px 11px 8px;font-size:20px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);transition:transform .15s;font-family:inherit}
+.shop-add-btn:active{transform:translateY(1px);box-shadow:none}
+.shop-list{display:flex;flex-direction:column;gap:5px;max-height:38vh;overflow-y:auto}
+.shop-it{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;cursor:pointer;transition:border-color .15s,background .15s;background:rgba(255,255,255,.28);user-select:none}
+html[data-dark] .shop-it{background:rgba(255,255,255,.03)}
+.shop-it:hover{border-color:var(--bdr)}
+.shop-ck{width:19px;height:19px;border:2px solid var(--t4);border-radius:6px 4px 6px 5px;flex-shrink:0;position:relative;transition:all .2s cubic-bezier(.22,1,.36,1)}
+.shop-it.done .shop-ck{background:var(--green);border-color:var(--green);transform:rotate(-6deg) scale(1.05)}
+.shop-it.done .shop-ck::after{content:'✓';position:absolute;inset:-1px;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.shop-t{flex:1;font-size:14px;color:var(--t1);transition:color .25s;line-height:1.3;position:relative}
+.shop-t::after{content:'';position:absolute;left:0;right:0;top:51%;height:2px;background:var(--t3);transform:scaleX(0);transform-origin:left;transition:transform .28s cubic-bezier(.22,1,.36,1)}
+.shop-it.done .shop-t{color:var(--t4)}
+.shop-it.done .shop-t::after{transform:scaleX(1)}
+.shop-del{background:none;border:none;color:var(--t4);font-size:17px;cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:0 2px}
+.shop-it:hover .shop-del{opacity:.8}
+.shop-empty{font-size:13px;font-style:italic;color:var(--t4);text-align:center;padding:22px 0}
+.shop-done{margin-top:14px;padding-top:14px;border-top:1px dashed var(--bdr-soft);animation:dropIn .4s cubic-bezier(.22,1,.36,1) both}
+.shop-done-msg{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px}
+.shop-done .m-field{margin-bottom:12px}
 
 /* ── SAZONAL ──────────────────────────────────────────── */
 .logo,.l-logo,.intro-logo{position:relative}
@@ -936,6 +962,9 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <button class="icon-btn icon-btn-extra" onclick="openBuy()" title="posso comprar?">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg>
         </button>
+        <button class="icon-btn icon-btn-extra" onclick="openShop()" title="lista de compras">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12l2 2 4-4"/></svg>
+        </button>
         <button class="icon-btn" onclick="openAnnual()" title="resumo anual">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg>
         </button>
@@ -950,6 +979,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           <button onclick="openCal()">calendário</button>
           <button onclick="openLoansTab()">empréstimos</button>
           <button onclick="openBuy()">posso comprar?</button>
+          <button onclick="openShop()">lista de compras</button>
           <button onclick="openProfileModal()">editar perfil</button>
           <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
@@ -1231,6 +1261,26 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <button class="m-cancel" onclick="delPropOne()">só deste mês</button>
       <button class="m-ok m-danger" onclick="delPropAll()">deste até dezembro</button>
     </div>
+  </div>
+</div>
+
+<!-- ══ LISTA DE COMPRAS ═════════════════════════════════ -->
+<div class="overlay hidden" id="shopOverlay" onclick="if(event.target===this)closeShop()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">lista de compras</div>
+    <div class="shop-add">
+      <input class="m-in" id="shopNew" type="text" placeholder="adicionar item…" autocomplete="off" />
+      <button class="shop-add-btn" onclick="shopAdd()">+</button>
+    </div>
+    <div id="shopList" class="shop-list"></div>
+    <div id="shopDone" class="shop-done hidden">
+      <div class="shop-done-msg">tudo riscado! quanto deu na compra?</div>
+      <div class="m-field"><div class="val-wrap"><span class="val-pfx">R$</span>
+        <input class="m-in" id="shopVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" /></div></div>
+      <div class="m-field"><label>Pago com</label><div class="cat-pills" id="shopPays"></div></div>
+      <button class="m-ok" onclick="shopFinalize()">lançar como mercado</button>
+    </div>
+    <div class="m-actions"><button class="m-cancel" onclick="closeShop()">fechar</button></div>
   </div>
 </div>
 
@@ -2354,7 +2404,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); propKeep(); delPropCancel(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2371,6 +2421,8 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='fixSavInput') saveFixSav();
     else if(f?.id==='tpName') confirmModal();
     else if(f?.id==='partialVal') confirmPartial();
+    else if(f?.id==='shopNew') shopAdd();
+    else if(f?.id==='shopVal') shopFinalize();
   }
 });
 
@@ -3023,8 +3075,76 @@ function buyEval(){
   const r=avaliarCompra(v,buySelPay,parc);
   const tags={sim:'pode!',talvez:'dá, com cuidado',nao:'ainda não'};
   out.className='buy-verdict bv-'+r.n;
-  out.innerHTML=`<span class="bv-tag">${tags[r.n]}</span><span class="bv-txt">${r.t}</span>`+(r.sub?`<div class="bv-sub">${r.sub}</div>`:'');
+  out.innerHTML=`<span class="bv-tag">${tags[r.n]}</span><span class="bv-txt">${r.t}</span>`+(r.sub?`<div class="bv-sub">${r.sub}</div>`:'')+(r.n==='sim'?`<button class="bv-add" onclick="buyAdd()">lançar nos gastos esporádicos →</button>`:'');
   out.classList.remove('hidden');
+}
+function buyAdd(){
+  const v=parseMoney(document.getElementById('buyVal').value);
+  if(!v||v<=0) return;
+  const desc=document.getElementById('buyDesc').value.trim()||'compra';
+  const parc=buyIsParc?(parseInt(document.getElementById('buyParcVal').value)||1):1;
+  if(buySelPay==='credito'&&parc>1){
+    const pp=Math.round(v/parc*100)/100; let k=curMonth; const keys=[];
+    for(let i=0;i<parc;i++){ k=nextKeyOf(k);
+      const val=i===parc-1?Math.round((v-pp*(parc-1))*100)/100:pp;
+      monthLocal(k)['exp-extra'].push({desc:`${desc} (${i+1}/${parc})`,value:val,pay:'credito'}); keys.push(k); }
+    if(curUser){ const rows=keys.map(kk=>({user_id:curUser.id,month_key:kk,data:allMonths[kk],updated_at:new Date().toISOString()})); sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'}); }
+  } else {
+    const d=monthLocal(curMonth);
+    d['exp-extra'].push({desc,value:v,pay:buySelPay});
+    pages['exp-extra']=Math.ceil(d['exp-extra'].length/PAGE_SZ('exp-extra'))-1;
+  }
+  renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak(); schedSave();
+  closeBuy(); toast('lançado nos gastos ✓');
+}
+
+// ── Lista de compras ──────────────────────────────────
+let shopSelPay='debito';
+function shopKey(){ return 'margem-shop-'+(curUser?.id||''); }
+function loadShop(){ try{ return JSON.parse(localStorage.getItem(shopKey())||'[]'); }catch(_){ return []; } }
+function saveShop(l){ try{ localStorage.setItem(shopKey(),JSON.stringify(l)); }catch(_){ } }
+function openShop(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  shopSelPay='debito';
+  document.getElementById('shopVal').value='';
+  document.getElementById('shopNew').value='';
+  renderShopPays(); renderShop();
+  document.getElementById('shopOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('shopNew').focus(),60);
+}
+function closeShop(){ document.getElementById('shopOverlay').classList.add('hidden'); }
+function renderShopPays(){
+  document.getElementById('shopPays').innerHTML=PAYS.map(p=>{
+    const on=shopSelPay===p.id,c=PAY_COL[p.id];
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="shopPick('${p.id}')">${p.lb}</div>`;
+  }).join('');
+}
+function shopPick(id){ shopSelPay=id; renderShopPays(); }
+function renderShop(){
+  const l=loadShop(), wrap=document.getElementById('shopList');
+  if(!l.length){ wrap.innerHTML='<div class="shop-empty">lista vazia — adicione o que precisa comprar</div>'; }
+  else wrap.innerHTML=l.map((it,i)=>
+    `<div class="shop-it${it.done?' done':''}" onclick="shopToggle(${i})"><span class="shop-ck"></span><span class="shop-t">${esc(it.t)}</span><button class="shop-del" onclick="event.stopPropagation();shopDel(${i})" title="remover">×</button></div>`).join('');
+  const allDone=l.length>0 && l.every(x=>x.done);
+  document.getElementById('shopDone').classList.toggle('hidden',!allDone);
+}
+function shopAdd(){
+  const inp=document.getElementById('shopNew'), t=inp.value.trim();
+  if(!t) return;
+  const l=loadShop(); l.push({t,done:false}); saveShop(l);
+  inp.value=''; renderShop(); inp.focus();
+}
+function shopToggle(i){ const l=loadShop(); if(l[i]){ l[i].done=!l[i].done; saveShop(l); renderShop(); } }
+function shopDel(i){ const l=loadShop(); l.splice(i,1); saveShop(l); renderShop(); }
+function shopFinalize(){
+  const v=parseMoney(document.getElementById('shopVal').value);
+  if(!v||v<=0){ document.getElementById('shopVal').focus(); return; }
+  const d=monthLocal(curMonth);
+  d['exp-extra'].push({desc:'mercado',value:v,cat:'food',pay:shopSelPay});
+  pages['exp-extra']=Math.ceil(d['exp-extra'].length/PAGE_SZ('exp-extra'))-1;
+  saveShop([]); // some da lista após virar gasto
+  renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak(); schedSave();
+  closeShop(); toast('mercado lançado ✓');
 }
 
 // ── Calendário de vencimentos ──────────────────────────
