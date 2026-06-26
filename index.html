@@ -3241,21 +3241,25 @@ function investGap(k){
 function avaliarCompra(valor,metodo,parc){
   const av=heroVal||0, saved=savedUpTo(curMonth);
   const temSal=salaryOf(curMonth)>0;
-  // ── crédito parcelado: caixa, teto E investimento de cada mês ──
+  // colchão mínimo: o que precisa sobrar livre pro resto do mês (10% da renda)
+  const folgaMin=k=>temSal?salaryOf(k)*0.1:0;
+  // ── crédito parcelado: caixa, teto, investimento E folga de cada mês ──
   if(metodo==='credito'&&parc>1){
     const pp=valor/parc;
-    let k=curMonth, piorC=Infinity,piorCK=null, piorR=Infinity,piorRK=null, piorH=Infinity,piorHK=null;
+    let k=curMonth, piorC=Infinity,piorCK=null, piorR=Infinity,piorRK=null, piorH=Infinity,piorHK=null, piorF=Infinity,piorFK=null;
     for(let i=0;i<parc;i++){ k=nextKeyOf(k);
       const c=projAvail(k); if(c<piorC){piorC=c;piorCK=k;}
       const r=ceilingRoom(k); if(r<piorR){piorR=r;piorRK=k;}
       const h=projAvail(k)-investGap(k); if(h<piorH){piorH=h;piorHK=k;}
+      const f=h-pp-folgaMin(k); if(f<piorF){piorF=f;piorFK=k;}
     }
     const sub=`${parc}x de ${fmt(pp)}, de ${mkLbl(nextKeyOf(curMonth))} em diante`;
     if(piorC<0) return {n:'nao',t:`${mkLbl(piorCK)} já fecha no vermelho — não cabe parcela de ${fmt(pp)}`,sub};
     if(piorC<pp) return {n:'nao',t:`pesado — em ${mkLbl(piorCK)} só há ${fmt(piorC)} pra parcela de ${fmt(pp)}`,sub};
     if(temSal&&piorH<pp) return {n:'talvez',t:`o caixa aguenta, mas em ${mkLbl(piorHK)} a parcela come o que era pra investir`,sub};
     if(temSal&&piorR<pp) return {n:'talvez',t:`o caixa aguenta, mas em ${mkLbl(piorRK)} a parcela passa ${fmt(pp-piorR)} do teto de gastos`,sub};
-    if(piorC>=pp*1.05) return {n:'sim',t:`cabe — o mês mais apertado (${mkLbl(piorCK)}) ainda deixa ${fmt(piorC)}${temSal?', respeitando teto e investimento':''}`,sub};
+    if(temSal&&piorF<0) return {n:'talvez',t:`as parcelas te deixam no limite — em ${mkLbl(piorFK)} sobra quase nada pro resto do mês`,sub:'comprometer todo mês assim é arriscado'};
+    if(piorC>=pp*1.05) return {n:'sim',t:`cabe com folga — o mês mais apertado (${mkLbl(piorCK)}) ainda deixa ${fmt(piorC)}${temSal?', respeitando teto e investimento':''}`,sub};
     return {n:'talvez',t:`dá, mas aperta em ${mkLbl(piorCK)} — só ${fmt(piorC)} sobrando pra parcela de ${fmt(pp)}`,sub};
   }
   // ── crédito à vista: cai na fatura do mês que vem ──
@@ -3264,7 +3268,9 @@ function avaliarCompra(valor,metodo,parc){
     if(an>=valor){
       if(temSal&&gap>0&&valor>healthy) return {n:'talvez',t:`o caixa de ${nk} cobre, mas você ainda precisa investir ${fmt(gap)} naquele mês — sobraria só ${fmt(Math.max(healthy,0))} livre`,sub:'parcelar dilui melhor'};
       if(temSal&&valor>room) return {n:'talvez',t:`o caixa de ${nk} cobre, mas passa ${fmt(valor-room)} do teto de gastos daquele mês`,sub:'parcelar dilui melhor'};
-      return {n:'sim',t:`pode — em ${nk} (a fatura) você terá ${fmt(an)}${temSal?', dentro do teto e mantendo o investimento':''}`,sub:'dica: parcelar deixa ainda mais folgado'};
+      const sobra=an-valor-gap;
+      if(temSal&&sobra<folgaMin(nkk)) return {n:'talvez',t:`cobre a fatura de ${nk}, mas te deixa no limite — ${sobra<=0.005?'não sobra nada':'sobra só '+fmt(sobra)} pro resto daquele mês`,sub:'parcelar deixa mais respirável'};
+      return {n:'sim',t:`pode — em ${nk} (a fatura) você terá ${fmt(an)} com folga${temSal?', dentro do teto e mantendo o investimento':''}`,sub:'dica: parcelar deixa ainda mais folgado'};
     }
     if(an+saved>=valor) return {n:'talvez',t:`cai em ${nk} (que terá ${fmt(an)}); faltam ${fmt(valor-Math.max(an,0))} que sairiam do guardado`,sub:'mexer na reserva atrasa suas metas'};
     return {n:'nao',t:`arriscado — ${nk} terá só ${fmt(an)} e a fatura de ${fmt(valor)} não cabe`,sub:'considere parcelar ou esperar'};
@@ -3274,7 +3280,9 @@ function avaliarCompra(valor,metodo,parc){
   if(av>=valor){
     if(temSal&&gap>0&&valor>healthy) return {n:'talvez',t:`você tem o dinheiro, mas ainda precisa investir ${fmt(gap)} este mês — depois disso sobram só ${fmt(Math.max(healthy,0))}`,sub:'investir primeiro mantém seu plano de pé'};
     if(temSal&&valor>room) return {n:'talvez',t:`você tem o dinheiro, mas passa ${fmt(valor-room)} do teto de gastos do mês`,sub:room>0?`cabem ${fmt(room)} dentro do teto`:'você já passou do teto'};
-    return {n:'sim',t:`pode comprar agora — sobram ${fmt(av-valor)}${temSal?', dentro do teto e mantendo o investimento':''}`};
+    const sobra=av-valor-gap;
+    if(temSal&&sobra<folgaMin(curMonth)) return {n:'talvez',t:`dá e ainda investe, mas te deixa no limite — ${sobra<=0.005?'não sobra nada':'sobra só '+fmt(sobra)} pro resto do mês`,sub:'sem folga pra imprevisto; pensa se vale'};
+    return {n:'sim',t:`pode comprar agora — sobram ${fmt(av-valor)}${temSal?', com folga e mantendo o investimento':''}`};
   }
   if(av+saved>=valor){
     const doG=valor-Math.max(av,0);
