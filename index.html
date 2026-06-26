@@ -750,6 +750,38 @@ html[data-dark] .shop-t::after{background-image:url("data:image/svg+xml,<svg xml
 .shop-done-msg{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px}
 .shop-done .m-field{margin-bottom:12px}
 
+/* ── CAIXINHAS ────────────────────────────────────────── */
+.box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .15s;background:rgba(255,255,255,.22)}
+html[data-dark] .box-row{background:rgba(255,255,255,.03)}
+.box-row:hover{border-color:var(--bdr);transform:translateX(2px)}
+.box-row.done{border-style:solid;border-color:rgba(74,222,128,.45)}
+.box-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.box-nm{font-size:13px;font-weight:600;color:var(--t1)}
+.box-amt{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:13px;color:var(--purple);font-variant-numeric:tabular-nums;white-space:nowrap}
+.box-amt i{font-style:normal;color:var(--t4);font-weight:400;font-size:11px}
+.box-tr{height:7px;background:var(--surf2);border:1px solid var(--bdr-soft);border-radius:5px;overflow:hidden;margin:7px 0 6px}
+.box-tr>span{display:block;height:100%;background:var(--purple);border-radius:5px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.box-row.done .box-tr>span{background:var(--green)}
+.box-bot{display:flex;justify-content:space-between;align-items:center}
+.box-add{background:none;border:none;font-family:inherit;font-size:11px;font-weight:700;color:var(--purple);cursor:pointer;padding:0;letter-spacing:.2px}
+.box-add:hover{text-decoration:underline;text-underline-offset:2px}
+.box-pct{font-size:10px;font-weight:600;color:var(--t4)}
+.box-row.done .box-pct{color:var(--green)}
+.box-lock{font-size:10px;font-style:italic;color:var(--t4);margin-top:4px;line-height:1.5}
+.box-detail-bal{font-family:'Playfair Display',Georgia,serif;font-size:28px;font-weight:900;color:var(--purple);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.box-detail-bal span{font-size:14px;color:var(--t4);font-weight:400}
+.box-deps{display:flex;flex-direction:column;margin-top:14px;max-height:34vh;overflow-y:auto}
+.box-dep{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px solid var(--bdr-soft)}
+.box-dep>span:first-child{flex:1;font-size:13px;color:var(--t1)}
+.box-dep em{font-style:normal;color:var(--t4);font-size:9px;display:block;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.box-dep i{font-style:normal;color:var(--purple);font-size:11px}
+.box-dep-v{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+.box-dep-v.neg{color:var(--red)}
+.box-dep .del-btn{flex-shrink:0}
+.box-detail-act{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.box-fix-row{display:flex;gap:8px;align-items:center}
+.box-fix-row .goal-input{flex:1}
+
 /* ── SCORE ────────────────────────────────────────────── */
 .sc-band{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;margin-top:2px}
 .sc-delta{font-size:11px;font-weight:600;color:var(--t4);margin-top:4px}
@@ -787,6 +819,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .metas-in::before{content:'';position:absolute;top:-9px;left:12%;width:44px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(1.4deg)}
 .metas-hd{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-bottom:14px}
 .metas-sal-row{display:flex;align-items:center;gap:8px}
+.metas-sal-val{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:15px;color:var(--t1);font-variant-numeric:tabular-nums}
 .metas-sal-lb{font-size:11px;font-weight:600;color:var(--t3)}
 .metas-sal-in{max-width:130px;font-variant-numeric:tabular-nums}
 .metas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
@@ -1106,27 +1139,12 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <div class="sav-wrap">
       <div class="sav-in">
         <span class="wm" style="color:var(--purple)">$</span>
-        <div class="sav-hd"><span class="sav-nm">reserva / poupança</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
-        <div id="rows-savings"></div>
+        <div class="sav-hd"><span class="sav-nm">caixinhas</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
+        <div id="boxesList"></div>
         <div class="grp-ft">
-          <button class="add-trig" onclick="openModal('savings')">+ adicionar</button>
-          <div class="pager hidden" id="pager-savings"></div>
+          <button class="add-trig hidden" id="newBoxBtn" onclick="openNewBox()">+ nova caixinha</button>
         </div>
-        <div id="goalSection" style="margin-top:10px;border-top:1px solid var(--bdr-soft);padding-top:10px">
-          <div class="goal-row hidden" id="goalDisplay">
-            <div class="goal-bar-tr"><div class="goal-bar-fi" id="goalFi"></div></div>
-            <span class="goal-lbl" id="goalLbl"></span>
-          </div>
-          <span class="goal-hint" id="goalHint">informe seu salário em “metas do salário” para acompanhar aqui a reserva de emergência</span>
-          <div class="sav-fix-wrap">
-            <button class="sav-fix-btn" id="fixSavBtn" onclick="toggleFixSav()">corrigir saldo (rendimentos)</button>
-            <div class="sav-fix-row hidden" id="fixSavEdit">
-              <span class="goal-pfx">R$</span>
-              <input type="text" inputmode="numeric" class="goal-input" id="fixSavInput" placeholder="saldo real da reserva" autocomplete="off" oninput="moneyMask(this)" />
-              <button class="sav-fix-ok" onclick="saveFixSav()">ok</button>
-            </div>
-          </div>
-        </div>
+        <div class="box-lock hidden" id="boxLock">complete a reserva de emergência pra liberar novas caixinhas (sonhos)</div>
       </div>
       <div class="loan-in">
         <span class="wm" style="color:var(--amber)">&amp;</span>
@@ -1146,9 +1164,8 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="metas-hd">
           <span class="metas-nm">metas do salário</span>
           <div class="metas-sal-row">
-            <span class="metas-sal-lb">seu salário</span>
-            <span class="goal-pfx">R$</span>
-            <input type="text" inputmode="numeric" class="goal-input metas-sal-in" id="metasSal" placeholder="ex: 5.000,00" autocomplete="off" oninput="moneyMask(this);metasInput()" />
+            <span class="metas-sal-lb">base · renda fixa</span>
+            <span class="metas-sal-val" id="metasBase">R$ 0,00</span>
           </div>
         </div>
         <div class="metas-grid" id="metasGrid"></div>
@@ -1302,6 +1319,28 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <button class="m-ok" onclick="shopFinalize()">lançar como mercado</button>
     </div>
     <div class="m-actions"><button class="m-cancel" onclick="closeShop()">fechar</button></div>
+  </div>
+</div>
+
+<!-- ══ NOVA CAIXINHA ════════════════════════════════════ -->
+<div class="overlay hidden" id="newBoxOverlay" onclick="if(event.target===this)closeNewBox()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">nova caixinha</div>
+    <div class="m-field"><label>Qual o sonho?</label>
+      <input class="m-in" id="boxName" type="text" placeholder="ex: viagem, carro, casa…" autocomplete="off" /></div>
+    <div class="m-field"><label>Quanto quer juntar?</label>
+      <div class="val-wrap"><span class="val-pfx">R$</span>
+        <input class="m-in" id="boxTarget" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" /></div></div>
+    <div class="m-actions"><button class="m-cancel" onclick="closeNewBox()">cancelar</button>
+      <button class="m-ok" onclick="confirmNewBox()">criar</button></div>
+  </div>
+</div>
+
+<!-- ══ CAIXINHA — DETALHE ════════════════════════════════ -->
+<div class="ann-overlay hidden" id="boxOverlay" onclick="if(event.target===this)closeBoxDetail()">
+  <div class="ann-modal" style="max-width:400px">
+    <div class="ann-hd"><span class="ann-title" id="boxTitle">caixinha</span><button class="ann-close" onclick="closeBoxDetail()">×</button></div>
+    <div id="boxContent"></div>
   </div>
 </div>
 
@@ -1512,6 +1551,14 @@ function moneyMask(el){
   el.value=digits?numBR(parseInt(digits,10)/100):'';
 }
 const savedUpTo = mk=>Object.keys(allMonths).filter(k=>k<=mk).reduce((a,k)=>a+sum(allMonths[k]['savings']),0);
+// salário-base = renda fixa do mês (cai pro mês anterior com renda se o atual ainda não tem)
+const salaryOf = k=>{
+  let v=sum((allMonths[k]||{})['income-fixed']); if(v>0) return v;
+  const ks=Object.keys(allMonths).filter(x=>sum(allMonths[x]['income-fixed'])>0).sort();
+  if(!ks.length) return 0;
+  const le=ks.filter(x=>x<=k);
+  return sum(allMonths[(le.length?le[le.length-1]:ks[ks.length-1])]['income-fixed']);
+};
 const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
 const ini    = n=>n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -1861,6 +1908,7 @@ const PAGE_SZ = k => (k==='savings'||k==='loans') ? 2 : 4;
 let pages = {};
 function flipPage(key,dir){ pages[key]=(pages[key]||0)+dir; if(key==='loans') renderLoans(); else renderRows(key); }
 function renderRows(key){
+  if(!document.getElementById('rows-'+key)) return;
   const d=monthLocal(curMonth);
   const items=d[key]||[];
   const sz=PAGE_SZ(key);
@@ -2108,7 +2156,7 @@ function recalc(){
   setTot('tot-income-extra',iX);
   setTot('tot-exp-fixed',eF);
   setTot('tot-exp-extra',eX);
-  setTot('tot-savings',sv);
+  setTot('tot-savings',Object.values(allMonths).reduce((a,m)=>a+sum(m.savings),0));
   setTot('tot-loans',loanOutstanding());
   const hn=document.getElementById('heroN');
   animateNumber(hn, heroVal??av, av); heroVal=av;
@@ -2126,7 +2174,7 @@ function recalc(){
     const pS=sum(prevD['savings']);
     trendEl(tI,pI,'trInc'); trendEl(tE,pE,'trExp',true); trendEl(sv,pS,'trSav');
   } else ['trInc','trExp','trSav'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent='';el.className='hst-tr';}});
-  updateGoalDisplay(totalSaved);
+  renderBoxes(); if(boxDetailId&&!document.getElementById('boxOverlay').classList.contains('hidden')) buildBoxDetail();
   const fi=document.getElementById('progFi');
   if(tI+recvd>0){
     const pct=Math.min((tE+svFlow+lent)/(tI+recvd)*100,100),free=Math.max(100-pct,0);
@@ -2224,11 +2272,11 @@ function openModal(key, idx=-1){
   document.getElementById('overlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
-function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; editLoanMk=null; }
+function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; editLoanMk=null; depositBox='emerg'; }
 function confirmModal(){
-  const desc=document.getElementById('mDesc').value.trim();
+  let desc=document.getElementById('mDesc').value.trim();
   const val=parseMoney(document.getElementById('mVal').value);
-  if(!desc){ document.getElementById('mDesc').focus(); return; }
+  if(!desc){ if(modalKey==='savings') desc='aporte'; else { document.getElementById('mDesc').focus(); return; } }
   if(!val||val<=0){ document.getElementById('mVal').focus(); return; }
   if(isTp && !document.getElementById('tpName').value.trim()){ document.getElementById('tpName').focus(); return; }
   if(isParcelado && editIdx<0){
@@ -2241,6 +2289,7 @@ function confirmModal(){
   const d0=(modalKey==='loans'&&editIdx>=0&&editLoanMk)?allMonths[editLoanMk]:monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
   const item={desc,value:val};
+  if(modalKey==='savings') item.box=depositBox||'emerg';
   if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
   if(selPay&&['exp-fixed','exp-extra'].includes(modalKey)) item.pay=selPay;
   if(isTp&&editIdx<0&&['exp-fixed','exp-extra'].includes(modalKey)) item.tp=document.getElementById('tpName').value.trim();
@@ -2436,7 +2485,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); propKeep(); delPropCancel(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); closeNewBox(); closeBoxDetail(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2450,7 +2499,9 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='rEmail') doResetPassword();
     else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
     else if(f?.id==='npPin2') doSaveNewPin();
-    else if(f?.id==='fixSavInput') saveFixSav();
+    else if(f?.id==='boxFixInput') boxFixSave();
+    else if(f?.id==='boxName') document.getElementById('boxTarget').focus();
+    else if(f?.id==='boxTarget') confirmNewBox();
     else if(f?.id==='tpName') confirmModal();
     else if(f?.id==='partialVal') confirmPartial();
     else if(f?.id==='shopNew') shopAdd();
@@ -2729,46 +2780,8 @@ function confirmCover(){
 }
 
 // ── Corrigir saldo da reserva (rendimentos) ───────────
-function toggleFixSav(){
-  const ed=document.getElementById('fixSavEdit');
-  const hidden=ed.classList.contains('hidden');
-  ed.classList.toggle('hidden',!hidden);
-  if(hidden){
-    document.getElementById('fixSavInput').value=numBR(savedUpTo(curMonth));
-    setTimeout(()=>{const i=document.getElementById('fixSavInput');i.focus();i.select();},60);
-  }
-}
-function saveFixSav(){
-  const real=parseMoney(document.getElementById('fixSavInput').value);
-  if(isNaN(real)){ document.getElementById('fixSavInput').focus(); return; }
-  const diff=Math.round((real-savedUpTo(curMonth))*100)/100;
-  document.getElementById('fixSavEdit').classList.add('hidden');
-  if(!diff){ toast('saldo já está certo ✓'); return; }
-  const d=monthLocal(curMonth);
-  d['savings'].push({desc:'correção de rendimento',value:diff,adj:true});
-  pages['savings']=Math.ceil(d['savings'].length/PAGE_SZ('savings'))-1;
-  renderRows('savings'); recalc(); drawChart(); schedSave();
-  toast('saldo corrigido pra '+fmt(real)+' ✓');
-}
 
 // ── Meta de reserva (= reserva de emergência, 6× salário) ──
-function updateGoalDisplay(totalSaved){
-  const s=parseFloat(localStorage.getItem('margem-salary'))||0;
-  const goal=s*6;
-  const disp=document.getElementById('goalDisplay');
-  const hint=document.getElementById('goalHint');
-  if(!goal){
-    if(disp) disp.classList.add('hidden');
-    if(hint) hint.classList.remove('hidden');
-    return;
-  }
-  if(hint) hint.classList.add('hidden');
-  if(disp) disp.classList.remove('hidden');
-  const pct=Math.min(totalSaved/goal*100,100);
-  const fi=document.getElementById('goalFi'), lb=document.getElementById('goalLbl');
-  if(fi) fi.style.width=pct.toFixed(1)+'%';
-  if(lb) lb.textContent=Math.round(pct)+'% da reserva de emergência — '+fmt(totalSaved)+' de '+fmt(goal);
-}
 
 // ── Fatura do cartão ──────────────────────────────────
 function creditItemsOf(mk){
@@ -2859,7 +2872,7 @@ function checkStamps(av,tI,tE,svFlow,totalSaved){
     try{ localStorage.setItem('margem-stamps',JSON.stringify(seen)); }catch(_){}
     stamp(txt);
   };
-  const sal=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const sal=salaryOf(curMonth);
   const totalItems=Object.values(allMonths).reduce((a,m)=>a+KEYS.reduce((x,k)=>x+(m[k]||[]).length,0)+(m.loans||[]).length,0);
   if(totalItems===1) fire('primeiro','PRIMEIRO LANÇAMENTO!');
   if(sal&&svFlow>=sal*.2-0.004) fire('invest-'+curMonth,'META DO MÊS ✓');
@@ -2947,21 +2960,13 @@ async function confirmDelMonth(){
 }
 
 // ── Metas do salário (seção incorporada) ───────────────
-function metasInput(){
-  const n=parseMoney(document.getElementById('metasSal').value);
-  localStorage.setItem('margem-salary', isNaN(n)?'':String(n));
-  if(n===1000000 && Date.now()-(metasInput._eg||0)>8000){ metasInput._eg=Date.now(); stamp('SONHO GRANDE!'); }
-  recalc();
-}
 function renderMetas(eF,eX,sv,totalSaved){
   const grid=document.getElementById('metasGrid');
   if(!grid) return;
-  const saved=localStorage.getItem('margem-salary')||'';
-  const inp=document.getElementById('metasSal');
-  if(inp&&document.activeElement!==inp) inp.value=saved?numBR(parseFloat(saved)):'';
-  const s=parseFloat(saved)||0;
+  const s=salaryOf(curMonth);
+  const baseEl=document.getElementById('metasBase'); if(baseEl) baseEl.textContent=fmt(s);
   if(!s){
-    grid.innerHTML='<div class="metas-empty">informe seu salário ali em cima e veja na hora quanto guardar, quanto pode gastar e onde você está em cada meta.</div>';
+    grid.innerHTML='<div class="metas-empty">adicione sua <b>renda fixa</b> e as metas aparecem aqui sozinhas — quanto guardar, quanto pode gastar e onde você está em cada uma.</div>';
     return;
   }
   const pctOf=(v,alvo)=>alvo>0?Math.min(Math.round(v/alvo*100),999):0;
@@ -2977,15 +2982,15 @@ function renderMetas(eF,eX,sv,totalSaved){
       : `seus variáveis já estão em ${fmt(eX/hoje)} por dia`;
   }
   const rows=[
-    {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% do salário — teto pros gastos variáveis (esporádicos)',
+    {lbl:'gasto mensal máximo', alvo:s*.3, desc:'30% da renda — teto pros gastos variáveis (esporádicos)',
      ok:eX<=s*.3, st:eX<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-eX)}`:`passou ${fmt(eX-s*.3)} do teto`, extra:dayLine},
-    {lbl:'despesas fixas máximas', alvo:s/2, desc:'metade do salário — máximo em compromissos fixos',
+    {lbl:'despesas fixas máximas', alvo:s/2, desc:'metade da renda — máximo em compromissos fixos',
      ok:eF<=s/2, st:eF<=s/2?`✓ fixos sob controle — folga de ${fmt(s/2-eF)}`:`fixos estouraram ${fmt(eF-s/2)}`},
-    {lbl:'investimento mensal', alvo:s*.2, desc:'20% do salário — quanto guardar todo mês',
+    {lbl:'investimento mensal', alvo:s*.2, desc:'20% da renda — quanto guardar todo mês',
      ok:sv>=s*.2, st:sv>=s*.2?`✓ meta do mês batida (${fmt(sv)})`:`faltam ${fmt(s*.2-sv)} este mês`},
-    {lbl:'reserva de emergência', alvo:s*6, desc:'6 salários — sua primeira grande meta',
+    {lbl:'reserva de emergência', alvo:s*6, desc:'6× a renda — sua primeira grande meta',
      ok:totalSaved>=s*6, st:`${pctOf(totalSaved,s*6)}% — ${fmt(totalSaved)} guardados`},
-    {lbl:'patrimônio-alvo', alvo:s*36, desc:'36 salários — meta de patrimônio de longo prazo',
+    {lbl:'patrimônio-alvo', alvo:s*36, desc:'36× a renda — patrimônio de longo prazo',
      ok:totalSaved>=s*36, st:`${pctOf(totalSaved,s*36)}% do caminho`},
   ];
   grid.innerHTML=rows.map(r=>`
@@ -2998,9 +3003,96 @@ function renderMetas(eF,eX,sv,totalSaved){
     </div>`).join('');
 }
 
+// ── Caixinhas ─────────────────────────────────────────
+let depositBox='emerg', boxDetailId=null, boxFixOpen=false;
+function boxesKey(){ return 'margem-boxes-'+(curUser?.id||''); }
+function customBoxes(){ try{ return JSON.parse(localStorage.getItem(boxesKey())||'[]'); }catch(_){ return []; } }
+function saveCustomBoxes(a){ try{ localStorage.setItem(boxesKey(),JSON.stringify(a)); }catch(_){} }
+function allBoxes(){
+  const s=salaryOf(curMonth);
+  return [{id:'emerg',name:'reserva de emergência',target:s*6,fixed:true},...customBoxes()];
+}
+function boxBalance(id){
+  let t=0;
+  Object.values(allMonths).forEach(m=>(m.savings||[]).forEach(it=>{ if((it.box||'emerg')===id) t+=it.value; }));
+  return Math.round(t*100)/100;
+}
+function emergFull(){ const e=allBoxes()[0]; return e.target>0 && boxBalance('emerg')>=e.target-0.005; }
+function renderBoxes(){
+  const wrap=document.getElementById('boxesList'); if(!wrap) return;
+  wrap.innerHTML=allBoxes().map(b=>{
+    const bal=boxBalance(b.id), tgt=b.target||0;
+    const pct=tgt>0?Math.min(bal/tgt*100,100):0, done=tgt>0&&bal>=tgt-0.005;
+    return `<div class="box-row${done?' done':''}" onclick="openBoxDetail('${b.id}')">
+      <div class="box-top"><span class="box-nm">${esc(b.name)}</span><span class="box-amt">${fmt(bal)}${tgt>0?` <i>/ ${fmt(tgt)}</i>`:''}</span></div>
+      ${tgt>0?`<div class="box-tr"><span style="width:${pct.toFixed(1)}%"></span></div>`:''}
+      <div class="box-bot"><button class="box-add" onclick="event.stopPropagation();depositTo('${b.id}')">+ guardar</button><span class="box-pct">${done?'✓ completa':tgt>0?Math.round(pct)+'%':'livre'}</span></div>
+    </div>`;
+  }).join('');
+  const full=emergFull();
+  document.getElementById('newBoxBtn')?.classList.toggle('hidden',!full);
+  document.getElementById('boxLock')?.classList.toggle('hidden',full);
+}
+function depositTo(id){ depositBox=id; closeBoxDetail(); openModal('savings'); }
+function openNewBox(){
+  if(!emergFull()){ toast('complete a reserva de emergência primeiro'); return; }
+  document.getElementById('uMenu')?.classList.add('hidden');
+  document.getElementById('boxName').value=''; document.getElementById('boxTarget').value='';
+  document.getElementById('newBoxOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('boxName').focus(),60);
+}
+function closeNewBox(){ document.getElementById('newBoxOverlay').classList.add('hidden'); }
+function confirmNewBox(){
+  const name=document.getElementById('boxName').value.trim();
+  const tgt=parseMoney(document.getElementById('boxTarget').value)||0;
+  if(!name){ document.getElementById('boxName').focus(); return; }
+  const a=customBoxes(); a.push({id:'b'+Date.now().toString(36),name,target:tgt}); saveCustomBoxes(a);
+  closeNewBox(); renderBoxes(); toast('caixinha criada ✓');
+}
+function openBoxDetail(id){ boxDetailId=id; boxFixOpen=false; buildBoxDetail(); document.getElementById('boxOverlay').classList.remove('hidden'); }
+function closeBoxDetail(){ document.getElementById('boxOverlay').classList.add('hidden'); boxDetailId=null; boxFixOpen=false; }
+function buildBoxDetail(){
+  const id=boxDetailId, b=allBoxes().find(x=>x.id===id); if(!b) return;
+  document.getElementById('boxTitle').textContent=b.name;
+  const bal=boxBalance(id), tgt=b.target||0, pct=tgt>0?Math.min(bal/tgt*100,100):0, done=tgt>0&&bal>=tgt-0.005;
+  const deps=[];
+  Object.keys(allMonths).sort().forEach(mk=>(allMonths[mk].savings||[]).forEach((it,idx)=>{ if((it.box||'emerg')===id) deps.push({mk,idx,it}); }));
+  let html=`<div class="box-detail-bal">${fmt(bal)}${tgt>0?` <span>de ${fmt(tgt)}${done?' · completa ✓':''}</span>`:''}</div>`;
+  if(tgt>0) html+=`<div class="box-tr" style="margin-top:8px;height:9px"><span style="width:${pct.toFixed(1)}%;${done?'background:var(--green)':''}"></span></div>`;
+  if(!deps.length) html+='<div class="cal-empty-msg">nada guardado ainda aqui</div>';
+  else html+=`<div class="box-deps">`+deps.slice().reverse().map(({mk,idx,it})=>
+    `<div class="box-dep"><span>${esc(it.desc)}${it.adj?' <i>· ajuste</i>':''}<em>${mkLbl(mk)}</em></span><span class="box-dep-v${it.value<0?' neg':''}">${(it.adj&&it.value>0?'+':'')}${fmt(it.value)}</span><button class="del-btn" onclick="delBoxDep('${mk}',${idx})" title="remover">×</button></div>`).join('')+`</div>`;
+  html+=`<div class="box-detail-act"><button class="m-ok" onclick="depositTo('${id}')">+ guardar aqui</button>`;
+  if(id==='emerg'){
+    if(boxFixOpen) html+=`<div class="box-fix-row"><span class="goal-pfx">R$</span><input type="text" inputmode="numeric" class="goal-input" id="boxFixInput" placeholder="saldo real" autocomplete="off" oninput="moneyMask(this)" value="${numBR(bal)}"><button class="sav-fix-ok" onclick="boxFixSave()">ok</button></div>`;
+    else html+=`<button class="carry-btn-g" onclick="boxFixToggle()">corrigir saldo (rendimentos)</button>`;
+  } else {
+    html+=`<button class="carry-btn-g" onclick="delBox('${id}')">excluir caixinha</button>`;
+  }
+  html+=`</div>`;
+  document.getElementById('boxContent').innerHTML=html;
+  if(boxFixOpen) setTimeout(()=>{const i=document.getElementById('boxFixInput');if(i){i.focus();i.select();}},50);
+}
+async function delBoxDep(mk,idx){ allMonths[mk].savings.splice(idx,1); await saveMonth(mk); renderBoxes(); recalc(); drawChart(); buildBoxDetail(); }
+function delBox(id){
+  if(boxBalance(id)>0.005){ toast('esvazie a caixinha antes de excluir'); return; }
+  saveCustomBoxes(customBoxes().filter(x=>x.id!==id));
+  closeBoxDetail(); renderBoxes(); toast('caixinha excluída ✓');
+}
+function boxFixToggle(){ boxFixOpen=true; buildBoxDetail(); }
+async function boxFixSave(){
+  const real=parseMoney(document.getElementById('boxFixInput').value);
+  if(isNaN(real)){ document.getElementById('boxFixInput').focus(); return; }
+  const diff=Math.round((real-boxBalance('emerg'))*100)/100;
+  boxFixOpen=false;
+  if(diff){ monthLocal(curMonth)['savings'].push({desc:'correção de rendimento',value:diff,adj:true,box:'emerg'}); recalc(); drawChart(); schedSave(); }
+  renderBoxes(); buildBoxDetail();
+  toast(diff?'saldo corrigido ✓':'já estava certo ✓');
+}
+
 // ── Score financeiro (0–1000, avança com os meses) ────
 function monthHealthParts(k){
-  const sl=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const sl=salaryOf(k);
   const m=allMonths[k]; if(!m) return null;
   const ti=sum(m['income-fixed'])+sum(m['income-extra']);
   const ref=sl>0?sl:ti; if(ref<=0) return null;
@@ -3028,13 +3120,31 @@ const SCORE_BANDS=[
   {max:1000,lb:'excelente', c:'#16a34a'}
 ];
 function scoreBand(sc){ return SCORE_BANDS.find(b=>sc<=b.max)||SCORE_BANDS[SCORE_BANDS.length-1]; }
+const SCORE_MSG={
+  'começando':'respira — o primeiro passo é o mais difícil, e você já deu. um mês de cada vez.',
+  'em construção':'tá nascendo algo bom aqui. mantém o ritmo que daqui a uns meses você não reconhece esse número.',
+  'bom':'você está no caminho certo. mais alguns meses firmes e o "excelente" é seu.',
+  'excelente':'você dominou o jogo. seu eu do futuro está aplaudindo agora.'
+};
+// score travado no último mês fechado; atualiza quando o mês vira
+function currentScore(){
+  const uid=curUser?.id||'';
+  const lastDone=prevMonthKey(nowKey());
+  let st=null; try{ st=JSON.parse(localStorage.getItem('margem-score-'+uid)||'null'); }catch(_){}
+  if(!st || st.through!==lastDone){
+    const v=scoreUpTo(lastDone);
+    if(v!=null){ st={v,through:lastDone}; try{localStorage.setItem('margem-score-'+uid,JSON.stringify(st));}catch(_){} }
+  }
+  return st?st.v:scoreUpTo(curMonth);
+}
 function openScore(){
   document.getElementById('uMenu')?.classList.add('hidden');
-  const sc=scoreUpTo(curMonth);
+  const sc=currentScore();
   const wrap=document.getElementById('scoreContent');
   if(sc==null){ wrap.innerHTML='<div class="cal-empty-msg">adicione renda e gastos pra calcular seu score</div>'; document.getElementById('scoreOverlay').classList.remove('hidden'); return; }
   const b=scoreBand(sc);
-  const prev=scoreUpTo(prevMonthKey(curMonth));
+  const lastDone=prevMonthKey(nowKey());
+  const prev=scoreUpTo(prevMonthKey(lastDone));
   const dl=prev!=null?(sc-prev):null;
   const arc=263.9, filled=(sc/1000*arc).toFixed(1);
   const parts=monthHealthParts(curMonth);
@@ -3058,10 +3168,10 @@ function openScore(){
         <text x="100" y="110" text-anchor="middle" style="font-size:10px;font-weight:700;letter-spacing:.12em;fill:var(--t4)">DE 1000</text>
       </svg>
       <div class="sc-band" style="color:${b.c}">${b.lb}</div>
-      ${dl!=null?`<div class="sc-delta ${dl>=0?'up':'dn'}">${dl>=0?'▲ +':'▼ '}${dl} vs ${mkLbl(prevMonthKey(curMonth))}</div>`:'<div class="sc-delta">primeiro mês registrado</div>'}
+      ${dl!=null?`<div class="sc-delta ${dl>=0?'up':'dn'}">${dl>=0?'▲ +':'▼ '}${dl} no último mês</div>`:'<div class="sc-delta">atualiza no fim de cada mês</div>'}
     </div>
     ${factors}
-    <div class="sc-foot">sobe aos poucos conforme você mantém os hábitos: investir todo mês, segurar os gastos no teto e fechar no azul.</div>`;
+    <div class="sc-foot">${SCORE_MSG[b.lb]||''}</div>`;
   document.getElementById('scoreOverlay').classList.remove('hidden');
 }
 function closeScore(){ document.getElementById('scoreOverlay').classList.add('hidden'); }
@@ -3083,7 +3193,7 @@ function folgaMensal(){
 function projAvail(k){ return monthHasData(k)?monthAvail(k):folgaMensal(); }
 // quanto ainda cabe no teto de gastos variáveis (30% do salário) do mês k; ∞ sem salário
 function ceilingRoom(k){
-  const s=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const s=salaryOf(k);
   if(!s) return Infinity;
   return s*0.3 - sum((allMonths[k]||{})['exp-extra']);
 }
@@ -3124,13 +3234,13 @@ function buyToggleParc(){
 }
 // quanto ainda falta investir no mês k pra bater a meta de 20% do salário
 function investGap(k){
-  const sl=parseFloat(localStorage.getItem('margem-salary'))||0;
+  const sl=salaryOf(k);
   if(!sl) return 0;
   return Math.max(0, sl*0.2 - sumFlow((allMonths[k]||{}).savings));
 }
 function avaliarCompra(valor,metodo,parc){
   const av=heroVal||0, saved=savedUpTo(curMonth);
-  const temSal=(parseFloat(localStorage.getItem('margem-salary'))||0)>0;
+  const temSal=salaryOf(curMonth)>0;
   // ── crédito parcelado: caixa, teto E investimento de cada mês ──
   if(metodo==='credito'&&parc>1){
     const pp=valor/parc;
