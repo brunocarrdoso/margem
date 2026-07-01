@@ -800,6 +800,45 @@ html[data-dark] .box-row{background:rgba(255,255,255,.03)}
 .box-fix-row{display:flex;gap:8px;align-items:center}
 .box-fix-row .goal-input{flex:1}
 
+/* ── CARRINHO DE DESEJOS ──────────────────────────────── */
+.wish-btn{position:relative}
+.wish-dot{position:absolute;top:3px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surf);pointer-events:none}
+#wishBuyOverlay{z-index:120}
+.wish-views{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.wish-form{display:flex;flex-direction:column;gap:8px;padding:12px;border:1.5px dashed var(--bdr);border-radius:12px 8px 11px 9px;margin-bottom:14px;background:rgba(255,255,255,.25)}
+html[data-dark] .wish-form{background:rgba(255,255,255,.03)}
+.wish-form-row{display:flex;gap:8px}
+.wish-form-row .m-in{flex:1;padding:9px 12px;font-size:13px}
+.wish-form .cat-pills{margin-top:0}
+.wish-it{display:flex;align-items:center;gap:9px;padding:10px 11px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;margin-bottom:6px;background:rgba(255,255,255,.28)}
+html[data-dark] .wish-it{background:rgba(255,255,255,.03)}
+.wish-pr{width:8px;height:8px;border-radius:0;transform:rotate(45deg);flex-shrink:0}
+.wish-nm{flex:1;font-size:13px;font-weight:600;color:var(--t1);min-width:0;position:relative;line-height:1.35}
+.wish-nm a{color:var(--blue);text-decoration:none;font-weight:700}
+.wish-nm a:hover{text-decoration:underline;text-underline-offset:2px}
+.wish-nm em{font-style:normal;display:block;font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
+.wish-it.done .wish-nm{color:var(--t4)}
+.wish-it.done .wish-nm::after{content:'';position:absolute;left:-2px;right:-2px;top:48%;height:6px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23b45309' stroke-width='1.5' fill='none' opacity='.65'/></svg>") repeat-x left center/24px 6px;pointer-events:none}
+html[data-dark] .wish-it.done .wish-nm::after{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23f5b942' stroke-width='1.5' fill='none' opacity='.65'/></svg>")}
+.wish-val{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:14px;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap}
+.wish-it.done .wish-val{color:var(--t4);text-decoration:line-through}
+.wish-share{margin-top:18px;padding-top:14px;border-top:1px dashed var(--bdr-soft)}
+.wish-share-lb{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:9px}
+.wish-req{display:flex;align-items:center;gap:8px;background:var(--amber-bg);border:1.5px solid rgba(217,119,6,.35);border-radius:10px 7px 10px 8px;padding:9px 12px;margin-bottom:7px;font-size:12px;color:var(--t1);flex-wrap:wrap}
+.wish-req b{font-weight:700}
+.wish-req .carry-btn-p{padding:5px 12px;font-size:11px}
+.wish-req .carry-btn-g{padding:5px 10px;font-size:11px}
+.wish-mail-row{display:flex;gap:8px;margin-bottom:9px}
+.wish-mail-row .m-in{flex:1;padding:9px 12px;font-size:13px}
+.wish-share-it{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);padding:6px 2px;border-bottom:1px solid var(--bdr-soft)}
+.wish-share-it:last-child{border-bottom:none}
+.wish-share-it span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.wish-st{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:8px}
+.wish-st.p{color:var(--amber);background:var(--amber-bg)}
+.wish-st.a{color:var(--green);background:var(--green-bg)}
+.wish-st.r{color:var(--red);background:var(--red-bg)}
+.wish-hint{font-size:11px;font-style:italic;color:var(--t4);line-height:1.55}
+
 /* ── SCORE ────────────────────────────────────────────── */
 .sc-band{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;margin-top:2px}
 .sc-delta{font-size:11px;font-weight:600;color:var(--t4);margin-top:4px}
@@ -1038,6 +1077,9 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <button class="icon-btn" onclick="openShop()" title="lista de compras">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12l2 2 4-4"/></svg>
         </button>
+        <button class="icon-btn wish-btn" onclick="openWish()" title="carrinho de desejos">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.2C1.2 7 3.6 4 6.8 4c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.2 0 5.6 3 4.1 6.8C19.5 15.4 12 20 12 20z"/></svg><span class="wish-dot hidden"></span>
+        </button>
         <button class="icon-btn" onclick="openAnnual()" title="resumo anual">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg>
         </button>
@@ -1064,6 +1106,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <button onclick="openScore()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18a8 8 0 1 1 14 0"/><path d="M12 14l3.5-3.5"/></svg><span>score</span></button>
     <button onclick="openBuy()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg><span>posso?</span></button>
     <button onclick="openShop()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12l2 2 4-4"/></svg><span>compras</span></button>
+    <button class="wish-btn" onclick="openWish()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.2C1.2 7 3.6 4 6.8 4c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.2 0 5.6 3 4.1 6.8C19.5 15.4 12 20 12 20z"/></svg><span class="wish-dot hidden"></span><span>desejos</span></button>
     <button onclick="openAnnual()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg><span>ano</span></button>
   </nav>
   <select class="hidden" id="monthSel"></select>
@@ -1366,6 +1409,26 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
   <div class="ann-modal" style="max-width:400px">
     <div class="ann-hd"><span class="ann-title" id="boxTitle">caixinha</span><button class="ann-close" onclick="closeBoxDetail()">×</button></div>
     <div id="boxContent"></div>
+  </div>
+</div>
+
+<!-- ══ CARRINHO DE DESEJOS ══════════════════════════════ -->
+<div class="ann-overlay hidden" id="wishOverlay" onclick="if(event.target===this)closeWish()">
+  <div class="ann-modal" style="max-width:480px">
+    <div class="ann-hd"><span class="ann-title">desejos</span><button class="ann-close" onclick="closeWish()">×</button></div>
+    <div id="wishContent"></div>
+  </div>
+</div>
+
+<!-- ══ COMPREI (desejo) ═════════════════════════════════ -->
+<div class="overlay hidden" id="wishBuyOverlay" onclick="if(event.target===this)closeWishBuy()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">comprei!</div>
+    <p class="mini-msg" id="wishBuyMsg"></p>
+    <div class="m-field"><label>Pago com</label><div class="cat-pills" id="wishPays"></div></div>
+    <p class="mini-msg" id="wishBuyNote" style="font-size:11px;color:var(--t4)"></p>
+    <div class="m-actions"><button class="m-cancel" onclick="closeWishBuy()">cancelar</button>
+      <button class="m-ok" onclick="confirmWishBuy()">lançar nos gastos</button></div>
   </div>
 </div>
 
@@ -1804,6 +1867,7 @@ async function bootApp(){
   applyDark(dark);
   await loadAllMonths();
   initSelectors();
+  wishInit();
   setTimeout(()=>document.getElementById('loadOverlay').classList.add('fade'),200);
 }
 
@@ -2513,7 +2577,7 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); closeNewBox(); closeBoxDetail(); propKeep(); delPropCancel(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); closeNewBox(); closeBoxDetail(); closeWish(); closeWishBuy(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
@@ -2528,6 +2592,10 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
     else if(f?.id==='npPin2') doSaveNewPin();
     else if(f?.id==='boxFixInput') boxFixSave();
+    else if(f?.id==='wishName') document.getElementById('wishLink').focus();
+    else if(f?.id==='wishLink') document.getElementById('wishVal').focus();
+    else if(f?.id==='wishVal') wishAdd();
+    else if(f?.id==='shareEmail') shareAsk();
     else if(f?.id==='boxName') document.getElementById('boxTarget').focus();
     else if(f?.id==='boxTarget') confirmNewBox();
     else if(f?.id==='tpName') confirmModal();
@@ -3117,6 +3185,196 @@ async function boxFixSave(){
   renderBoxes(); buildBoxDetail();
   toast(diff?'saldo corrigido ✓':'já estava certo ✓');
 }
+
+// ── Carrinho de desejos ───────────────────────────────
+let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media';
+const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
+function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
+function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
+async function wishInit(){
+  try{ wishItems=JSON.parse(localStorage.getItem(wishLKey())||'[]'); }catch(_){ wishItems=[]; }
+  try{
+    const {data,error}=await sb.from('wishlists').select('items').eq('user_id',curUser.id).maybeSingle();
+    if(error) throw error;
+    wishRemote=true;
+    if(data&&Array.isArray(data.items)){ wishItems=data.items; wishPersistLocal(); }
+    else if(wishItems.length) wishPush();
+    await sharesRefresh();
+  }catch(_){ wishRemote=false; }
+  wishBadge();
+}
+async function wishPush(){
+  wishPersistLocal();
+  if(wishRemote){ try{ await sb.from('wishlists').upsert({user_id:curUser.id,items:wishItems,updated_at:new Date().toISOString()}); }catch(_){} }
+}
+async function sharesRefresh(){
+  if(!wishRemote) return;
+  try{ const {data,error}=await sb.from('wishlist_shares').select('*'); if(error) throw error; wishShares=data||[]; }catch(_){ wishShares=[]; }
+}
+const myEmail=()=> (curUser?.email||'').toLowerCase();
+const sharesIn=()=> wishShares.filter(r=>(r.owner_email||'').toLowerCase()===myEmail()&&r.requester_id!==curUser?.id);
+const sharesOut=()=> wishShares.filter(r=>r.requester_id===curUser?.id);
+const pendingIn=()=> sharesIn().filter(r=>r.status==='pending');
+function wishBadge(){
+  const n=pendingIn().length;
+  document.querySelectorAll('.wish-dot').forEach(d=>d.classList.toggle('hidden',!n));
+  if(n&&!wishBadge._t){ wishBadge._t=1; toast(n===1?'alguém quer ver seus desejos!':n+' pedidos pra ver seus desejos!'); }
+}
+function openWish(){ wishView='mine'; buildWish(); document.getElementById('wishOverlay').classList.remove('hidden'); }
+function closeWish(){ document.getElementById('wishOverlay').classList.add('hidden'); }
+function wishPrPills(){
+  return Object.keys(WISH_PR).map(k=>{
+    const on=wishPr===k,c=WISH_PR[k].c;
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishSetPr('${k}')">${WISH_PR[k].lb}</div>`;
+  }).join('');
+}
+function wishSetPr(k){ wishPr=k; const el=document.getElementById('wishPrRow'); if(el) el.innerHTML=wishPrPills(); }
+function wishRowHtml(it,mine){
+  const pr=WISH_PR[it.pr]||WISH_PR.media;
+  const nm=it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(it.name)} ↗</a>`:esc(it.name);
+  const sub=it.done?`<em>comprado${it.pay?' · '+(PAYS.find(p=>p.id===it.pay)?.lb||it.pay):''}</em>`:`<em>${pr.lb}</em>`;
+  const act=mine?(it.done
+    ?`<button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`
+    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`):'';
+  return `<div class="wish-it${it.done?' done':''}">
+    <span class="wish-pr" style="background:${pr.c}"></span>
+    <span class="wish-nm">${nm}${sub}</span>
+    <span class="wish-val">${fmt(it.value||0)}</span>${act}</div>`;
+}
+function wishSorted(list){
+  const w={alta:0,media:1,baixa:2};
+  return list.slice().sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(w[a.pr]??1)-(w[b.pr]??1));
+}
+function buildWish(){
+  const wrap=document.getElementById('wishContent'); if(!wrap) return;
+  const outAcc=sharesOut().filter(r=>r.status==='accepted');
+  let views=`<div class="wish-views"><div class="cat-pill${wishView==='mine'?' sel':''}" style="color:var(--blue);${wishView==='mine'?'background:var(--blue-bg);border-color:var(--blue)':'border-color:transparent;background:var(--surf2)'}" onclick="wishView='mine';buildWish()">meus desejos</div>`+
+    outAcc.map(r=>`<div class="cat-pill${wishView===r.id?' sel':''}" style="color:var(--purple);${wishView===r.id?'background:var(--purple-bg);border-color:var(--purple)':'border-color:transparent;background:var(--surf2)'}" onclick="wishViewOther('${r.id}')">${esc(r.owner_email)}</div>`).join('')+`</div>`;
+  if(wishView!=='mine'){
+    const sh=wishShares.find(r=>r.id===wishView);
+    wrap.innerHTML=views+`<div id="wishOtherList"><div class="cal-empty-msg">carregando…</div></div>`;
+    (async()=>{
+      try{
+        const {data,error}=await sb.from('wishlists').select('items').eq('user_id',sh.owner_id).maybeSingle();
+        if(error) throw error;
+        const items=(data?.items)||[];
+        document.getElementById('wishOtherList').innerHTML=items.length
+          ? wishSorted(items).map(it=>wishRowHtml(it,false)).join('')
+          : '<div class="cal-empty-msg">a lista está vazia por enquanto</div>';
+      }catch(_){ document.getElementById('wishOtherList').innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>'; }
+    })();
+    return;
+  }
+  let html=views;
+  html+=`<div class="wish-form">
+    <div class="wish-form-row"><input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off"></div>
+    <div class="wish-form-row"><input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off"></div>
+    <div class="wish-form-row" style="align-items:center">
+      <div class="cat-pills" id="wishPrRow">${wishPrPills()}</div>
+      <div class="val-wrap" style="flex:1;min-width:110px"><span class="val-pfx">R$</span><input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px"></div>
+      <button class="shop-add-btn" onclick="wishAdd()" title="adicionar desejo">+</button>
+    </div></div>`;
+  html+= wishItems.length ? wishSorted(wishItems).map(it=>wishRowHtml(it,true)).join('') : '<div class="cal-empty-msg">nenhum desejo ainda — sonha um pouco!</div>';
+  // compartilhamento
+  html+=`<div class="wish-share">`;
+  if(wishRemote===false){
+    html+=`<div class="wish-hint">pra sincronizar e compartilhar desejos, rode o arquivo <b>supabase/wishlist.sql</b> uma vez no SQL Editor do Supabase.</div></div>`;
+    wrap.innerHTML=html; return;
+  }
+  const pend=pendingIn();
+  if(pend.length){
+    html+=`<div class="wish-share-lb">pedidos pra ver a sua lista</div>`;
+    pend.forEach(r=>{ html+=`<div class="wish-req"><span style="flex:1"><b>${esc(r.requester_email)}</b> quer ver seus desejos</span>
+      <button class="carry-btn-p" onclick="shareAnswer('${r.id}',true)">aceitar</button>
+      <button class="carry-btn-g" onclick="shareAnswer('${r.id}',false)">recusar</button></div>`; });
+  }
+  html+=`<div class="wish-share-lb">ver a lista de alguém</div>
+    <div class="wish-mail-row"><input class="m-in" id="shareEmail" type="email" placeholder="e-mail de quem usa o margem" autocomplete="off"><button class="shop-add-btn" onclick="shareAsk()" title="pedir pra ver">→</button></div>`;
+  const out=sharesOut();
+  if(out.length){
+    html+=out.map(r=>`<div class="wish-share-it"><span>${esc(r.owner_email)}</span>
+      <span class="wish-st ${r.status==='accepted'?'a':r.status==='pending'?'p':'r'}">${r.status==='accepted'?'aceito':r.status==='pending'?'pendente':'recusado'}</span>
+      <button class="del-btn" onclick="shareRemove('${r.id}')" title="remover">×</button></div>`).join('');
+  }
+  const seeMine=sharesIn().filter(r=>r.status==='accepted');
+  if(seeMine.length){
+    html+=`<div class="wish-share-lb" style="margin-top:12px">quem vê a sua lista</div>`+
+      seeMine.map(r=>`<div class="wish-share-it"><span>${esc(r.requester_email)}</span>
+      <button class="del-btn" onclick="shareRevoke('${r.id}')" title="revogar acesso">×</button></div>`).join('');
+  }
+  html+=`</div>`;
+  wrap.innerHTML=html;
+}
+function wishAdd(){
+  const name=document.getElementById('wishName').value.trim();
+  const link=document.getElementById('wishLink').value.trim();
+  const val=parseMoney(document.getElementById('wishVal').value);
+  if(!name){ document.getElementById('wishName').focus(); return; }
+  if(!val||val<=0){ document.getElementById('wishVal').focus(); return; }
+  const it={id:'w'+Date.now().toString(36),name,pr:wishPr,value:val,done:false};
+  if(link) it.link=/^https?:\/\//i.test(link)?link:'https://'+link;
+  wishItems.push(it); wishPush(); buildWish(); toast('desejo anotado ✓');
+}
+function wishDel(id){ wishItems=wishItems.filter(x=>x.id!==id); wishPush(); buildWish(); }
+function wishBuy(id){
+  wishBuyId=id; wishPaySel='debito';
+  const it=wishItems.find(x=>x.id===id); if(!it) return;
+  document.getElementById('wishBuyMsg').innerHTML=`<strong>${esc(it.name)}</strong> por <strong>${fmt(it.value)}</strong> — como pagou?`;
+  renderWishPays();
+  document.getElementById('wishBuyOverlay').classList.remove('hidden');
+}
+function closeWishBuy(){ document.getElementById('wishBuyOverlay').classList.add('hidden'); wishBuyId=null; }
+function renderWishPays(){
+  document.getElementById('wishPays').innerHTML=PAYS.map(p=>{
+    const on=wishPaySel===p.id,c=PAY_COL[p.id];
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishPaySel='${p.id}';renderWishPays()">${p.lb}</div>`;
+  }).join('');
+  document.getElementById('wishBuyNote').textContent=wishPaySel==='credito'?`no crédito vai pra fatura de ${mkLbl(nextKeyOf(curMonth))}`:'';
+}
+function confirmWishBuy(){
+  const it=wishItems.find(x=>x.id===wishBuyId); if(!it) return;
+  it.done=true; it.pay=wishPaySel; wishPush();
+  const exp={desc:it.name,value:it.value,pay:wishPaySel};
+  if(wishPaySel==='credito'){
+    const nk=nextKeyOf(curMonth);
+    monthLocal(nk)['exp-extra'].push(exp); saveMonth(nk);
+    toast('comprado! na fatura de '+mkLbl(nk)+' ✓');
+  } else {
+    const d=monthLocal(curMonth);
+    d['exp-extra'].push(exp);
+    pages['exp-extra']=Math.ceil(d['exp-extra'].length/PAGE_SZ('exp-extra'))-1;
+    schedSave();
+    toast('comprado! lançado nos gastos ✓');
+  }
+  renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
+  closeWishBuy(); buildWish();
+}
+async function shareAsk(){
+  const inp=document.getElementById('shareEmail');
+  const em=(inp.value||'').trim().toLowerCase();
+  if(!em||!em.includes('@')){ inp.focus(); return; }
+  if(em===myEmail()){ toast('essa é a sua própria lista!'); return; }
+  try{
+    const {error}=await sb.from('wishlist_shares').insert({requester_id:curUser.id,requester_email:myEmail(),owner_email:em});
+    if(error) throw error;
+    await sharesRefresh(); buildWish(); toast('pedido enviado ✓');
+  }catch(e){ toast((e?.code==='23505')?'você já pediu pra essa pessoa':'não deu pra enviar o pedido','err'); }
+}
+async function shareAnswer(id,ok){
+  try{
+    const {error}=await sb.from('wishlist_shares').update({status:ok?'accepted':'refused',owner_id:curUser.id}).eq('id',id);
+    if(error) throw error;
+    await sharesRefresh(); buildWish(); wishBadge();
+    toast(ok?'acesso liberado ✓':'pedido recusado');
+  }catch(_){ toast('não deu pra responder','err'); }
+}
+async function shareRemove(id){
+  try{ await sb.from('wishlist_shares').delete().eq('id',id); await sharesRefresh(); if(wishView===id) wishView='mine'; buildWish(); }catch(_){}
+}
+async function shareRevoke(id){
+  try{ await sb.from('wishlist_shares').update({status:'refused',owner_id:curUser.id}).eq('id',id); await sharesRefresh(); buildWish(); toast('acesso revogado'); }catch(_){}
+}
+function wishViewOther(id){ wishView=id; buildWish(); }
 
 // ── Score financeiro (0–1000, avança com os meses) ────
 function monthHealthParts(k){
