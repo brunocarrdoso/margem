@@ -3278,7 +3278,7 @@ function buildWish(){
   // compartilhamento
   html+=`<div class="wish-share">`;
   if(wishRemote===false){
-    html+=`<div class="wish-hint">pra sincronizar e compartilhar desejos, rode o arquivo <b>supabase/wishlist.sql</b> uma vez no SQL Editor do Supabase.</div></div>`;
+    html+=`<div class="wish-hint">sem conexão com a nuvem agora — seus desejos ficam salvos neste aparelho e o compartilhamento volta quando a conexão voltar.</div></div>`;
     wrap.innerHTML=html; return;
   }
   const pend=pendingIn();
