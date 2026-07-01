@@ -206,6 +206,13 @@ html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 .mini-av{width:26px;height:26px;border-radius:7px;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pill-nm{font-size:13px;font-weight:600;color:var(--t1);white-space:nowrap}
 .pill-v{font-size:9px;color:var(--t4);flex-shrink:0}
+.dk-sw{position:relative;width:47px;height:25px;border:1.5px solid var(--ink);border-radius:14px;background:var(--surf2);cursor:pointer;padding:0;flex-shrink:0;box-shadow:2px 2px 0 var(--ink-sh);transition:background .25s}
+.dk-sw .dk-ico{position:absolute;top:50%;transform:translateY(-50%);font-size:11px;line-height:1;color:var(--t3);pointer-events:none}
+.dk-sw .dk-ico:first-child{left:7px}
+.dk-sw .dk-ico:nth-child(2){right:6px}
+.dk-knob{position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--pop);border:1.5px solid var(--ink);transition:left .28s cubic-bezier(.22,1,.36,1);pointer-events:none}
+html[data-dark] .dk-sw .dk-knob{left:23px}
+.dk-sw:active .dk-knob{transform:scale(.9)}
 .icon-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:none;border:1.5px solid var(--bdr);border-radius:8px;cursor:pointer;font-size:14px;transition:all .14s;color:var(--t3)}
 .icon-btn:hover{border-color:var(--t2);color:var(--t1);background:var(--surf2)}
 .sel{border:1.5px solid var(--bdr);background:var(--surf);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:500;color:var(--t2);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;transition:border-color .14s;font-family:inherit}
@@ -486,9 +493,6 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 @keyframes wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-4deg)}60%{transform:rotate(3deg)}}
 .logo span{display:inline-block}
 .logo:hover span{animation:wiggle .55s ease-in-out}
-/* botão de dark mode gira ao clicar */
-#darkBtn{transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .14s,color .14s,background .14s}
-#darkBtn:active{transform:rotate(160deg) scale(.9)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 /* ── ALTURA FIXA + PAGINAÇÃO nos cards de lançamentos ── */
@@ -1002,7 +1006,9 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     </nav>
     <div class="sb-footer">
       <div class="sb-footer-btns">
-        <button class="icon-btn" id="darkBtn" onclick="toggleDark()">◑</button>
+        <button class="dk-sw" id="darkBtn" onclick="toggleDark()" title="claro / escuro" aria-label="alternar tema">
+          <span class="dk-ico">☀</span><span class="dk-ico">☾</span><span class="dk-knob"></span>
+        </button>
         <button class="icon-btn icon-btn-extra" onclick="openCal()" title="calendário">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
         </button>
@@ -1591,7 +1597,6 @@ function removeProfileLocal(id){
 // ── Dark mode ─────────────────────────────────────────
 function applyDark(on){
   document.documentElement.toggleAttribute('data-dark',on);
-  const b=document.getElementById('darkBtn'); if(b) b.textContent=on?'☀':'◑';
   if(chart) drawChart();
 }
 function toggleDark(){ dark=!dark; localStorage.setItem('margem-dark',dark?'1':'0'); applyDark(dark); }
@@ -2425,7 +2430,7 @@ function toggleParcelado(){
   const isLoan=modalKey==='loans';
   document.getElementById('tSwitch').classList.toggle('on',isParcelado);
   document.getElementById('parcelasField').classList.toggle('hidden',!isParcelado);
-  document.getElementById('mValLabel').textContent=(isParcelado&&!isLoan)?'Valor por parcela':'Valor';
+  document.getElementById('mValLabel').textContent=(isParcelado&&!isLoan)?'Valor total':'Valor';
   document.getElementById('mOkBtn').textContent=(isParcelado&&!isLoan)?'criar parcelas':'adicionar';
   document.querySelector('#parcelasField label').textContent=isLoan?'Em quantas vezes?':'Número de parcelas';
   if(isParcelado) setTimeout(()=>document.getElementById('mParcelas').focus(),60);
@@ -2447,7 +2452,8 @@ function updateParcelHint(){
   const endTotalM=(sm-1)+(n-1);
   const ey=sy+Math.floor(endTotalM/12);
   const em=(endTotalM%12)+1;
-  hint.textContent=`de ${mns[sm-1]}/${String(sy).slice(2)} até ${mns[em-1]}/${String(ey).slice(2)}`;
+  const tot=parseMoney(document.getElementById('mVal').value);
+  hint.textContent=`${tot>0?`${n}x de ${fmt(tot/n)} — `:''}de ${mns[sm-1]}/${String(sy).slice(2)} até ${mns[em-1]}/${String(ey).slice(2)}`;
   hint.classList.remove('hidden');
 }
 
@@ -2456,12 +2462,15 @@ async function createInstallments(desc,val,n){
   btn.disabled=true; btn.textContent='salvando…';
   const [sy,sm]=curMonth.split('-').map(Number);
   const keysToSave=[];
+  // val é o TOTAL — divide igual, a última parcela absorve os centavos
+  const pp=Math.round(val/n*100)/100;
   for(let i=0;i<n;i++){
     const totalM=(sm-1)+i;
     const y=sy+Math.floor(totalM/12);
     const m=(totalM%12)+1;
     const mk=`${y}-${String(m).padStart(2,'0')}`;
-    const inst={desc:`${desc} (${i+1}/${n})`,value:val};
+    const instVal=i===n-1?Math.round((val-pp*(n-1))*100)/100:pp;
+    const inst={desc:`${desc} (${i+1}/${n})`,value:instVal};
     if(selCat) inst.cat=selCat;
     if(selPay) inst.pay=selPay;
     const tpn=isTp?document.getElementById('tpName').value.trim():'';
@@ -2469,7 +2478,7 @@ async function createInstallments(desc,val,n){
     const mm=monthLocal(mk);
     mm[modalKey].push(inst);
     // parcela de outra pessoa: "a receber" correspondente em cada mês
-    if(tpn){ mm.loans=mm.loans||[]; mm.loans.push({desc:`${tpn} (${i+1}/${n})`, value:val, viaCard:true}); }
+    if(tpn){ mm.loans=mm.loans||[]; mm.loans.push({desc:`${tpn} (${i+1}/${n})`, value:instVal, viaCard:true}); }
     keysToSave.push(mk);
   }
   const rows=keysToSave.map(k=>({
