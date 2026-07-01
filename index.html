@@ -1426,6 +1426,14 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     <div class="m-title">comprei!</div>
     <p class="mini-msg" id="wishBuyMsg"></p>
     <div class="m-field"><label>Pago com</label><div class="cat-pills" id="wishPays"></div></div>
+    <div class="m-field hidden" id="wishParcWrap">
+      <div class="parc-row" onclick="wishToggleParc()"><span class="parc-lbl">parcelar?</span><div class="t-sw" id="wishParcSw"></div></div>
+    </div>
+    <div class="m-field hidden" id="wishParcN">
+      <label>Em quantas vezes?</label>
+      <input class="m-in" id="wishParcVal" type="number" min="2" max="48" placeholder="ex: 6" oninput="wishParcHint()">
+      <div class="parc-hint hidden" id="wishParcHintEl"></div>
+    </div>
     <p class="mini-msg" id="wishBuyNote" style="font-size:11px;color:var(--t4)"></p>
     <div class="m-actions"><button class="m-cancel" onclick="closeWishBuy()">cancelar</button>
       <button class="m-ok" onclick="confirmWishBuy()">lançar nos gastos</button></div>
@@ -2596,6 +2604,7 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='wishLink') document.getElementById('wishVal').focus();
     else if(f?.id==='wishVal') wishAdd();
     else if(f?.id==='shareEmail') shareAsk();
+    else if(f?.id==='wishParcVal') confirmWishBuy();
     else if(f?.id==='boxName') document.getElementById('boxTarget').focus();
     else if(f?.id==='boxTarget') confirmNewBox();
     else if(f?.id==='tpName') confirmModal();
@@ -3187,7 +3196,7 @@ async function boxFixSave(){
 }
 
 // ── Carrinho de desejos ───────────────────────────────
-let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media';
+let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media', wishEditId=null, wishIsParc=false;
 const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
 function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
 function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
@@ -3221,7 +3230,7 @@ function wishBadge(){
   if(n&&!wishBadge._t){ wishBadge._t=1; toast(n===1?'alguém quer ver seus desejos!':n+' pedidos pra ver seus desejos!'); }
 }
 function openWish(){ wishView='mine'; buildWish(); document.getElementById('wishOverlay').classList.remove('hidden'); }
-function closeWish(){ document.getElementById('wishOverlay').classList.add('hidden'); }
+function closeWish(){ document.getElementById('wishOverlay').classList.add('hidden'); wishEditId=null; }
 function wishPrPills(){
   return Object.keys(WISH_PR).map(k=>{
     const on=wishPr===k,c=WISH_PR[k].c;
@@ -3235,7 +3244,7 @@ function wishRowHtml(it,mine){
   const sub=it.done?`<em>comprado${it.pay?' · '+(PAYS.find(p=>p.id===it.pay)?.lb||it.pay):''}</em>`:`<em>${pr.lb}</em>`;
   const act=mine?(it.done
     ?`<button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`
-    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`):'';
+    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="edit-btn" onclick="wishEdit('${it.id}')" title="editar">✎</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`):'';
   return `<div class="wish-it${it.done?' done':''}">
     <span class="wish-pr" style="background:${pr.c}"></span>
     <span class="wish-nm">${nm}${sub}</span>
@@ -3266,13 +3275,15 @@ function buildWish(){
     return;
   }
   let html=views;
-  html+=`<div class="wish-form">
-    <div class="wish-form-row"><input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off"></div>
-    <div class="wish-form-row"><input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off"></div>
+  const ed=wishEditId?wishItems.find(x=>x.id===wishEditId):null;
+  html+=`<div class="wish-form${ed?' editing':''}">
+    ${ed?`<div class="wish-hint" style="display:flex;justify-content:space-between;gap:8px"><span>editando <b>${esc(ed.name)}</b></span><button class="sav-fix-btn" onclick="wishEditCancel()">cancelar</button></div>`:''}
+    <div class="wish-form-row"><input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off" value="${ed?esc(ed.name):''}"></div>
+    <div class="wish-form-row"><input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off" value="${ed&&ed.link?esc(ed.link):''}"></div>
     <div class="wish-form-row" style="align-items:center">
       <div class="cat-pills" id="wishPrRow">${wishPrPills()}</div>
-      <div class="val-wrap" style="flex:1;min-width:110px"><span class="val-pfx">R$</span><input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px"></div>
-      <button class="shop-add-btn" onclick="wishAdd()" title="adicionar desejo">+</button>
+      <div class="val-wrap" style="flex:1;min-width:110px"><span class="val-pfx">R$</span><input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px" value="${ed?numBR(ed.value):''}"></div>
+      <button class="shop-add-btn" onclick="wishAdd()" title="${ed?'salvar alterações':'adicionar desejo'}">${ed?'✓':'+'}</button>
     </div></div>`;
   html+= wishItems.length ? wishSorted(wishItems).map(it=>wishRowHtml(it,true)).join('') : '<div class="cal-empty-msg">nenhum desejo ainda — sonha um pouco!</div>';
   // compartilhamento
@@ -3311,29 +3322,78 @@ function wishAdd(){
   const val=parseMoney(document.getElementById('wishVal').value);
   if(!name){ document.getElementById('wishName').focus(); return; }
   if(!val||val<=0){ document.getElementById('wishVal').focus(); return; }
+  const lk=link?(/^https?:\/\//i.test(link)?link:'https://'+link):null;
+  if(wishEditId){
+    const it=wishItems.find(x=>x.id===wishEditId);
+    if(it){ it.name=name; it.pr=wishPr; it.value=val; if(lk) it.link=lk; else delete it.link; }
+    wishEditId=null; wishPush(); buildWish(); toast('desejo atualizado ✓'); return;
+  }
   const it={id:'w'+Date.now().toString(36),name,pr:wishPr,value:val,done:false};
-  if(link) it.link=/^https?:\/\//i.test(link)?link:'https://'+link;
+  if(lk) it.link=lk;
   wishItems.push(it); wishPush(); buildWish(); toast('desejo anotado ✓');
 }
-function wishDel(id){ wishItems=wishItems.filter(x=>x.id!==id); wishPush(); buildWish(); }
+function wishEdit(id){
+  const it=wishItems.find(x=>x.id===id); if(!it) return;
+  wishEditId=id; wishPr=it.pr||'media';
+  buildWish();
+  setTimeout(()=>document.getElementById('wishName')?.focus(),60);
+}
+function wishEditCancel(){ wishEditId=null; buildWish(); }
+function wishDel(id){ if(wishEditId===id) wishEditId=null; wishItems=wishItems.filter(x=>x.id!==id); wishPush(); buildWish(); }
 function wishBuy(id){
-  wishBuyId=id; wishPaySel='debito';
+  wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
+  document.getElementById('wishParcSw').classList.remove('on');
+  document.getElementById('wishParcN').classList.add('hidden');
+  document.getElementById('wishParcVal').value='';
+  document.getElementById('wishParcHintEl').classList.add('hidden');
   const it=wishItems.find(x=>x.id===id); if(!it) return;
   document.getElementById('wishBuyMsg').innerHTML=`<strong>${esc(it.name)}</strong> por <strong>${fmt(it.value)}</strong> — como pagou?`;
   renderWishPays();
   document.getElementById('wishBuyOverlay').classList.remove('hidden');
 }
-function closeWishBuy(){ document.getElementById('wishBuyOverlay').classList.add('hidden'); wishBuyId=null; }
+function closeWishBuy(){ document.getElementById('wishBuyOverlay').classList.add('hidden'); wishBuyId=null; wishIsParc=false; }
+function wishToggleParc(){
+  wishIsParc=!wishIsParc;
+  document.getElementById('wishParcSw').classList.toggle('on',wishIsParc);
+  document.getElementById('wishParcN').classList.toggle('hidden',!wishIsParc);
+  if(wishIsParc) setTimeout(()=>document.getElementById('wishParcVal').focus(),60);
+  else document.getElementById('wishParcHintEl').classList.add('hidden');
+  wishParcHint();
+}
+function wishParcHint(){
+  const el=document.getElementById('wishParcHintEl');
+  const it=wishItems.find(x=>x.id===wishBuyId);
+  const n=parseInt(document.getElementById('wishParcVal').value);
+  if(!wishIsParc||!it||!n||n<2){ el.classList.add('hidden'); return; }
+  let k=curMonth; for(let i=0;i<n;i++) k=nextKeyOf(k);
+  el.textContent=`${n}x de ${fmt(it.value/n)} — de ${mkLbl(nextKeyOf(curMonth))} até ${mkLbl(k)}`;
+  el.classList.remove('hidden');
+}
 function renderWishPays(){
   document.getElementById('wishPays').innerHTML=PAYS.map(p=>{
     const on=wishPaySel===p.id,c=PAY_COL[p.id];
     return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishPaySel='${p.id}';renderWishPays()">${p.lb}</div>`;
   }).join('');
-  document.getElementById('wishBuyNote').textContent=wishPaySel==='credito'?`no crédito vai pra fatura de ${mkLbl(nextKeyOf(curMonth))}`:'';
+  const cred=wishPaySel==='credito';
+  document.getElementById('wishParcWrap').classList.toggle('hidden',!cred);
+  if(!cred){ wishIsParc=false; document.getElementById('wishParcSw').classList.remove('on'); document.getElementById('wishParcN').classList.add('hidden'); document.getElementById('wishParcHintEl').classList.add('hidden'); }
+  document.getElementById('wishBuyNote').textContent=cred?`no crédito vai pra fatura de ${mkLbl(nextKeyOf(curMonth))}`:'';
 }
 function confirmWishBuy(){
   const it=wishItems.find(x=>x.id===wishBuyId); if(!it) return;
+  const parc=wishIsParc?(parseInt(document.getElementById('wishParcVal').value)||1):1;
+  if(wishPaySel==='credito'&&wishIsParc&&parc<2){ document.getElementById('wishParcVal').focus(); return; }
   it.done=true; it.pay=wishPaySel; wishPush();
+  if(wishPaySel==='credito'&&parc>1){
+    const pp=Math.round(it.value/parc*100)/100; let k=curMonth; const keys=[];
+    for(let i=0;i<parc;i++){ k=nextKeyOf(k);
+      const val=i===parc-1?Math.round((it.value-pp*(parc-1))*100)/100:pp;
+      monthLocal(k)['exp-extra'].push({desc:`${it.name} (${i+1}/${parc})`,value:val,pay:'credito'}); keys.push(k); }
+    if(curUser){ const rows=keys.map(kk=>({user_id:curUser.id,month_key:kk,data:allMonths[kk],updated_at:new Date().toISOString()})); sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'}); }
+    renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
+    closeWishBuy(); buildWish();
+    toast(`comprado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`); return;
+  }
   const exp={desc:it.name,value:it.value,pay:wishPaySel};
   if(wishPaySel==='credito'){
     const nk=nextKeyOf(curMonth);
