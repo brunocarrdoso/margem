@@ -739,9 +739,8 @@ html[data-dark] .scard-avail.neg{background:#b06a52}
 .shop-add-btn{width:46px;flex-shrink:0;border:2px solid var(--ink);background:var(--pop);color:#241c12;border-radius:11px 7px 11px 8px;font-size:20px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);transition:transform .15s;font-family:inherit}
 .shop-add-btn:active{transform:translateY(1px);box-shadow:none}
 .shop-list{display:flex;flex-direction:column;gap:5px;max-height:38vh;overflow-y:auto}
-.shop-it{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;cursor:pointer;transition:border-color .15s,background .15s;background:rgba(255,255,255,.28);user-select:none}
+.shop-it{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;cursor:pointer;transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s;background:rgba(255,255,255,.28);user-select:none}
 html[data-dark] .shop-it{background:rgba(255,255,255,.03)}
-.shop-it:hover{border-color:var(--bdr)}
 .shop-ck{width:19px;height:19px;border:2px solid var(--t4);border-radius:6px 4px 6px 5px;flex-shrink:0;position:relative;transition:background .2s,border-color .2s}
 .shop-it.done .shop-ck{background:var(--green);border-color:var(--green);transform:rotate(-6deg)}
 .shop-it.done .shop-ck::after{content:'✓';position:absolute;inset:-1px;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
@@ -762,9 +761,10 @@ html[data-dark] .shop-t::after{background-image:url("data:image/svg+xml,<svg xml
 .shop-done .m-field{margin-bottom:12px}
 
 /* ── CAIXINHAS ────────────────────────────────────────── */
-.box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .15s;background:rgba(255,255,255,.22)}
+.box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s;background:rgba(255,255,255,.22)}
 html[data-dark] .box-row{background:rgba(255,255,255,.03)}
-.box-row:hover{border-color:var(--bdr);transform:translateX(2px)}
+.box-row:hover,.wish-it:hover,.shop-it:hover{border-style:solid;border-color:var(--bdr);box-shadow:2px 2px 0 var(--bdr);transform:translateX(3px) rotate(.25deg);background:rgba(255,255,255,.5)}
+html[data-dark] .box-row:hover,html[data-dark] .wish-it:hover,html[data-dark] .shop-it:hover{background:rgba(255,255,255,.06)}
 .box-row.done{border-style:solid;border-color:rgba(74,222,128,.45)}
 .box-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .box-nm{font-size:13px;font-weight:600;color:var(--t1)}
@@ -804,7 +804,7 @@ html[data-dark] .wish-form{background:rgba(255,255,255,.03)}
 .wish-form-row{display:flex;gap:8px}
 .wish-form-row .m-in{flex:1;padding:9px 12px;font-size:13px}
 .wish-form .cat-pills{margin-top:0}
-.wish-it{display:flex;align-items:center;gap:9px;padding:10px 11px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;margin-bottom:6px;background:rgba(255,255,255,.28)}
+.wish-it{display:flex;align-items:center;gap:9px;padding:10px 11px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;margin-bottom:6px;background:rgba(255,255,255,.28);transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s}
 html[data-dark] .wish-it{background:rgba(255,255,255,.03)}
 .wish-pr{width:8px;height:8px;border-radius:0;transform:rotate(45deg);flex-shrink:0}
 .wish-nm{flex:1;font-size:13px;font-weight:600;color:var(--t1);min-width:0;position:relative;line-height:1.35}
@@ -841,7 +841,7 @@ html[data-dark] .wish-it.done .wish-nm::after{background-image:url("data:image/s
 .sc-f-top{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--t2)}
 .sc-f-top span:last-child{font-variant-numeric:tabular-nums;color:var(--t3)}
 .sc-f-tr{height:8px;background:var(--surf2);border:1px solid var(--bdr-soft);border-radius:5px;overflow:hidden;margin-top:4px}
-.sc-f-tr>span{display:block;height:100%;border-radius:5px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.sc-f-tr>span{display:block;height:100%;border-radius:5px;transition:width .6s cubic-bezier(.22,1,.36,1)}
 .sc-f-note{font-size:10px;color:var(--t4);margin-top:3px;font-style:italic}
 .sc-foot{font-size:11px;font-style:italic;color:var(--t4);line-height:1.55;margin-top:16px;padding-top:14px;border-top:1px dashed var(--bdr-soft)}
 
@@ -3488,7 +3488,8 @@ function openScore(){
   const dl=prev!=null?(sc-prev):null;
   const arc=263.9, filled=(sc/1000*arc).toFixed(1);
   const parts=monthHealthParts(curMonth);
-  const fbar=(lb,v,extra)=>{const pct=Math.round((v||0)*100);return `<div class="sc-factor"><div class="sc-f-top"><span>${lb}</span><span>${pct}%</span></div><div class="sc-f-tr"><span style="width:${pct}%;background:${b.c}"></span></div>${extra?`<div class="sc-f-note">${extra}</div>`:''}</div>`;};
+  let fbIdx=0;
+  const fbar=(lb,v,extra)=>{const pct=Math.round((v||0)*100);const dl=(fbIdx++)*110+320;return `<div class="sc-factor"><div class="sc-f-top"><span>${lb}</span><span>${pct}%</span></div><div class="sc-f-tr"><span class="sc-fill" data-w="${pct}" style="width:0%;background:${b.c};transition-delay:${dl}ms"></span></div>${extra?`<div class="sc-f-note">${extra}</div>`:''}</div>`;};
   let factors='';
   if(parts){
     const sl=parseFloat(localStorage.getItem('margem-salary'))||0;
@@ -3503,16 +3504,35 @@ function openScore(){
     <div style="text-align:center">
       <svg viewBox="0 0 200 118" style="width:220px;display:block;margin:2px auto 0">
         <path d="M16 100 A84 84 0 0 1 184 100" fill="none" stroke="var(--bdr)" stroke-width="13" stroke-linecap="round"/>
-        <path d="M16 100 A84 84 0 0 1 184 100" fill="none" stroke="${b.c}" stroke-width="13" stroke-linecap="round" stroke-dasharray="${filled} 999"/>
-        <text x="100" y="90" text-anchor="middle" style="font-family:'Playfair Display',serif;font-weight:900;font-size:44px;fill:${b.c}">${sc}</text>
+        <path id="scArc" d="M16 100 A84 84 0 0 1 184 100" fill="none" stroke="${b.c}" stroke-width="13" stroke-linecap="round" stroke-dasharray="0 999"/>
+        <text id="scNum" x="100" y="90" text-anchor="middle" style="font-family:'Playfair Display',serif;font-weight:900;font-size:44px;fill:${b.c}">0</text>
         <text x="100" y="110" text-anchor="middle" style="font-size:10px;font-weight:700;letter-spacing:.12em;fill:var(--t4)">DE 1000</text>
       </svg>
-      <div class="sc-band" style="color:${b.c}">${b.lb}</div>
-      ${dl!=null?`<div class="sc-delta ${dl>=0?'up':'dn'}">${dl>=0?'▲ +':'▼ '}${dl} no último mês</div>`:'<div class="sc-delta">atualiza no fim de cada mês</div>'}
+      <div class="sc-band" style="color:${b.c};animation:stampIn .45s cubic-bezier(.22,1,.36,1) .45s both">${b.lb}</div>
+      ${dl!=null?`<div class="sc-delta ${dl>=0?'up':'dn'}" style="animation:introSub .4s ease .65s both">${dl>=0?'▲ +':'▼ '}${dl} no último mês</div>`:'<div class="sc-delta" style="animation:introSub .4s ease .65s both">atualiza no fim de cada mês</div>'}
     </div>
     ${factors}
-    <div class="sc-foot">${SCORE_MSG[b.lb]||''}</div>`;
+    <div class="sc-foot" style="animation:introSub .45s ease .8s both">${SCORE_MSG[b.lb]||''}</div>`;
   document.getElementById('scoreOverlay').classList.remove('hidden');
+  // abertura: número conta, arco varre, barras crescem em cascata
+  const arcEl=document.getElementById('scArc'), numEl=document.getElementById('scNum');
+  const fills=document.querySelectorAll('#scoreContent .sc-fill');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){
+    numEl.textContent=sc; arcEl.setAttribute('stroke-dasharray',filled+' 999');
+    fills.forEach(el=>{el.style.transitionDelay='0ms';el.style.width=el.dataset.w+'%';});
+  } else {
+    arcEl.style.transition='stroke-dasharray .85s cubic-bezier(.22,1,.36,1) .1s';
+    void wrap.offsetWidth;
+    arcEl.style.strokeDasharray=filled+' 999';
+    fills.forEach(el=>el.style.width=el.dataset.w+'%');
+    const t0=performance.now(), dur=850;
+    (function tk(){
+      const p=Math.min((performance.now()-t0)/dur,1), e=1-Math.pow(1-p,3);
+      numEl.textContent=Math.round(sc*e);
+      if(p<1) setTimeout(tk,16);
+    })();
+  }
 }
 function closeScore(){ document.getElementById('scoreOverlay').classList.add('hidden'); }
 
