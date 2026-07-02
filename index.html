@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Margem</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffd84d'/><rect x='2.5' y='2.5' width='27' height='27' rx='6.5' fill='%23fffdf7' stroke='%232b2117' stroke-width='2'/><rect x='9' y='23.5' width='14' height='2.2' rx='1.1' fill='%23b45309' transform='rotate(-4 16 16)'/><text x='16' y='22' font-family='Georgia,serif' font-size='17' font-weight='700' font-style='italic' fill='%231c1917' text-anchor='middle' transform='rotate(-4 16 16)'>m</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='42' fill='%23ffd84d'/><rect x='14' y='14' width='152' height='152' rx='34' fill='%23fffdf7' stroke='%232b2117' stroke-width='10'/><rect x='52' y='128' width='76' height='11' rx='5.5' fill='%23b45309' transform='rotate(-4 90 90)'/><text x='90' y='120' font-family='Georgia,serif' font-size='92' font-weight='700' font-style='italic' fill='%231c1917' text-anchor='middle' transform='rotate(-4 90 90)'>m</text></svg>">
@@ -401,11 +401,6 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .tr-up{color:var(--green)} .tr-dn{color:var(--red)}
 
 /* ── META DE RESERVA ──────────────────────────────────── */
-.goal-row{display:flex;align-items:center;gap:10px;margin-top:8px}
-.goal-bar-tr{flex:1;height:3px;background:var(--bdr);border-radius:99px;overflow:hidden}
-.goal-bar-fi{height:100%;background:var(--purple);border-radius:99px;transition:width .5s ease}
-.goal-lbl{font-size:11px;color:var(--t4);font-weight:500;white-space:nowrap}
-.goal-hint{font-size:11px;font-style:italic;color:var(--t4)}
 .goal-pfx{font-size:12px;color:var(--t4)}
 .goal-input{flex:1;border:1.5px solid var(--bdr);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--t1);outline:none;transition:border-color .15s;-webkit-appearance:none}
 .goal-input:focus{border-color:var(--blue)}
@@ -469,6 +464,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .tool-strip{display:none}
   .mob-bar{display:flex}
   .main-content{padding-bottom:82px}
+  .toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
   /* bottom sheet */
   .overlay{align-items:flex-end;padding:0}
   .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1)}
@@ -513,7 +509,6 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 [id^="rows-"]{min-height:56px}
 @media(min-width:901px){
   [id^="rows-"]{height:248px;overflow:hidden}
-  #rows-savings{height:96px}
   #rows-loans{height:auto;min-height:96px}
 }
 .grp-ft{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
@@ -585,10 +580,8 @@ html[data-dark] .pay-tp{color:#c084fc}
 .cover-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 rgba(0,0,0,.4)}
 
 /* ── CORRIGIR SALDO DA RESERVA ───────────────────────── */
-.sav-fix-wrap{margin-top:6px}
 .sav-fix-btn{background:none;border:none;font-family:inherit;font-size:11px;color:var(--t4);cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px;transition:color .15s}
 .sav-fix-btn:hover{color:var(--purple)}
-.sav-fix-row{display:flex;align-items:center;gap:8px;margin-top:8px}
 .sav-fix-ok{background:var(--pop);border:1.5px solid var(--ink);border-radius:8px 5px 9px 6px;padding:6px 14px;font-family:inherit;font-size:12px;font-weight:700;color:#241c12;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);transition:all .15s}
 .sav-fix-ok:hover{transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
 .sav-fix-ok:active{transform:translateY(1px);box-shadow:none}
@@ -807,6 +800,7 @@ html[data-dark] .box-row{background:rgba(255,255,255,.03)}
 .wish-views{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .wish-form{display:flex;flex-direction:column;gap:8px;padding:12px;border:1.5px dashed var(--bdr);border-radius:12px 8px 11px 9px;margin-bottom:14px;background:rgba(255,255,255,.25)}
 html[data-dark] .wish-form{background:rgba(255,255,255,.03)}
+.wish-form.editing{border-style:solid;border-color:var(--blue)}
 .wish-form-row{display:flex;gap:8px}
 .wish-form-row .m-in{flex:1;padding:9px 12px;font-size:13px}
 .wish-form .cat-pills{margin-top:0}
@@ -878,7 +872,6 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .metas-sal-row{display:flex;align-items:center;gap:8px}
 .metas-sal-val{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:15px;color:var(--t1);font-variant-numeric:tabular-nums}
 .metas-sal-lb{font-size:11px;font-weight:600;color:var(--t3)}
-.metas-sal-in{max-width:130px;font-variant-numeric:tabular-nums}
 .metas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 .meta-row{background:var(--surf2);border-radius:12px 8px 12px 10px;padding:14px 16px;border:1.5px solid var(--bdr-soft);position:relative;overflow:hidden}
 .meta-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:0 2px 2px 0;opacity:.6}
@@ -1595,7 +1588,7 @@ const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const KEYS   = ['income-fixed','income-extra','exp-fixed','exp-extra','savings'];
-const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos','savings':'reserva','loans':'emprestado'};
+const SEC_NM = {'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos','savings':'caixinha','loans':'emprestado'};
 const PAYS=[{id:'credito',lb:'crédito'},{id:'debito',lb:'débito'},{id:'pix',lb:'pix'}];
 const EMPTY_NM={
   'income-fixed':'nenhuma renda fixa — começa pelo salário',
@@ -2345,11 +2338,12 @@ function openModal(key, idx=-1){
   // dia do vencimento: só em itens fixos
   const hasDay=['income-fixed','exp-fixed'].includes(key);
   document.getElementById('dayWrap').classList.toggle('hidden',!hasDay);
-  // empréstimo: descrição vira "pra quem?"
-  document.getElementById('mDesc').placeholder = key==='loans' ? 'pra quem? ex: joão…' : 'ex: salário, aluguel…';
+  // empréstimo: descrição vira "pra quem?"; aporte tem a própria cara
+  document.getElementById('mDesc').placeholder = key==='loans' ? 'pra quem? ex: joão…' : key==='savings' ? 'ex: aporte do mês…' : 'ex: salário, aluguel…';
 
   const editing = idx >= 0;
-  document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : '+ '+SEC_NM[key];
+  const boxNm = key==='savings' ? (allBoxes().find(b=>b.id===depositBox)?.name||'caixinha') : null;
+  document.getElementById('mTitle').textContent = editing ? 'editar — '+SEC_NM[key] : (key==='savings' ? 'guardar em “'+boxNm+'”' : '+ '+SEC_NM[key]);
   if(editing){
     const item = key==='loans' ? ((editLoanMk?allMonths[editLoanMk]:monthLocal(curMonth)).loans||[])[idx] : monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
@@ -2676,7 +2670,7 @@ function drawChart(){
     data:{labels,datasets:[
       {type:'bar',label:'renda',data:inc,backgroundColor:dk?'rgba(61,107,74,.6)':'rgba(61,107,74,.5)',borderColor:'rgba(61,107,74,.85)',borderWidth:1.5,borderRadius:{topLeft:4,topRight:2,bottomLeft:1,bottomRight:3},order:2},
       {type:'bar',label:'gastos',data:exp,backgroundColor:dk?'rgba(139,58,42,.55)':'rgba(139,58,42,.45)',borderColor:'rgba(139,58,42,.85)',borderWidth:1.5,borderRadius:{topLeft:2,topRight:4,bottomLeft:3,bottomRight:1},order:2},
-      {type:'bar',label:'reserva',data:sav,backgroundColor:dk?'rgba(107,76,126,.55)':'rgba(107,76,126,.45)',borderColor:'rgba(107,76,126,.85)',borderWidth:1.5,borderRadius:{topLeft:3,topRight:2,bottomLeft:2,bottomRight:4},order:2},
+      {type:'bar',label:'guardado',data:sav,backgroundColor:dk?'rgba(107,76,126,.55)':'rgba(107,76,126,.45)',borderColor:'rgba(107,76,126,.85)',borderWidth:1.5,borderRadius:{topLeft:3,topRight:2,bottomLeft:2,bottomRight:4},order:2},
       {type:'line',label:'disponível',data:avl,borderColor:'#2b4c7e',backgroundColor:dk?'rgba(43,76,126,.15)':'rgba(43,76,126,.07)',borderWidth:2,pointBackgroundColor:'#2b4c7e',pointRadius:3,pointHoverRadius:5,fill:true,tension:.4,order:1}
     ]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
@@ -3007,7 +3001,7 @@ function openAnnual(){
   const totAv=totI-totE-totS;
   document.getElementById('annContent').innerHTML=`
     <table class="ann-table">
-      <thead><tr><th>mês</th><th>renda</th><th>gastos</th><th>reserva</th><th>disponível</th></tr></thead>
+      <thead><tr><th>mês</th><th>renda</th><th>gastos</th><th>guardado</th><th>disponível</th></tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr><td>total ${y}</td><td class="c-green">${fmt(totI)}</td><td class="c-red">${fmt(totE)}</td><td class="c-purple">${fmt(totS)}</td><td class="${totAv<0?'c-red':'c-green'}">${fmt(totAv)}</td></tr></tfoot>
     </table>
