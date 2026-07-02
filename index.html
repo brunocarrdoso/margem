@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Margem</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ffd84d'/><rect x='2.5' y='2.5' width='27' height='27' rx='6.5' fill='%23fffdf7' stroke='%232b2117' stroke-width='2'/><rect x='9' y='23.5' width='14' height='2.2' rx='1.1' fill='%23b45309' transform='rotate(-4 16 16)'/><text x='16' y='22' font-family='Georgia,serif' font-size='17' font-weight='700' font-style='italic' fill='%231c1917' text-anchor='middle' transform='rotate(-4 16 16)'>m</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='42' fill='%23ffd84d'/><rect x='14' y='14' width='152' height='152' rx='34' fill='%23fffdf7' stroke='%232b2117' stroke-width='10'/><rect x='52' y='128' width='76' height='11' rx='5.5' fill='%23b45309' transform='rotate(-4 90 90)'/><text x='90' y='120' font-family='Georgia,serif' font-size='92' font-weight='700' font-style='italic' fill='%231c1917' text-anchor='middle' transform='rotate(-4 90 90)'>m</text></svg>">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#faf3e2">
 <meta name="mobile-web-app-capable" content="yes">
@@ -195,6 +195,7 @@ html[data-dark] .sidebar{background:var(--surf)}
 html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .3s;flex-shrink:0}
 .save-dot.show{opacity:1}
+.save-dot.err{background:var(--red);opacity:1}
 .u-pill-wrap{position:relative}
 .u-pill{display:flex;align-items:center;gap:6px;background:var(--surf);border:1.5px solid var(--ink);border-radius:10px 7px 10px 8px;padding:5px 10px 5px 6px;cursor:pointer;transition:all .14s;font-family:inherit;box-shadow:2px 2px 0 var(--ink-sh)}
 .u-pill:active{transform:translateY(1px);box-shadow:none}
@@ -396,6 +397,9 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(14px) rotate(-1deg) scale(.92);background:var(--pop);color:#241c12;border:2px solid var(--ink);padding:10px 18px;border-radius:10px 6px 12px 8px;font-size:12px;font-weight:700;letter-spacing:.1px;z-index:300;opacity:0;transition:opacity .22s,transform .26s cubic-bezier(.22,1,.36,1);white-space:nowrap;pointer-events:none;box-shadow:3px 3px 0 var(--ink-sh)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0) rotate(-1deg) scale(1)}
 .toast.err{background:var(--red);color:#fff}
+.toast.act{pointer-events:auto;display:flex;align-items:center;gap:11px}
+.toast-undo{background:#241c12;color:var(--pop);border:none;border-radius:7px 4px 8px 5px;padding:4px 10px;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.2px;cursor:pointer}
+.toast-undo:active{transform:translateY(1px)}
 
 /* ── TENDÊNCIAS ───────────────────────────────────────── */
 .hst-tr{font-size:10px;font-weight:500;height:14px;margin-top:4px;font-variant-numeric:tabular-nums;transition:color .2s;letter-spacing:.1px}
@@ -1088,6 +1092,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="u-menu hidden" id="uMenu">
           <button onclick="openAnnual()">resumo anual</button>
           <button onclick="openProfileModal()">editar perfil</button>
+          <button onclick="exportData()">exportar dados</button>
           <button onclick="openDelMonth()">excluir mês</button>
           <button class="danger" onclick="logout()">sair</button>
         </div>
@@ -1684,6 +1689,18 @@ function applyDark(on){
   if(chart) drawChart();
 }
 function toggleDark(){ dark=!dark; localStorage.setItem('margem-dark',dark?'1':'0'); applyDark(dark); }
+function exportData(){
+  document.getElementById('uMenu')?.classList.add('hidden');
+  const payload={app:'margem',exported_at:new Date().toISOString(),email:curUser?.email||null,
+    months:allMonths, boxes:customBoxes(), wishlist:wishItems, shopping:loadShop()};
+  const blob=new Blob([JSON.stringify(payload,null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='margem-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  toast('backup baixado — guarda ele bem');
+}
 
 // ── Login views ───────────────────────────────────────
 function showView(id){
@@ -1874,35 +1891,90 @@ async function bootApp(){
 }
 
 // ── Dados ─────────────────────────────────────────────
-async function loadAllMonths(){
-  const {data}=await sb.from('financial_data').select('month_key,data').order('month_key');
-  allMonths={};
-  (data||[]).forEach(row=>{
-    allMonths[row.month_key]=row.data||emptyMonth();
-    KEYS.forEach(k=>{if(!allMonths[row.month_key][k]) allMonths[row.month_key][k]=[];});
-  });
+let dirtyMonths=new Set(), retryTimer=null, netWarned=false, loadFailed=false;
+const monthsCacheKey=()=>'margem-months-'+curUser.id;
+const dirtyKey=()=>'margem-dirty-'+curUser.id;
+function cacheMonthsLocal(){ try{ localStorage.setItem(monthsCacheKey(),JSON.stringify(allMonths)); }catch(_){} }
+function readMonthsCache(){ try{ return JSON.parse(localStorage.getItem(monthsCacheKey())||'null'); }catch(_){ return null; } }
+function persistDirty(){ try{ localStorage.setItem(dirtyKey(),JSON.stringify([...dirtyMonths])); }catch(_){} }
+function syncDot(){
+  const d=document.getElementById('saveDot');
+  if(dirtyMonths.size||loadFailed){ d.classList.add('show','err'); d.title='sem conexão — sincronizo quando voltar'; }
+  else { d.classList.remove('err'); d.title=''; }
 }
 
-async function saveMonth(mk){
-  if(!curUser) return;
-  await sb.from('financial_data').upsert(
-    {user_id:curUser.id, month_key:mk, data:allMonths[mk]||emptyMonth(), updated_at:new Date().toISOString()},
-    {onConflict:'user_id,month_key'}
-  );
+async function loadAllMonths(){
+  let rows=null;
+  try{
+    const {data,error}=await sb.from('financial_data').select('month_key,data').order('month_key');
+    if(error) throw error; rows=data||[];
+  }catch(_){}
+  if(rows){
+    loadFailed=false; allMonths={};
+    rows.forEach(row=>{
+      allMonths[row.month_key]=row.data||emptyMonth();
+      KEYS.forEach(k=>{if(!allMonths[row.month_key][k]) allMonths[row.month_key][k]=[];});
+      if(!allMonths[row.month_key].loans) allMonths[row.month_key].loans=[];
+    });
+    // mudanças feitas offline na sessão passada: a cópia local desses meses é mais nova
+    let pend=[]; try{ pend=JSON.parse(localStorage.getItem(dirtyKey())||'[]'); }catch(_){}
+    if(pend.length){
+      const cached=readMonthsCache()||{};
+      pend.forEach(mk=>{ if(cached[mk]){ allMonths[mk]=cached[mk]; dirtyMonths.add(mk); } });
+      scheduleFlush(800);
+    }
+    cacheMonthsLocal();
+  } else {
+    const cached=readMonthsCache();
+    if(cached){ allMonths=cached; loadFailed=false; toast('sem conexão — mostrando sua cópia local','err'); }
+    else { allMonths={}; loadFailed=true; toast('não consegui carregar seus dados — verifique a conexão','err'); }
+    scheduleFlush(15000);
+  }
+  syncDot();
 }
+
+async function pushMonth(mk){
+  if(!curUser||!mk) return;
+  if(loadFailed){ syncDot(); return; } // nunca gravar por cima sem ter carregado os dados reais
+  cacheMonthsLocal();
+  try{
+    const {error}=await sb.from('financial_data').upsert(
+      {user_id:curUser.id, month_key:mk, data:allMonths[mk]||emptyMonth(), updated_at:new Date().toISOString()},
+      {onConflict:'user_id,month_key'}
+    );
+    if(error) throw error;
+    dirtyMonths.delete(mk); persistDirty();
+    if(!dirtyMonths.size){
+      document.getElementById('saveDot').classList.remove('show');
+      if(netWarned){ netWarned=false; toast('conexão de volta — tudo sincronizado'); }
+    }
+    syncDot();
+  }catch(_){
+    dirtyMonths.add(mk); persistDirty(); syncDot();
+    if(!netWarned){ netWarned=true; toast('sem conexão — guardei no aparelho e sincronizo depois','err'); }
+    scheduleFlush(15000);
+  }
+}
+async function saveMonth(mk){ return pushMonth(mk); }
 
 function schedSave(){
   clearTimeout(saveTimer);
   document.getElementById('saveDot').classList.add('show');
-  saveTimer=setTimeout(async()=>{
-    if(!curUser||!curMonth) return;
-    await sb.from('financial_data').upsert(
-      {user_id:curUser.id, month_key:curMonth, data:allMonths[curMonth]||emptyMonth(), updated_at:new Date().toISOString()},
-      {onConflict:'user_id,month_key'}
-    );
-    document.getElementById('saveDot').classList.remove('show');
-  },1000);
+  saveTimer=setTimeout(()=>pushMonth(curMonth),1000);
 }
+
+function scheduleFlush(ms){ clearTimeout(retryTimer); retryTimer=setTimeout(flushSync,ms); }
+async function flushSync(){
+  if(!curUser) return;
+  if(loadFailed){
+    await loadAllMonths();
+    if(loadFailed) return; // loadAllMonths já reagendou
+    initSelectors();
+  }
+  for(const mk of [...dirtyMonths]) await pushMonth(mk);
+  if(dirtyMonths.size) scheduleFlush(15000);
+}
+window.addEventListener('online',()=>scheduleFlush(500));
 
 // ── Carry-over (banner inline no mês vazio) ───────────
 function updateCarryBanner(){
@@ -2125,9 +2197,16 @@ async function unrecvLoan(mk,idx){
   await saveMonth(mk);
 }
 async function delLoan(mk,idx){
+  const it=allMonths[mk].loans[idx]; if(!it) return;
   allMonths[mk].loans.splice(idx,1);
   renderLoans(); refreshLoansTab(); recalc(); drawChart();
   await saveMonth(mk);
+  undoToast(`empréstimo de “${cutS(it.desc)}” removido`,async()=>{
+    const a=allMonths[mk].loans;
+    a.splice(Math.min(idx,a.length),0,it);
+    renderLoans(); refreshLoansTab(); recalc(); drawChart();
+    await saveMonth(mk);
+  });
 }
 
 // ── Recebimento parcial ───────────────────────────────
@@ -2294,7 +2373,18 @@ function recalc(){
   checkStamps(av,tI,tE,svFlow,totalSaved);
   updateCarryBanner();
 }
-function doRemoveItem(key,i){ monthLocal(curMonth)[key].splice(i,1); renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave(); }
+function doRemoveItem(key,i){
+  const arr=monthLocal(curMonth)[key]; const it=arr[i]; if(!it) return;
+  arr.splice(i,1);
+  renderRows(key); recalc(); drawChart(); drawCatBreak(); schedSave();
+  const mk=curMonth;
+  undoToast(`“${cutS(it.desc)}” removido`,()=>{
+    const a=(allMonths[mk][key]=allMonths[mk][key]||[]);
+    a.splice(Math.min(i,a.length),0,it);
+    if(curMonth===mk){ renderRows(key); recalc(); drawChart(); drawCatBreak(); }
+    pushMonth(mk);
+  });
+}
 function removeItem(key,i){
   if(['exp-fixed','income-fixed'].includes(key)){
     const it=monthLocal(curMonth)[key][i];
@@ -2467,19 +2557,25 @@ async function delPropAll(){
   document.getElementById('delPropOverlay').classList.add('hidden');
   if(!pendingDel) return;
   const {key,i,desc}=pendingDel; pendingDel=null;
-  doRemoveItem(key,i);
   const low=desc.trim().toLowerCase();
-  const touched=[];
+  const removed=[];
+  const cur=monthLocal(curMonth)[key];
+  if(cur[i]){ removed.push({mk:curMonth,item:cur[i],idx:i}); cur.splice(i,1); }
   monthsUntilDec(curMonth).forEach(mk=>{
     const arr=allMonths[mk]?.[key]; if(!arr) return;
-    const before=arr.length;
-    allMonths[mk][key]=arr.filter(x=>x.desc.trim().toLowerCase()!==low);
-    if(allMonths[mk][key].length!==before) touched.push(mk);
+    for(let j=arr.length-1;j>=0;j--) if(arr[j].desc.trim().toLowerCase()===low){ removed.push({mk,item:arr[j],idx:j}); arr.splice(j,1); }
   });
-  if(touched.length&&curUser){
-    const rows=touched.map(k=>({user_id:curUser.id,month_key:k,data:allMonths[k],updated_at:new Date().toISOString()}));
-    await sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'});
-  }
+  renderRows(key); recalc(); drawChart(); drawCatBreak();
+  const touched=[...new Set(removed.map(r=>r.mk))];
+  for(const k of touched) await pushMonth(k);
+  if(removed.length) undoToast(`“${cutS(desc)}” removido até dezembro`,async()=>{
+    [...removed].reverse().forEach(({mk,item,idx})=>{
+      const a=(allMonths[mk][key]=allMonths[mk][key]||[]);
+      a.splice(Math.min(idx,a.length),0,item);
+    });
+    renderRows(key); recalc(); drawChart(); drawCatBreak();
+    for(const k of touched) await pushMonth(k);
+  });
   drawChart(); recalc();
   toast('removido até dez ✓');
 }
@@ -2797,6 +2893,19 @@ function animateNumber(el, from, to, dur=480){
 }
 
 // ── Toast ─────────────────────────────────────────────
+const cutS=t=>t.length>24?t.slice(0,23)+'…':t;
+function undoToast(msg,fn){
+  const t=document.createElement('div');
+  t.className='toast act';
+  const sp=document.createElement('span'); sp.textContent=msg;
+  const b=document.createElement('button'); b.className='toast-undo'; b.textContent='desfazer';
+  b.onclick=()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); fn(); };
+  t.append(sp,b); document.body.appendChild(t);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>t.classList.add('show'));
+    setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },6000);
+  });
+}
 function toast(msg, type=''){
   const t=document.createElement('div');
   t.className='toast'+(type?' '+type:'');
@@ -3493,7 +3602,7 @@ function openScore(){
   const fbar=(lb,v,extra)=>{const pct=Math.round((v||0)*100);const dl=(fbIdx++)*110+320;return `<div class="sc-factor"><div class="sc-f-top"><span>${lb}</span><span>${pct}%</span></div><div class="sc-f-tr"><span class="sc-fill" data-w="${pct}" style="width:0%;background:${b.c};transition-delay:${dl}ms"></span></div>${extra?`<div class="sc-f-note">${extra}</div>`:''}</div>`;};
   let factors='';
   if(parts){
-    const sl=parseFloat(localStorage.getItem('margem-salary'))||0;
+    const sl=salaryOf(curMonth);
     factors=`<div class="sc-factors">
       ${fbar('investimento do mês',parts.pInv, sl?(parts.pInv>=1?'meta de 20% batida':'ainda falta investir '+fmt(investGap(curMonth))):'')}
       ${fbar('gastos no teto',parts.pVar)}

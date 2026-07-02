@@ -1,5 +1,5 @@
-const CACHE = 'margem-v3';
-const ASSETS = ['./', './index.html', './icon.svg', './manifest.json'];
+const CACHE = 'margem-v4';
+const ASSETS = ['./', './index.html', './icon.svg', './manifest.json', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
