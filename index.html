@@ -3559,8 +3559,10 @@ function ceilingRoom(k){
   return s*0.3 - sum((allMonths[k]||{})['exp-extra']);
 }
 let buySelPay='debito', buyIsParc=false;
+let buyTrigger=null;
 function openBuy(){
   document.getElementById('uMenu')?.classList.add('hidden');
+  buyTrigger=document.activeElement;
   buySelPay='debito'; buyIsParc=false;
   document.getElementById('buyDesc').value='';
   document.getElementById('buyVal').value='';
@@ -3573,7 +3575,7 @@ function openBuy(){
   document.getElementById('buyOverlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('buyVal').focus(),60);
 }
-function closeBuy(){ document.getElementById('buyOverlay').classList.add('hidden'); }
+function closeBuy(){ const ov=document.getElementById('buyOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); buyTrigger?.focus?.(); buyTrigger=null; }
 function renderBuyPays(){
   document.getElementById('buyPays').innerHTML=PAYS.map(p=>{
     const on=buySelPay===p.id,c=PAY_COL[p.id];
@@ -3693,8 +3695,10 @@ let shopSelPay='debito';
 function shopKey(){ return 'margem-shop-'+(curUser?.id||''); }
 function loadShop(){ try{ return JSON.parse(localStorage.getItem(shopKey())||'[]'); }catch(_){ return []; } }
 function saveShop(l){ try{ localStorage.setItem(shopKey(),JSON.stringify(l)); }catch(_){ } }
+let shopTrigger=null;
 function openShop(){
   document.getElementById('uMenu')?.classList.add('hidden');
+  shopTrigger=document.activeElement;
   shopSelPay='debito';
   document.getElementById('shopVal').value='';
   document.getElementById('shopNew').value='';
@@ -3702,7 +3706,7 @@ function openShop(){
   document.getElementById('shopOverlay').classList.remove('hidden');
   setTimeout(()=>document.getElementById('shopNew').focus(),60);
 }
-function closeShop(){ document.getElementById('shopOverlay').classList.add('hidden'); }
+function closeShop(){ const ov=document.getElementById('shopOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); shopTrigger?.focus?.(); shopTrigger=null; }
 function renderShopPays(){
   document.getElementById('shopPays').innerHTML=PAYS.map(p=>{
     const on=shopSelPay===p.id,c=PAY_COL[p.id];
