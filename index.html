@@ -535,6 +535,21 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   #rows-loans{height:auto;min-height:96px}
 }
 .grp-ft{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.mascot{position:absolute;top:-18px;right:-12px;width:42px;height:42px;background:var(--surf);border:2px solid var(--ink);border-radius:50%;box-shadow:2px 2px 0 var(--ink-sh);display:flex;align-items:center;justify-content:center;z-index:4;transform:rotate(-7deg);animation:mascotPop .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes mascotPop{0%{opacity:0;transform:rotate(-7deg) scale(0)}60%{opacity:1;transform:rotate(-7deg) scale(1.16)}100%{opacity:1;transform:rotate(-7deg) scale(1)}}
+.meter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--bdr-soft)}
+.meter.hidden{display:none}
+.meter-info{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.meter-row{display:flex;justify-content:space-between;gap:8px;font-size:11px;font-weight:600;color:var(--t3)}
+.meter-row b{font-family:'Playfair Display',Georgia,serif;font-size:13.5px;font-weight:700;color:var(--t2);letter-spacing:-.2px}
+.meter-jar{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.meter-pct{font-size:10.5px;font-weight:700;color:var(--t3);white-space:nowrap}
+.jar{overflow:visible}
+.jar .wave{animation:waveX 2.8s linear infinite}
+.jar .wave2{animation-duration:4.2s;animation-direction:reverse;opacity:.5}
+.jlevel{transition:transform .9s cubic-bezier(.22,1,.36,1)}
+@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-56px)}}
+@media(prefers-reduced-motion:reduce){.jar .wave{animation:none} .mascot{animation:none}}
 .pager{display:flex;align-items:center;gap:7px;padding-top:10px}
 .pg-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1.5px solid var(--ink);border-radius:7px 4px 7px 5px;font-size:14px;color:var(--t1);cursor:pointer;line-height:1;box-shadow:2px 2px 0 var(--ink-sh);transition:all .14s cubic-bezier(.22,1,.36,1);padding:0;font-family:inherit}
 .pg-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
@@ -1159,7 +1174,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <!-- coluna esquerda: ganhos + guardado -->
       <div class="col">
         <div class="group group-income">
-          <span class="wm" style="color:var(--green)">+</span>
+          <span class="wm" style="color:var(--green)">+</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><g fill="#a7d18a" stroke="#166534" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 12l2.5-3M23 12l-2.5-3" fill="none" stroke-linecap="round"/><ellipse cx="15.5" cy="18" rx="9.5" ry="7"/><ellipse cx="23" cy="18" rx="3.2" ry="2.8"/></g><circle cx="22.4" cy="17.4" r="0.8" fill="#166534"/><circle cx="23.8" cy="17.4" r="0.8" fill="#166534"/><path d="M12.5 14.5h5" stroke="#166534" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#166534"/><path d="M11.5 23v2M19 23v2" stroke="#166534" stroke-width="1.8" stroke-linecap="round"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
           <div id="rows-income-fixed"></div>
           <div class="grp-ft">
@@ -1168,7 +1183,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           </div>
         </div>
         <div class="group group-income">
-          <span class="wm" style="color:var(--green)">≈</span>
+          <span class="wm" style="color:var(--green)">≈</span><div class="mascot"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path d="M15 5l3 6.6 7.2 1-5.3 5 1.3 7.1L15 21.4 8.6 24.7l1.3-7.1-5.3-5 7.2-1z" fill="#ffd84d" stroke="#166534" stroke-width="1.8" stroke-linejoin="round"/><path d="M25 8l4-2M26.5 12.5l3.5-1" stroke="#7bbf5a" stroke-width="2" stroke-linecap="round"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
           <div id="rows-income-extra"></div>
           <div class="grp-ft">
@@ -1180,7 +1195,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <!-- coluna direita: gastos -->
       <div class="col">
         <div class="group group-expense">
-          <span class="wm" style="color:var(--red)">−</span>
+          <span class="wm" style="color:var(--red)">−</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><path d="M6 15.5l10-8 10 8" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="8.5" y="15" width="15" height="11" rx="1.5" fill="#e6b8a8" stroke="#9f1239" stroke-width="1.8"/><rect x="13.5" y="19.5" width="5" height="6.5" fill="#9f1239"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
           <div id="rows-exp-fixed"></div>
           <div class="grp-ft">
@@ -1189,9 +1204,10 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
           </div>
         </div>
         <div class="group group-expense">
-          <span class="wm" style="color:var(--amber)">?</span>
+          <span class="wm" style="color:var(--amber)">?</span><div class="mascot"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path d="M9 12h14l-1.4 13.6a2 2 0 0 1-2 1.9H12.4a2 2 0 0 1-2-1.9z" fill="#f0c98a" stroke="#b45309" stroke-width="1.8" stroke-linejoin="round"/><path d="M12.5 12.5v-2.5a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="#b45309" stroke-width="1.8"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
           <div id="rows-exp-extra"></div>
+          <div class="meter hidden" id="meter-exp-extra"></div>
           <div class="grp-ft">
             <button class="add-trig" onclick="openModal('exp-extra')">+ adicionar</button>
             <div class="pager hidden" id="pager-exp-extra"></div>
@@ -1202,18 +1218,20 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
     <div class="sav-wrap">
       <div class="sav-in">
-        <span class="wm" style="color:var(--purple)">$</span>
+        <span class="wm" style="color:var(--purple)">$</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="2.5" fill="#d7c4f0" stroke="#6d28d9" stroke-width="1.8"/><circle cx="15" cy="16" r="5" fill="none" stroke="#6d28d9" stroke-width="1.8"/><circle cx="15" cy="16" r="1.4" fill="#6d28d9"/><path d="M15 11v-1.4M15 22.4V21M20 16h1.4M8.6 16H10" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/><path d="M9 25v2M23 25v2" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round"/></svg></div>
         <div class="sav-hd"><span class="sav-nm">caixinhas</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
         <div id="boxesList"></div>
+        <div class="meter hidden" id="meter-savings"></div>
         <div class="grp-ft">
           <button class="add-trig hidden" id="newBoxBtn" onclick="openNewBox()">+ nova caixinha</button>
         </div>
         <div class="box-lock hidden" id="boxLock">complete a reserva de emergência pra liberar novas caixinhas (sonhos)</div>
       </div>
       <div class="loan-in">
-        <span class="wm" style="color:var(--amber)">&amp;</span>
+        <span class="wm" style="color:var(--amber)">&amp;</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><circle cx="15" cy="17" r="8.5" fill="#f0c98a" stroke="#b45309" stroke-width="1.8"/><text x="15" y="21" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="700" fill="#b45309">$</text><path d="M23 9a9 9 0 0 1 1.8 5.5" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round"/><path d="M21.6 6.5l1.8 3.6-3.9 .8" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="sav-hd"><span class="loan-nm" onclick="openLoansTab()" style="cursor:pointer" title="ver todos os empréstimos">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
         <div id="rows-loans"></div>
+        <div class="meter hidden" id="meter-loans"></div>
         <div class="grp-ft">
           <button class="add-trig" onclick="openModal('loans')">+ emprestar</button>
           <div class="pager hidden" id="pager-loans"></div>
@@ -2390,13 +2408,54 @@ function loanAdj(mk){
   return {lent,recvd};
 }
 
+let jarSeq=0; const lastTot={};
 function setTot(id,v){
-  const el=document.getElementById(id);
-  const t=fmt(v);
-  if(el.textContent!==t){
-    el.textContent=t;
-    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
-  }
+  const el=document.getElementById(id); if(!el) return;
+  const from=(id in lastTot)?lastTot[id]:0; lastTot[id]=v;
+  if(Math.abs(from-v)<0.005){ el.textContent=fmt(v); return; }
+  el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  animateNumber(el, from, v, 520);
+}
+function jarSVG(pct,fill){
+  pct=Math.max(0,Math.min(pct,1));
+  const ty=((1-pct)*50).toFixed(1), uid='jar'+(jarSeq++);
+  return `<svg class="jar" viewBox="0 0 56 68" width="44" height="54" aria-hidden="true">
+    <defs><clipPath id="${uid}"><rect x="7" y="12" width="42" height="50" rx="9"/></clipPath></defs>
+    <g clip-path="url(#${uid})">
+      <rect x="7" y="12" width="42" height="50" fill="var(--surf2)"/>
+      <g class="jlevel" style="transform:translateY(${ty}px)">
+        <path class="wave" d="M-56 14 q14 -7 28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 v72 h-224 z" fill="${fill}"/>
+        <path class="wave wave2" d="M-56 17 q14 -6 28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 t28 0 v72 h-224 z" fill="${fill}"/>
+      </g>
+    </g>
+    <rect x="7" y="12" width="42" height="50" rx="9" fill="none" stroke="var(--ink)" stroke-width="2"/>
+    <rect x="12" y="6" width="32" height="9" rx="3" fill="var(--surf)" stroke="var(--ink)" stroke-width="2"/>
+  </svg>`;
+}
+function renderMeter(id,o){
+  const el=document.getElementById(id); if(!el) return;
+  if(!o){ el.classList.add('hidden'); el.innerHTML=''; return; }
+  el.classList.remove('hidden');
+  const rows=o.rows.map(r=>`<div class="meter-row"><span>${r[0]}</span><b class="${r[2]||''}">${r[1]}</b></div>`).join('');
+  el.innerHTML=`<div class="meter-info">${rows}</div><div class="meter-jar">${jarSVG(o.pct,o.fill)}<span class="meter-pct">${o.pctLabel}</span></div>`;
+}
+function updateMeters(eX){
+  const sal=salaryOf(curMonth);
+  if(sal>0){
+    const teto=sal*0.3, pct=teto?eX/teto:0, over=eX>teto;
+    renderMeter('meter-exp-extra',{pct, fill:over?'var(--red)':'var(--amber)', pctLabel:Math.round(pct*100)+'% do teto',
+      rows:[['gasto do mês', fmt(eX),'c-amber'],['teto (30%)', fmt(teto),'']]});
+  } else renderMeter('meter-exp-extra',null);
+  if(sal>0){
+    const target=sal*6, saved=savedUpTo(curMonth), pct=target?saved/target:0;
+    renderMeter('meter-savings',{pct, fill:'var(--purple)', pctLabel:Math.round(Math.min(pct,1)*100)+'% da reserva',
+      rows:[['guardado', fmt(saved),'c-purple'],['reserva ideal (6×)', fmt(target),'']]});
+  } else renderMeter('meter-savings',null);
+  let tl=0,rc=0; Object.values(allMonths).forEach(m=>(m.loans||[]).forEach(l=>{tl+=l.value; if(l.recv) rc+=l.value;}));
+  if(tl>0){
+    renderMeter('meter-loans',{pct:rc/tl, fill:'var(--green)', pctLabel:Math.round(rc/tl*100)+'% de volta',
+      rows:[['a receber', fmt(tl-rc),'c-amber'],['já voltou', fmt(rc),'c-green']]});
+  } else renderMeter('meter-loans',null);
 }
 function renderAll(){ KEYS.forEach(renderRows); renderLoans(); recalc(); drawCatBreak(); }
 function recalc(){
@@ -2428,6 +2487,7 @@ function recalc(){
     trendEl(tI,pI,'trInc'); trendEl(tE,pE,'trExp',true); trendEl(sv,pS,'trSav');
   } else ['trInc','trExp','trSav'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent='';el.className='hst-tr';}});
   renderBoxes(); if(boxDetailId&&!document.getElementById('boxOverlay').classList.contains('hidden')) buildBoxDetail();
+  updateMeters(eX);
   const fi=document.getElementById('progFi');
   if(tI+recvd>0){
     const pct=Math.min((tE+svFlow+lent)/(tI+recvd)*100,100),free=Math.max(100-pct,0);
