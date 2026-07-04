@@ -115,6 +115,24 @@ html[data-dark] .l-logo span{text-decoration-color:rgba(245,158,11,.25)}
 .divider{display:flex;align-items:center;gap:12px;margin:18px 0}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bdr)}
 .divider span{font-size:11px;color:var(--t4);white-space:nowrap}
+.l-wrap{width:100%;max-width:392px;position:relative;z-index:1}
+.l-hero{text-align:center;margin-bottom:20px}
+.l-pill{display:inline-flex;align-items:center;gap:7px;background:var(--surf);border:1.6px solid var(--ink);border-radius:9px 6px 9px 7px;padding:5px 12px 5px 6px;font-size:12px;font-weight:600;color:var(--t3);box-shadow:2px 2px 0 var(--ink-sh);margin-bottom:15px}
+.l-pill-badge{background:var(--pop);color:#241c12;border:1.2px solid var(--ink);border-radius:5px 3px 5px 4px;padding:1px 7px;font-size:11px;font-weight:700}
+.l-hero-title{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:32px;font-weight:600;letter-spacing:-1.5px;line-height:1.13;color:var(--t1);margin-bottom:10px;cursor:default}
+.l-hero-title em{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:400;color:var(--blue);letter-spacing:-1px}
+.l-hero-sub{font-size:13px;font-weight:400;color:var(--t3);line-height:1.5;max-width:320px;margin:0 auto}
+.grid-empty{font-size:12px;color:var(--t4);text-align:center;padding:4px 0 14px}
+.pw-field{position:relative}
+.pw-field input{padding-right:38px}
+.pw-field .pw-eye{position:absolute;right:8px;bottom:7px;background:none;border:none;color:var(--t4);cursor:pointer;padding:4px;display:flex;transition:color .15s}
+.pw-field .pw-eye:hover{color:var(--t2)}
+.pw-field .pw-eye.on{color:var(--blue)}
+.pass-who{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.pass-name{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:700;color:var(--t1);letter-spacing:-.3px;line-height:1.1}
+.pass-tip{font-size:11px;color:var(--t4)}
+.mig-sub{font-size:13px;color:var(--t3);margin:-4px 0 16px;line-height:1.45}
+.lbl-hint{font-size:11px;color:var(--t4);font-weight:400;text-transform:none;letter-spacing:0}
 
 /* ── APP ──────────────────────────────────── */
 #app{min-height:100dvh;display:flex;flex-direction:column}
@@ -923,112 +941,91 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 
 <!-- ══ LOGIN ══════════════════════════════════════════ -->
 <div id="loginScreen">
-  <div class="l-card">
-    <div class="l-logo" onclick="logoEgg()">mar<span>gem</span></div>
-    <p class="l-sub">planejador financeiro pessoal</p>
-
-    <!-- Perfis salvos neste dispositivo -->
-    <div id="vPicker">
-      <div class="user-grid" id="profileGrid"></div>
-      <div class="u-new-wrap">
-        <button class="u-new" onclick="showView('vNew')">
-          <div class="u-new-ic">+</div>
-          <span class="u-new-lb">nova conta</span>
-        </button>
-      </div>
-      <div class="divider"><span>ou</span></div>
-      <button class="btn-g" onclick="showView('vLogin')" style="margin-top:0">entrar com e-mail e PIN →</button>
+  <div class="l-wrap">
+    <div class="l-hero">
+      <div class="l-pill"><span class="l-pill-badge">novo</span> seu score, agora</div>
+      <h1 class="l-hero-title" onclick="logoEgg()">suas contas.<br>uma <em>margem</em> clara.</h1>
+      <p class="l-hero-sub">o planejador que mostra o quanto sobra — metas, caixinhas e score, tudo em um lugar só.</p>
     </div>
 
-    <!-- Primeiro acesso neste dispositivo -->
-    <div id="vLogin" class="hidden">
-      <div class="l-form">
-        <h2>entrar</h2>
-        <p class="l-form-sub">Primeiro acesso neste dispositivo</p>
-        <div class="field">
-          <label>e-mail</label>
-          <input id="lEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
-        </div>
-        <div class="field">
-          <label>PIN</label>
-          <input id="lPin" type="number" placeholder="4 dígitos" />
-        </div>
-        <div class="auth-err hidden" id="lErr"></div>
-        <button class="btn-p" id="lBtn" onclick="doEmailLogin()">entrar</button>
-        <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
-        <button class="btn-link" onclick="showView('vReset')">esqueci meu PIN</button>
+    <div class="l-card">
+      <!-- perfis salvos neste aparelho -->
+      <div id="vPicker">
+        <div class="user-grid" id="profileGrid"></div>
+        <button class="btn-p" onclick="showView('vNew')">criar conta</button>
+        <div class="divider"><span>ou</span></div>
+        <button class="btn-g" onclick="showView('vLogin')">entrar em outro aparelho →</button>
       </div>
-    </div>
 
-    <!-- PIN do tile selecionado -->
-    <div id="vPin" class="hidden">
-      <div class="pin-box">
-        <div class="pin-who" id="pinWho"></div>
-        <div class="pin-dots">
-          <div class="pd" id="pd0"></div><div class="pd" id="pd1"></div>
-          <div class="pd" id="pd2"></div><div class="pd" id="pd3"></div>
+      <!-- senha do perfil escolhido -->
+      <div id="vPass" class="hidden">
+        <div class="pass-who">
+          <div class="avatar" id="passAv"></div>
+          <div><div class="pass-name" id="passName"></div><div class="pass-tip">digite sua senha</div></div>
         </div>
-        <div class="pin-err" id="pinErr"></div>
-        <div class="numpad" id="numpad"></div>
+        <div class="field pw-field">
+          <label>senha</label>
+          <input id="passInput" type="password" placeholder="sua senha" autocomplete="current-password" />
+          <button type="button" class="pw-eye" onclick="togglePw('passInput',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <div class="auth-err hidden" id="passErr"></div>
+        <button class="btn-p" id="passBtn" onclick="doTileLogin()">entrar</button>
+        <button class="btn-g" onclick="showView('vPicker')">← trocar de conta</button>
+        <button class="btn-link" onclick="showView('vReset')">esqueci a senha</button>
       </div>
-      <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
-      <button class="btn-link" onclick="showView('vReset')">esqueci meu PIN</button>
-    </div>
 
-    <!-- Redefinir PIN -->
-    <div id="vReset" class="hidden">
-      <div class="l-form">
-        <h2>redefinir PIN</h2>
-        <p class="l-form-sub">Enviaremos um link para o seu e-mail</p>
-        <div class="field">
-          <label>e-mail</label>
-          <input id="rEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
+      <!-- entrar em outro aparelho -->
+      <div id="vLogin" class="hidden">
+        <div class="l-form">
+          <h2>entrar</h2>
+          <p class="l-form-sub">use seu usuário e senha</p>
+          <div class="field"><label>usuário ou e-mail</label><input id="lUser" type="text" placeholder="seu usuário" autocomplete="username" /></div>
+          <div class="field pw-field"><label>senha</label><input id="lPass" type="password" placeholder="sua senha" autocomplete="current-password" /><button type="button" class="pw-eye" onclick="togglePw('lPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="auth-err hidden" id="lErr"></div>
+          <button class="btn-p" id="lBtn" onclick="doLogin()">entrar</button>
+          <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
+          <button class="btn-link" onclick="showView('vReset')">esqueci a senha</button>
         </div>
-        <div class="auth-err hidden" id="rErr"></div>
-        <div class="auth-info hidden" id="rInfo">✓ Link enviado! Verifique sua caixa de entrada.</div>
-        <button class="btn-p" id="rBtn" onclick="doResetPassword()">enviar link</button>
-        <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
       </div>
-    </div>
 
-    <!-- Novo PIN (chegou pelo link de recuperação) -->
-    <div id="vNewPin" class="hidden">
-      <div class="l-form">
-        <h2>novo PIN</h2>
-        <p class="l-form-sub">Escolha um PIN de 4 dígitos para sua conta</p>
-        <div class="field">
-          <label>novo PIN</label>
-          <input id="npPin1" type="number" placeholder="4 dígitos" />
+      <!-- redefinir senha -->
+      <div id="vReset" class="hidden">
+        <div class="l-form">
+          <h2>redefinir senha</h2>
+          <p class="l-form-sub">enviaremos um link para o seu e-mail</p>
+          <div class="field"><label>e-mail</label><input id="rEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
+          <div class="auth-err hidden" id="rErr"></div>
+          <div class="auth-info hidden" id="rInfo">✓ link enviado! verifique sua caixa de entrada.</div>
+          <button class="btn-p" id="rBtn" onclick="doResetPassword()">enviar link</button>
+          <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
         </div>
-        <div class="field">
-          <label>confirmar PIN</label>
-          <input id="npPin2" type="number" placeholder="repita o PIN" />
-        </div>
-        <div class="auth-err hidden" id="npErr"></div>
-        <button class="btn-p" id="npBtn" onclick="doSaveNewPin()">salvar novo PIN</button>
       </div>
-    </div>
 
-    <!-- Nova conta -->
-    <div id="vNew" class="hidden">
-      <div class="l-form">
-        <h2>nova conta</h2>
-        <p class="l-form-sub">Crie seu perfil para começar</p>
-        <div class="field">
-          <label>seu nome</label>
-          <input id="nName" type="text" placeholder="ex: Bruno" autocomplete="off" />
+      <!-- nova senha (via link de recuperação) -->
+      <div id="vNewPass" class="hidden">
+        <div class="l-form">
+          <h2>nova senha</h2>
+          <p class="l-form-sub">escolha uma nova senha para sua conta</p>
+          <div class="field pw-field"><label>nova senha</label><input id="npPass1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('npPass1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="field"><label>confirmar senha</label><input id="npPass2" type="password" placeholder="repita a senha" /></div>
+          <div class="auth-err hidden" id="npErr"></div>
+          <button class="btn-p" id="npBtn" onclick="doSaveNewPass()">salvar nova senha</button>
         </div>
-        <div class="field">
-          <label>e-mail</label>
-          <input id="nEmail" type="email" placeholder="voce@email.com" autocomplete="email" />
+      </div>
+
+      <!-- criar conta -->
+      <div id="vNew" class="hidden">
+        <div class="l-form">
+          <h2>criar conta</h2>
+          <p class="l-form-sub">é rapidinho</p>
+          <div class="field"><label>e-mail</label><input id="nEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
+          <div class="field"><label>usuário</label><input id="nUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
+          <div class="field pw-field"><label>senha</label><input id="nPass" type="password" placeholder="mín. 6 caracteres" autocomplete="new-password" /><button type="button" class="pw-eye" onclick="togglePw('nPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="field"><label>confirmar senha</label><input id="nPass2" type="password" placeholder="repita a senha" autocomplete="new-password" /></div>
+          <div class="auth-err hidden" id="nErr"></div>
+          <button class="btn-p" id="nBtn" onclick="createProfile()">criar conta</button>
+          <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
         </div>
-        <div class="field">
-          <label>PIN (4 dígitos)</label>
-          <input id="nPin" type="number" placeholder="ex: 1234" />
-        </div>
-        <div class="auth-err hidden" id="nErr"></div>
-        <button class="btn-p" id="nBtn" onclick="createProfile()">criar conta</button>
-        <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
       </div>
     </div>
   </div>
@@ -1507,8 +1504,8 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">editar perfil</div>
     <div class="m-field">
-      <label>Nome</label>
-      <input class="m-in" id="editName" type="text" autocomplete="off" />
+      <label>Usuário</label>
+      <input class="m-in" id="editUser" type="text" autocomplete="username" />
     </div>
     <div class="m-field">
       <label>Cor do avatar</label>
@@ -1516,17 +1513,36 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
     </div>
     <div style="border-top:1px solid var(--bdr);margin:16px 0 18px"></div>
     <div class="m-field">
-      <label>Novo PIN (deixe vazio para manter)</label>
-      <input class="m-in" id="editPin1" type="number" placeholder="4 dígitos" />
+      <label>E-mail <span class="lbl-hint">(trocar envia confirmação)</span></label>
+      <input class="m-in" id="editEmail" type="email" autocomplete="email" />
     </div>
-    <div class="m-field">
-      <label>Confirmar novo PIN</label>
-      <input class="m-in" id="editPin2" type="number" placeholder="4 dígitos" />
+    <div class="m-field pw-field">
+      <label>Senha</label>
+      <input class="m-in" id="editPass" type="password" />
+      <button type="button" class="pw-eye" onclick="togglePw('editPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
+    <p class="lbl-hint" style="margin:-6px 0 0">use o olho pra ver; edite o campo pra trocar a senha.</p>
     <div class="auth-err hidden" id="editErr"></div>
     <div class="m-actions">
       <button class="m-cancel" onclick="closeProfileModal()">cancelar</button>
       <button class="m-ok" id="editSaveBtn" onclick="saveProfile()">salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="migrateOverlay">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="m-title">padronizar acesso</div>
+    <p class="mig-sub">escolha um usuário<span id="migPwNote"> e uma senha nova</span> pra entrar mais fácil da próxima vez.</p>
+    <div class="m-field"><label>Usuário</label><input class="m-in" id="migUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
+    <div id="migPwWrap">
+      <div class="m-field pw-field"><label>Nova senha</label><input class="m-in" id="migPw1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('migPw1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <div class="m-field"><label>Confirmar senha</label><input class="m-in" id="migPw2" type="password" placeholder="repita a senha" /></div>
+    </div>
+    <div class="auth-err hidden" id="migErr"></div>
+    <div class="m-actions">
+      <button class="m-cancel" onclick="closeMigrate()">depois</button>
+      <button class="m-ok" id="migBtn" onclick="saveMigrate()">salvar</button>
     </div>
   </div>
 </div>
@@ -1623,6 +1639,7 @@ const CATS=[
 ];
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
+let curUsername=null, loggedWithPin=false;
 let modalKey=null, editIdx=-1, chart=null, saveTimer=null, pinBuf='', isParcelado=false, selCat=null,  heroVal=null;
 let prevInc=null, prevExp=null, prevSav=null;
 let recoveryMode=false;
@@ -1658,6 +1675,14 @@ const esc    = s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt
 const mkKey  = (y,m)=>`${y}-${String(m+1).padStart(2,'0')}`;
 const ini    = n=>n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const padPin = p=>p+'__margem';
+const MIN_PW = 6;
+const validUser = u=>/^[a-z0-9_.]{3,20}$/i.test(u);
+const credKey = uid=>'margem-cred-'+uid;
+function cacheCred(uid,pw){ try{ if(uid&&pw) localStorage.setItem(credKey(uid),pw); }catch(_){} }
+function readCred(uid){ try{ return localStorage.getItem(credKey(uid))||''; }catch(_){ return ''; } }
+function togglePw(id,btn){ const el=document.getElementById(id); const show=el.type==='password'; el.type=show?'text':'password'; btn.classList.toggle('on',show); }
+async function emailForUsername(u){ try{ const {data,error}=await sb.rpc('email_for_username',{uname:u}); if(error) throw error; return data||null; }catch(_){ return null; } }
+async function usernameAvailable(u){ try{ const {data,error}=await sb.rpc('username_available',{uname:u}); if(error) throw error; return !!data; }catch(_){ return null; } }
 const avc    = id=>{let h=0;for(let c of id)h=(h*31+c.charCodeAt(0))&0x7fffffff;return AV_COL[h%AV_COL.length];};
 const emptyMonth = ()=>{const o={};KEYS.forEach(k=>o[k]=[]);o.loans=[];return o;};
 const nowKey = ()=>{const n=new Date();return mkKey(n.getFullYear(),n.getMonth());};
@@ -1704,53 +1729,71 @@ function exportData(){
 
 // ── Login views ───────────────────────────────────────
 function showView(id){
-  ['vPicker','vLogin','vPin','vNew','vReset','vNewPin'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
+  ['vPicker','vLogin','vPass','vNew','vReset','vNewPass'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
   if(id==='vPicker') renderGrid();
-  if(id==='vNew')    setTimeout(()=>document.getElementById('nName').focus(),50);
-  if(id==='vLogin')  setTimeout(()=>document.getElementById('lEmail').focus(),50);
-  if(id==='vReset')  setTimeout(()=>document.getElementById('rEmail').focus(),50);
-  if(id==='vNewPin') setTimeout(()=>document.getElementById('npPin1').focus(),50);
+  const foc={vLogin:'lUser',vNew:'nEmail',vReset:'rEmail',vNewPass:'npPass1',vPass:'passInput'}[id];
+  if(foc) setTimeout(()=>document.getElementById(foc)?.focus(),50);
 }
 
 function renderGrid(){
   loadProfilesLocal();
-  document.getElementById('profileGrid').innerHTML=allProfiles.map(p=>`
+  const grid=document.getElementById('profileGrid');
+  if(!allProfiles.length){ grid.innerHTML='<p class="grid-empty">nenhuma conta salva neste aparelho</p>'; return; }
+  grid.innerHTML=allProfiles.map(p=>`
     <button class="u-tile" onclick="selectProfile('${p.id}')">
-      <div class="avatar" style="background:${p.avatar_color||avc(p.id)}">${ini(p.name)}</div>
-      <span class="u-name">${esc(p.name)}</span>
+      <div class="avatar" style="background:${p.avatar_color||avc(p.id)}">${ini(p.username||p.name)}</div>
+      <span class="u-name">${esc(p.username||p.name)}</span>
     </button>`).join('');
 }
 
 function selectProfile(id){
   selProfile=allProfiles.find(p=>p.id===id);
   if(!selProfile) return;
-  pinBuf='';
-  document.getElementById('pinWho').textContent=selProfile.name;
-  document.getElementById('pinErr').textContent='';
-  buildNumpad(); updateDots(); showView('vPin');
+  const nm=selProfile.username||selProfile.name;
+  const av=document.getElementById('passAv');
+  av.textContent=ini(nm); av.style.background=selProfile.avatar_color||avc(id);
+  document.getElementById('passName').textContent=nm;
+  const pi=document.getElementById('passInput'); pi.value=''; pi.type='password';
+  document.querySelector('#vPass .pw-eye')?.classList.remove('on');
+  document.getElementById('passErr').classList.add('hidden');
+  showView('vPass');
 }
 
-function buildNumpad(){
-  document.getElementById('numpad').innerHTML=[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>
-    k===''?'<div></div>':`<button class="nk${k==='⌫'?' del':''}" onclick="pinPress('${k}')">${k}</button>`
-  ).join('');
-}
-function updateDots(){ for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('on',i<pinBuf.length); }
-
-async function pinPress(k){
-  if(k==='⌫'){ pinBuf=pinBuf.slice(0,-1); updateDots(); return; }
-  if(pinBuf.length>=4) return;
-  pinBuf+=k; updateDots();
-  if(pinBuf.length===4){
-    const {data,error}=await sb.auth.signInWithPassword({email:selProfile.email,password:padPin(pinBuf)});
-    if(error){
-      document.getElementById('pinErr').textContent='PIN incorreto';
-      setTimeout(()=>{pinBuf='';document.getElementById('pinErr').textContent='';updateDots();},900);
-    } else {
-      curUser=data.user;
-      await bootApp();
-    }
+async function loginWith(email,pw,errEl,btn){
+  errEl.classList.add('hidden');
+  const lbl=btn.textContent; btn.disabled=true; btn.textContent='entrando…';
+  let {data,error}=await sb.auth.signInWithPassword({email,password:pw});
+  let legacy=false;
+  if(error && /^\d{4}$/.test(pw)){
+    const r2=await sb.auth.signInWithPassword({email,password:padPin(pw)});
+    if(!r2.error){ data=r2.data; error=null; legacy=true; }
   }
+  btn.disabled=false; btn.textContent=lbl;
+  if(error){ errEl.textContent=traduzErro(error.message); errEl.classList.remove('hidden'); return false; }
+  curUser=data.user; loggedWithPin=legacy;
+  if(!legacy) cacheCred(curUser.id,pw);
+  await bootApp();
+  return true;
+}
+async function doTileLogin(){
+  const pw=document.getElementById('passInput').value;
+  const err=document.getElementById('passErr');
+  if(!pw){ err.textContent='digite sua senha.'; err.classList.remove('hidden'); return; }
+  await loginWith(selProfile.email,pw,err,document.getElementById('passBtn'));
+}
+async function doLogin(){
+  const idv=document.getElementById('lUser').value.trim();
+  const pw =document.getElementById('lPass').value;
+  const err=document.getElementById('lErr'); err.classList.add('hidden');
+  if(!idv||!pw){ err.textContent='preencha usuário e senha.'; err.classList.remove('hidden'); return; }
+  let email=idv;
+  if(!idv.includes('@')){
+    const btn=document.getElementById('lBtn'); btn.disabled=true; btn.textContent='entrando…';
+    email=await emailForUsername(idv);
+    btn.disabled=false; btn.textContent='entrar';
+    if(!email){ err.textContent='usuário não encontrado.'; err.classList.remove('hidden'); return; }
+  }
+  await loginWith(email,pw,err,document.getElementById('lBtn'));
 }
 
 // Redefinir PIN — envia e-mail de recuperação
@@ -1774,84 +1817,60 @@ async function doResetPassword(){
   document.getElementById('rEmail').value='';
 }
 
-// Salvar novo PIN (chegou pelo link de recuperação)
-async function doSaveNewPin(){
-  const pin1=document.getElementById('npPin1').value.trim();
-  const pin2=document.getElementById('npPin2').value.trim();
-  const err=document.getElementById('npErr');
-  err.classList.add('hidden');
-  if(!/^\d{4}$/.test(pin1)){ err.textContent='PIN deve ter exatamente 4 dígitos.'; err.classList.remove('hidden'); return; }
-  if(pin1!==pin2){ err.textContent='Os PINs não conferem.'; err.classList.remove('hidden'); return; }
-
-  const btn=document.getElementById('npBtn');
-  btn.disabled=true; btn.textContent='salvando…';
-
-  const {error}=await sb.auth.updateUser({password:padPin(pin1)});
-  btn.disabled=false; btn.textContent='salvar novo PIN';
-
+// Nova senha (chegou pelo link de recuperação)
+async function doSaveNewPass(){
+  const p1=document.getElementById('npPass1').value;
+  const p2=document.getElementById('npPass2').value;
+  const err=document.getElementById('npErr'); err.classList.add('hidden');
+  if(p1.length<MIN_PW){ err.textContent='a senha precisa de pelo menos 6 caracteres.'; err.classList.remove('hidden'); return; }
+  if(p1!==p2){ err.textContent='as senhas não conferem.'; err.classList.remove('hidden'); return; }
+  const btn=document.getElementById('npBtn'); btn.disabled=true; btn.textContent='salvando…';
+  const {error}=await sb.auth.updateUser({password:p1});
+  btn.disabled=false; btn.textContent='salvar nova senha';
   if(error){ err.textContent=traduzErro(error.message); err.classList.remove('hidden'); return; }
-  toast('PIN redefinido com sucesso ✓');
-  await bootApp();
-}
-
-// Login com e-mail + PIN (novo dispositivo)
-async function doEmailLogin(){
-  const email=document.getElementById('lEmail').value.trim();
-  const pin  =document.getElementById('lPin').value.trim();
-  const err  =document.getElementById('lErr');
-  err.classList.add('hidden');
-  if(!email||!/^\d{4}$/.test(pin)){ err.textContent='Preencha e-mail e PIN (4 dígitos).'; err.classList.remove('hidden'); return; }
-
-  const btn=document.getElementById('lBtn');
-  btn.disabled=true; btn.textContent='entrando…';
-
-  const {data,error}=await sb.auth.signInWithPassword({email,password:padPin(pin)});
-  btn.disabled=false; btn.textContent='entrar';
-
-  if(error){ err.textContent=traduzErro(error.message); err.classList.remove('hidden'); return; }
-
-  curUser=data.user;
+  if(curUser) cacheCred(curUser.id,p1);
+  recoveryMode=false;
+  toast('senha redefinida ✓');
   await bootApp();
 }
 
 // Criar conta
 async function createProfile(){
-  const name =document.getElementById('nName').value.trim();
   const email=document.getElementById('nEmail').value.trim();
-  const pin  =document.getElementById('nPin').value.trim();
-  const errEl=document.getElementById('nErr');
-  errEl.classList.add('hidden');
-
-  if(!name)              { errEl.textContent='Digite seu nome.';                errEl.classList.remove('hidden'); return; }
-  if(!email)             { errEl.textContent='Digite seu e-mail.';              errEl.classList.remove('hidden'); return; }
-  if(!/^\d{4}$/.test(pin)){ errEl.textContent='PIN deve ter exatamente 4 dígitos.'; errEl.classList.remove('hidden'); return; }
-
-  const btn=document.getElementById('nBtn');
-  btn.disabled=true; btn.textContent='criando…';
-
+  const user =document.getElementById('nUser').value.trim();
+  const pw   =document.getElementById('nPass').value;
+  const pw2  =document.getElementById('nPass2').value;
+  const err  =document.getElementById('nErr'); err.classList.add('hidden');
+  const fail=m=>{ err.textContent=m; err.classList.remove('hidden'); };
+  if(!email||!email.includes('@')) return fail('digite um e-mail válido.');
+  if(!validUser(user)) return fail('usuário: 3 a 20 letras, números, . ou _');
+  if(pw.length<MIN_PW) return fail('a senha precisa de pelo menos 6 caracteres.');
+  if(pw!==pw2) return fail('as senhas não conferem.');
+  const btn=document.getElementById('nBtn'); btn.disabled=true; btn.textContent='criando…';
+  const avail=await usernameAvailable(user);
+  if(avail===false){ btn.disabled=false; btn.textContent='criar conta'; return fail('esse usuário já existe. escolhe outro.'); }
   const color=AV_COL[Math.floor(Math.random()*AV_COL.length)];
-
-  const {data,error}=await sb.auth.signUp({
-    email, password:padPin(pin),
-    options:{ data:{name, avatar_color:color} }
-  });
-
+  const {data,error}=await sb.auth.signUp({ email, password:pw, options:{data:{name:user,avatar_color:color}} });
   btn.disabled=false; btn.textContent='criar conta';
-
-  if(error){ errEl.textContent=traduzErro(error.message); errEl.classList.remove('hidden'); return; }
-  if(!data.session){ errEl.textContent='Verifique seu e-mail para confirmar a conta.'; errEl.classList.remove('hidden'); return; }
-
-  curUser=data.user;
-  // Salva perfil localmente imediatamente
-  saveProfileLocal({id:curUser.id, name, email, avatar_color:color});
+  if(error) return fail(traduzErro(error.message));
+  if(!data.session){
+    try{ localStorage.setItem('margem-pending-un',user); localStorage.setItem('margem-pending-pw',pw); }catch(_){}
+    return fail('conta criada! confirme o link no seu e-mail e volte pra entrar.');
+  }
+  curUser=data.user; loggedWithPin=false;
+  cacheCred(curUser.id,pw);
+  try{ await sb.from('usernames').upsert({user_id:curUser.id,username:user,updated_at:new Date().toISOString()}); }catch(_){}
+  saveProfileLocal({id:curUser.id,name:user,username:user,email,avatar_color:color});
   await bootApp();
 }
 
 function traduzErro(msg){
-  if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) return 'E-mail ou PIN incorreto.';
-  if(msg.includes('already registered')||msg.includes('already been registered')) return 'E-mail já cadastrado.';
-  if(msg.includes('security purposes')||msg.includes('rate limit')||msg.includes('too many')) return 'Muitas tentativas. Aguarde alguns segundos.';
-  if(msg.includes('Password should')) return 'PIN inválido.';
+  msg=msg||'';
+  if(msg.includes('Invalid login')||msg.includes('invalid_credentials')) return 'usuário ou senha incorretos.';
+  if(msg.includes('already registered')||msg.includes('already been registered')) return 'esse e-mail já tem conta.';
+  if(msg.includes('security purposes')||msg.includes('rate limit')||msg.includes('too many')) return 'muitas tentativas. espera alguns segundos.';
+  if(msg.includes('Password should')) return 'senha muito curta (mín. 6).';
+  if(msg.includes('Unable to validate email')||msg.includes('invalid format')) return 'e-mail inválido.';
   return msg;
 }
 
@@ -1875,19 +1894,84 @@ async function bootApp(){
   if(!profile){
     const nm  = curUser.user_metadata?.name  || curUser.email.split('@')[0];
     const col = curUser.user_metadata?.avatar_color || avc(curUser.id);
-    profile={id:curUser.id, name:nm, email:curUser.email, avatar_color:col};
+    profile={id:curUser.id, name:nm, username:nm, email:curUser.email, avatar_color:col};
     saveProfileLocal(profile);
   }
 
-  document.getElementById('hdrAv').textContent=ini(profile.name);
+  const disp=profile.username||profile.name;
+  document.getElementById('hdrAv').textContent=ini(disp);
   document.getElementById('hdrAv').style.background=profile.avatar_color;
-  document.getElementById('hdrNm').textContent=profile.name;
+  document.getElementById('hdrNm').textContent=disp;
 
   applyDark(dark);
   await loadAllMonths();
   initSelectors();
   wishInit();
+  ensureUsername();
   setTimeout(()=>document.getElementById('loadOverlay').classList.add('fade'),200);
+}
+
+function setHeaderUser(u){
+  curUsername=u;
+  document.getElementById('hdrNm').textContent=u;
+  document.getElementById('hdrAv').textContent=ini(u);
+  const p=allProfiles.find(x=>x.id===curUser.id);
+  if(p){ p.username=u; p.name=u; saveProfileLocal(p); }
+}
+async function ensureUsername(){
+  let uname=null;
+  try{ const {data}=await sb.from('usernames').select('username').eq('user_id',curUser.id).maybeSingle(); uname=data?.username||null; }catch(_){}
+  if(!uname){
+    const pend=localStorage.getItem('margem-pending-un');
+    if(pend){
+      const av=await usernameAvailable(pend);
+      if(av!==false){
+        const {error}=await sb.from('usernames').upsert({user_id:curUser.id,username:pend,updated_at:new Date().toISOString()});
+        if(!error){ uname=pend; const pw=localStorage.getItem('margem-pending-pw'); if(pw) cacheCred(curUser.id,pw); localStorage.removeItem('margem-pending-un'); localStorage.removeItem('margem-pending-pw'); }
+      }
+    }
+  }
+  if(uname){ setHeaderUser(uname); return; }
+  openMigrateModal();
+}
+function openMigrateModal(){
+  document.getElementById('migPwWrap').style.display=loggedWithPin?'':'none';
+  document.getElementById('migPwNote').style.display=loggedWithPin?'':'none';
+  document.getElementById('migUser').value='';
+  document.getElementById('migPw1').value='';
+  document.getElementById('migPw2').value='';
+  document.getElementById('migErr').classList.add('hidden');
+  document.getElementById('migrateOverlay').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('migUser').focus(),80);
+}
+function closeMigrate(){ document.getElementById('migrateOverlay').classList.add('hidden'); }
+async function saveMigrate(){
+  const user=document.getElementById('migUser').value.trim();
+  const err=document.getElementById('migErr'); err.classList.add('hidden');
+  const fail=m=>{ err.textContent=m; err.classList.remove('hidden'); };
+  if(!validUser(user)) return fail('usuário: 3 a 20 letras, números, . ou _');
+  let pw=null;
+  if(loggedWithPin){
+    const p1=document.getElementById('migPw1').value, p2=document.getElementById('migPw2').value;
+    if(p1.length<MIN_PW) return fail('a senha precisa de pelo menos 6 caracteres.');
+    if(p1!==p2) return fail('as senhas não conferem.');
+    pw=p1;
+  }
+  const btn=document.getElementById('migBtn'); btn.disabled=true; btn.textContent='salvando…';
+  const avail=await usernameAvailable(user);
+  if(avail===false){ btn.disabled=false; btn.textContent='salvar'; return fail('esse usuário já existe. escolhe outro.'); }
+  if(pw){
+    const {error}=await sb.auth.updateUser({password:pw});
+    if(error){ btn.disabled=false; btn.textContent='salvar'; return fail(traduzErro(error.message)); }
+    cacheCred(curUser.id,pw);
+  }
+  const {error:e2}=await sb.from('usernames').upsert({user_id:curUser.id,username:user,updated_at:new Date().toISOString()});
+  btn.disabled=false; btn.textContent='salvar';
+  if(e2) return fail(String(e2.message).includes('duplicate')?'esse usuário já existe.':e2.message);
+  loggedWithPin=false;
+  setHeaderUser(user);
+  closeMigrate();
+  toast('acesso padronizado ✓');
 }
 
 // ── Dados ─────────────────────────────────────────────
@@ -2676,20 +2760,26 @@ async function createInstallments(desc,val,n){
 function overlayClick(e){ if(e.target===document.getElementById('overlay')) closeModal(); }
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); closeNewBox(); closeBoxDetail(); closeWish(); closeWishBuy(); propKeep(); delPropCancel(); }
+  if(e.key==='Escape'){ creditKeep(); closeModal(); closeAnnual(); closeCal(); closeDelMonth(); closeCover(); closeLoansTab(); closePartial(); closeFatura(); closeBuy(); closeShop(); closeScore(); closeNewBox(); closeBoxDetail(); closeWish(); closeWishBuy(); closeMigrate(); propKeep(); delPropCancel(); }
   if(e.key==='Enter'){
     const f=document.activeElement;
     if(f?.id==='mDesc') document.getElementById('mVal').focus();
     else if(f?.id==='mVal'){ if(isParcelado) document.getElementById('mParcelas').focus(); else confirmModal(); }
     else if(f?.id==='mParcelas') confirmModal();
-    else if(f?.id==='nName') document.getElementById('nEmail').focus();
-    else if(f?.id==='nEmail') document.getElementById('nPin').focus();
-    else if(f?.id==='nPin') createProfile();
-    else if(f?.id==='lEmail') document.getElementById('lPin').focus();
-    else if(f?.id==='lPin') doEmailLogin();
+    else if(f?.id==='nEmail') document.getElementById('nUser').focus();
+    else if(f?.id==='nUser') document.getElementById('nPass').focus();
+    else if(f?.id==='nPass') document.getElementById('nPass2').focus();
+    else if(f?.id==='nPass2') createProfile();
+    else if(f?.id==='lUser') document.getElementById('lPass').focus();
+    else if(f?.id==='lPass') doLogin();
+    else if(f?.id==='passInput') doTileLogin();
     else if(f?.id==='rEmail') doResetPassword();
-    else if(f?.id==='npPin1') document.getElementById('npPin2').focus();
-    else if(f?.id==='npPin2') doSaveNewPin();
+    else if(f?.id==='npPass1') document.getElementById('npPass2').focus();
+    else if(f?.id==='npPass2') doSaveNewPass();
+    else if(f?.id==='migUser'){ if(loggedWithPin) document.getElementById('migPw1').focus(); else saveMigrate(); }
+    else if(f?.id==='migPw1') document.getElementById('migPw2').focus();
+    else if(f?.id==='migPw2') saveMigrate();
+    else if(f?.id==='editUser') document.getElementById('editEmail').focus();
     else if(f?.id==='boxFixInput') boxFixSave();
     else if(f?.id==='wishName') document.getElementById('wishLink').focus();
     else if(f?.id==='wishLink') document.getElementById('wishVal').focus();
@@ -2812,19 +2902,20 @@ document.addEventListener('click',e=>{
 function openProfileModal(){
   document.getElementById('uMenu').classList.add('hidden');
   const profile=allProfiles.find(p=>p.id===curUser.id);
-  document.getElementById('editName').value = profile?.name || '';
-  document.getElementById('editPin1').value = '';
-  document.getElementById('editPin2').value = '';
+  document.getElementById('editUser').value = curUsername || profile?.username || profile?.name || '';
+  document.getElementById('editEmail').value = profile?.email || curUser.email || '';
+  const cred=readCred(curUser.id);
+  const pw=document.getElementById('editPass'); pw.value=cred; pw.type='password'; pw.placeholder=cred?'':'senha não salva neste aparelho';
+  document.querySelector('#profileOverlay .pw-eye')?.classList.remove('on');
   document.getElementById('editErr').classList.add('hidden');
 
-  // Render color swatches
   selectedColor = profile?.avatar_color || avc(curUser.id);
   document.getElementById('colorSwatches').innerHTML = AV_COL.map(c=>`
     <div class="cswatch${c===selectedColor?' sel':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
   `).join('');
 
   document.getElementById('profileOverlay').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('editName').focus(),60);
+  setTimeout(()=>document.getElementById('editUser').focus(),60);
 }
 
 function selectColor(c){
@@ -2837,44 +2928,45 @@ function closeProfileModal(){ document.getElementById('profileOverlay').classLis
 function profileOverlayClick(e){ if(e.target===document.getElementById('profileOverlay')) closeProfileModal(); }
 
 async function saveProfile(){
-  const name = document.getElementById('editName').value.trim();
-  const pin1 = document.getElementById('editPin1').value.trim();
-  const pin2 = document.getElementById('editPin2').value.trim();
-  const errEl= document.getElementById('editErr');
-  errEl.classList.add('hidden');
+  const user = document.getElementById('editUser').value.trim();
+  const email= document.getElementById('editEmail').value.trim();
+  const pass = document.getElementById('editPass').value;
+  const errEl= document.getElementById('editErr'); errEl.classList.add('hidden');
+  const fail=m=>{ errEl.textContent=m; errEl.classList.remove('hidden'); };
+  if(!validUser(user)) return fail('usuário: 3 a 20 letras, números, . ou _');
+  if(!email||!email.includes('@')) return fail('e-mail inválido.');
 
-  if(!name){ errEl.textContent='O nome não pode ser vazio.'; errEl.classList.remove('hidden'); return; }
-
-  const changingPin = pin1 || pin2;
-  if(changingPin){
-    if(!/^\d{4}$/.test(pin1)){ errEl.textContent='Novo PIN deve ter 4 dígitos.'; errEl.classList.remove('hidden'); return; }
-    if(pin1!==pin2){ errEl.textContent='Os PINs não coincidem.'; errEl.classList.remove('hidden'); return; }
-  }
-
-  const btn=document.getElementById('editSaveBtn');
-  btn.disabled=true; btn.textContent='salvando…';
-
-  // Atualiza PIN no Supabase (se solicitado)
-  if(changingPin){
-    const {error}=await sb.auth.updateUser({password: padPin(pin1)});
-    if(error){ errEl.textContent='Erro ao alterar PIN: '+error.message; errEl.classList.remove('hidden'); btn.disabled=false; btn.textContent='salvar'; return; }
-  }
-
-  // Atualiza nome e cor localmente
+  const cred=readCred(curUser.id);
   const profile=allProfiles.find(p=>p.id===curUser.id);
-  if(profile){
-    profile.name=name;
-    profile.avatar_color=selectedColor;
-    saveProfileLocal(profile);
+  const prevUser=curUsername||profile?.username||profile?.name;
+  const btn=document.getElementById('editSaveBtn'); btn.disabled=true; btn.textContent='salvando…';
+  const stop=m=>{ btn.disabled=false; btn.textContent='salvar'; fail(m); };
+
+  if(user!==prevUser){
+    const av=await usernameAvailable(user);
+    if(av===false) return stop('esse usuário já existe.');
+    const {error}=await sb.from('usernames').upsert({user_id:curUser.id,username:user,updated_at:new Date().toISOString()});
+    if(error) return stop(String(error.message).includes('duplicate')?'esse usuário já existe.':error.message);
+    curUsername=user;
   }
-
-  // Atualiza header
-  document.getElementById('hdrNm').textContent=name;
-  document.getElementById('hdrAv').textContent=ini(name);
+  if(pass && pass!==cred){
+    if(pass.length<MIN_PW) return stop('a senha precisa de pelo menos 6 caracteres.');
+    const {error}=await sb.auth.updateUser({password:pass});
+    if(error) return stop(traduzErro(error.message));
+    cacheCred(curUser.id,pass);
+  }
+  let emailMsg='';
+  if(email!==(profile?.email||curUser.email)){
+    const {error}=await sb.auth.updateUser({email});
+    if(error) return stop(traduzErro(error.message));
+    emailMsg=' — confirme no e-mail novo';
+  }
+  if(profile){ profile.username=user; profile.name=user; profile.avatar_color=selectedColor; if(!emailMsg) profile.email=email; saveProfileLocal(profile); }
+  document.getElementById('hdrNm').textContent=user;
+  document.getElementById('hdrAv').textContent=ini(user);
   document.getElementById('hdrAv').style.background=selectedColor;
-
   btn.disabled=false; btn.textContent='salvar';
-  closeProfileModal(); toast('perfil atualizado ✓');
+  closeProfileModal(); toast('perfil atualizado ✓'+emailMsg);
 }
 
 // ── Animação hero ─────────────────────────────────────
@@ -3994,7 +4086,7 @@ sb.auth.onAuthStateChange(async(event, session)=>{
     document.getElementById('app').classList.add('hidden');
     const lo=document.getElementById('loadOverlay');
     if(lo){ lo.classList.add('fade'); setTimeout(()=>lo.remove(),400); }
-    showView('vNewPin');
+    showView('vNewPass');
   }
 });
 
