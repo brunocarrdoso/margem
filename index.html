@@ -310,10 +310,10 @@ html[data-dark] .scard-avail.neg{background:#380a12;border-color:#921028}
 /* cards de grupo */
 .group{position:relative;overflow:visible;background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;padding:22px 24px;box-shadow:var(--shadow-sm);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px)}
 html[data-dark] .group{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(255,255,255,.022) 28px,rgba(255,255,255,.022) 29px)}
-.group-income{background-color:rgba(22,101,52,.04)}
-html[data-dark] .group-income{background-color:rgba(22,101,52,.08)}
-.group-expense{background-color:rgba(159,18,57,.03)}
-html[data-dark] .group-expense{background-color:rgba(159,18,57,.07)}
+.group-income{background-color:var(--surf)}
+html[data-dark] .group-income{background-color:var(--surf)}
+.group-expense{background-color:var(--surf)}
+html[data-dark] .group-expense{background-color:var(--surf)}
 .col:first-child .group:first-child{transform:rotate(-0.25deg)}
 .col:first-child .group:nth-child(2){transform:rotate(0.2deg)}
 .col:last-child .group:first-child{transform:rotate(0.3deg)}
@@ -329,8 +329,8 @@ html[data-dark] .group-expense{background-color:rgba(159,18,57,.07)}
 .group-expense .grp-nm::before{background:var(--red)}
 .grp-tot{font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0;letter-spacing:-.3px}
 /* micro-cards de item */
-.item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:3px;background:rgba(255,255,255,.25);border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 8px;transition:border-color .14s,background .14s,box-shadow .14s,transform .18s cubic-bezier(.22,1,.36,1)}
-html[data-dark] .item{background:rgba(255,255,255,.03)}
+.item{display:flex;align-items:center;gap:10px;padding:9px 12px;margin-bottom:3px;background:var(--surf2);border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 8px;transition:border-color .14s,background .14s,box-shadow .14s,transform .18s cubic-bezier(.22,1,.36,1)}
+html[data-dark] .item{background:var(--surf2)}
 .item:last-child{margin-bottom:0}
 .item:hover{border-style:solid;border-color:var(--bdr);background:rgba(255,255,255,.55);box-shadow:2px 2px 0 var(--bdr)}
 html[data-dark] .item:hover{background:rgba(255,255,255,.06)}
@@ -360,11 +360,11 @@ html[data-dark] .add-trig{background:rgba(255,255,255,.04);border-color:rgba(245
 .icon-btn-yr{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
 
 .sav-wrap{padding:14px 20px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
-.sav-in{background:rgba(109,40,217,.03);border:2px solid var(--ink);border-radius:12px 16px 14px 10px;padding:22px 24px;box-shadow:var(--shadow-sm);transform:rotate(0.2deg);position:relative;overflow:visible;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px)}
+.sav-in{background:var(--surf);border:2px solid var(--ink);border-radius:12px 16px 14px 10px;padding:22px 24px;box-shadow:var(--shadow-sm);transform:rotate(0.2deg);position:relative;overflow:visible;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px)}
 html[data-dark] .sav-in{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(255,255,255,.022) 28px,rgba(255,255,255,.022) 29px)}
 .sav-in:hover{animation:swingA .55s cubic-bezier(.22,1,.36,1) forwards;box-shadow:6px 6px 0 rgba(109,40,217,.3)}
 .sav-in::before{content:'';position:absolute;top:-9px;right:18%;width:40px;height:13px;background:rgba(109,40,217,.28);border-radius:3px;transform:rotate(1.8deg)}
-html[data-dark] .sav-in{background-color:rgba(109,40,217,.07);border-color:var(--ink)}
+html[data-dark] .sav-in{background-color:var(--surf);border-color:var(--ink)}
 .sav-hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:11px;border-bottom:1px solid var(--bdr-soft);margin-bottom:2px}
 .sav-nm,.loan-nm{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--t2);display:flex;align-items:center;gap:7px}
 .sav-nm::before{content:'';display:inline-block;width:5px;height:5px;border-radius:0;background:var(--purple);flex-shrink:0;transform:rotate(45deg)}
@@ -550,6 +550,23 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 .jlevel{transition:transform .9s cubic-bezier(.22,1,.36,1)}
 @keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-56px)}}
 @media(prefers-reduced-motion:reduce){.jar .wave{animation:none} .mascot{animation:none}}
+.grp-hd,.sav-hd{cursor:pointer;user-select:none}
+.grp-hd .grp-tot,.sav-hd .sav-tot{margin-left:auto}
+.grp-caret{margin-left:9px;font-size:17px;font-weight:700;color:var(--t4);transition:transform .28s cubic-bezier(.22,1,.36,1);flex-shrink:0;line-height:1}
+.group:not(.collapsed) .grp-caret,.sav-in:not(.collapsed) .grp-caret,.loan-in:not(.collapsed) .grp-caret{transform:rotate(90deg)}
+.grp-peek{display:none;flex-direction:column;gap:6px;padding-top:12px}
+.group.collapsed>.grp-peek,.sav-in.collapsed>.grp-peek,.loan-in.collapsed>.grp-peek{display:flex}
+.group.collapsed>[id^="rows-"],.group.collapsed>.grp-ft,.group.collapsed>.meter{display:none}
+.sav-in.collapsed>#boxesList,.sav-in.collapsed>.meter,.sav-in.collapsed>.grp-ft,.sav-in.collapsed>.box-lock{display:none}
+.loan-in.collapsed>[id^="rows-"],.loan-in.collapsed>.meter,.loan-in.collapsed>.grp-ft,.loan-in.collapsed>.loan-if{display:none}
+.peek-slip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surf2);border:1.5px solid var(--bdr);border-radius:8px 5px 8px 6px;padding:7px 12px;box-shadow:1.5px 1.5px 0 rgba(120,90,40,.13);animation:itemIn .28s cubic-bezier(.22,1,.36,1) backwards}
+html[data-dark] .peek-slip{box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35)}
+.peek-slip:nth-child(2){animation-delay:.05s} .peek-slip:nth-child(3){animation-delay:.1s}
+.peek-desc{font-size:12.5px;font-weight:600;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.peek-val{font-family:'Playfair Display',Georgia,serif;font-size:13px;font-weight:700;color:var(--t1);flex-shrink:0;font-variant-numeric:tabular-nums}
+.peek-val.neg{color:var(--red)} .peek-val.done{text-decoration:line-through;color:var(--t4)}
+.peek-more{font-size:11px;font-weight:600;color:var(--t4);text-align:center;padding-top:1px}
+.peek-empty{font-size:12px;color:var(--t4);font-style:italic;text-align:center;padding:9px 0 5px}
 .pager{display:flex;align-items:center;gap:7px;padding-top:10px}
 .pg-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1.5px solid var(--ink);border-radius:7px 4px 7px 5px;font-size:14px;color:var(--t1);cursor:pointer;line-height:1;box-shadow:2px 2px 0 var(--ink-sh);transition:all .14s cubic-bezier(.22,1,.36,1);padding:0;font-family:inherit}
 .pg-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
@@ -558,10 +575,10 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 .pg-lbl{font-size:10px;font-weight:700;color:var(--t3);font-variant-numeric:tabular-nums;letter-spacing:.5px}
 
 /* ── EMPRESTADO ───────────────────────────────────────── */
-.loan-in{background:rgba(217,119,6,.04);border:2px solid var(--ink);border-radius:16px 12px 10px 14px;padding:22px 24px;box-shadow:var(--shadow-sm);transform:rotate(-0.2deg);position:relative;overflow:visible;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px);display:flex;flex-direction:column}
+.loan-in{background:var(--surf);border:2px solid var(--ink);border-radius:16px 12px 10px 14px;padding:22px 24px;box-shadow:var(--shadow-sm);transform:rotate(-0.2deg);position:relative;overflow:visible;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(0,0,0,.03) 28px,rgba(0,0,0,.03) 29px);display:flex;flex-direction:column}
 #rows-loans{flex:1}
 .loan-in .grp-ft{margin-top:auto}
-html[data-dark] .loan-in{background-color:rgba(217,119,6,.07);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(255,255,255,.022) 28px,rgba(255,255,255,.022) 29px)}
+html[data-dark] .loan-in{background-color:var(--surf);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 28px,rgba(255,255,255,.022) 28px,rgba(255,255,255,.022) 29px)}
 @keyframes loanSwing{
   0%  {transform:rotate(-0.2deg) translateY(0)}
   35% {transform:rotate(0.9deg) translateY(-4px)}
@@ -799,8 +816,8 @@ html[data-dark] .shop-t::after{background-image:url("data:image/svg+xml,<svg xml
 .shop-done .m-field{margin-bottom:12px}
 
 /* ── CAIXINHAS ────────────────────────────────────────── */
-.box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s;background:rgba(255,255,255,.22)}
-html[data-dark] .box-row{background:rgba(255,255,255,.03)}
+.box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s;background:var(--surf2)}
+html[data-dark] .box-row{background:var(--surf2)}
 .box-row:hover,.wish-it:hover,.shop-it:hover{border-style:solid;border-color:var(--bdr);box-shadow:2px 2px 0 var(--bdr);transform:translateX(3px) rotate(.25deg);background:rgba(255,255,255,.5)}
 html[data-dark] .box-row:hover,html[data-dark] .wish-it:hover,html[data-dark] .shop-it:hover{background:rgba(255,255,255,.06)}
 .box-row.done{border-style:solid;border-color:rgba(74,222,128,.45)}
@@ -1176,6 +1193,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-income">
           <span class="wm" style="color:var(--green)">+</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><g fill="#a7d18a" stroke="#166534" stroke-width="1.8" stroke-linejoin="round"><path d="M8.5 12l2.5-3M23 12l-2.5-3" fill="none" stroke-linecap="round"/><ellipse cx="15.5" cy="18" rx="9.5" ry="7"/><ellipse cx="23" cy="18" rx="3.2" ry="2.8"/></g><circle cx="22.4" cy="17.4" r="0.8" fill="#166534"/><circle cx="23.8" cy="17.4" r="0.8" fill="#166534"/><path d="M12.5 14.5h5" stroke="#166534" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="#166534"/><path d="M11.5 23v2M19 23v2" stroke="#166534" stroke-width="1.8" stroke-linecap="round"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">renda fixa</span><span class="grp-tot c-green" id="tot-income-fixed">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-income-fixed"></div>
           <div id="rows-income-fixed"></div>
           <div class="grp-ft">
             <button class="add-trig" onclick="openModal('income-fixed')">+ adicionar</button>
@@ -1185,6 +1203,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-income">
           <span class="wm" style="color:var(--green)">≈</span><div class="mascot"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path d="M15 5l3 6.6 7.2 1-5.3 5 1.3 7.1L15 21.4 8.6 24.7l1.3-7.1-5.3-5 7.2-1z" fill="#ffd84d" stroke="#166534" stroke-width="1.8" stroke-linejoin="round"/><path d="M25 8l4-2M26.5 12.5l3.5-1" stroke="#7bbf5a" stroke-width="2" stroke-linecap="round"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">renda eventual</span><span class="grp-tot c-green" id="tot-income-extra">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-income-extra"></div>
           <div id="rows-income-extra"></div>
           <div class="grp-ft">
             <button class="add-trig" onclick="openModal('income-extra')">+ adicionar</button>
@@ -1197,6 +1216,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-expense">
           <span class="wm" style="color:var(--red)">−</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><path d="M6 15.5l10-8 10 8" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="8.5" y="15" width="15" height="11" rx="1.5" fill="#e6b8a8" stroke="#9f1239" stroke-width="1.8"/><rect x="13.5" y="19.5" width="5" height="6.5" fill="#9f1239"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">gastos fixos</span><span class="grp-tot c-red" id="tot-exp-fixed">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-exp-fixed"></div>
           <div id="rows-exp-fixed"></div>
           <div class="grp-ft">
             <button class="add-trig" onclick="openModal('exp-fixed')">+ adicionar</button>
@@ -1206,6 +1226,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
         <div class="group group-expense">
           <span class="wm" style="color:var(--amber)">?</span><div class="mascot"><svg viewBox="0 0 32 32" width="24" height="24" aria-hidden="true"><path d="M9 12h14l-1.4 13.6a2 2 0 0 1-2 1.9H12.4a2 2 0 0 1-2-1.9z" fill="#f0c98a" stroke="#b45309" stroke-width="1.8" stroke-linejoin="round"/><path d="M12.5 12.5v-2.5a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="#b45309" stroke-width="1.8"/></svg></div>
           <div class="grp-hd"><span class="grp-nm">gastos esporádicos</span><span class="grp-tot c-amber" id="tot-exp-extra">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-exp-extra"></div>
           <div id="rows-exp-extra"></div>
           <div class="meter hidden" id="meter-exp-extra"></div>
           <div class="grp-ft">
@@ -1220,6 +1241,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       <div class="sav-in">
         <span class="wm" style="color:var(--purple)">$</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><rect x="6" y="7" width="20" height="18" rx="2.5" fill="#d7c4f0" stroke="#6d28d9" stroke-width="1.8"/><circle cx="15" cy="16" r="5" fill="none" stroke="#6d28d9" stroke-width="1.8"/><circle cx="15" cy="16" r="1.4" fill="#6d28d9"/><path d="M15 11v-1.4M15 22.4V21M20 16h1.4M8.6 16H10" stroke="#6d28d9" stroke-width="1.5" stroke-linecap="round"/><path d="M9 25v2M23 25v2" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round"/></svg></div>
         <div class="sav-hd"><span class="sav-nm">caixinhas</span><span class="sav-tot c-purple" id="tot-savings">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-savings"></div>
         <div id="boxesList"></div>
         <div class="meter hidden" id="meter-savings"></div>
         <div class="grp-ft">
@@ -1229,7 +1251,8 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
       </div>
       <div class="loan-in">
         <span class="wm" style="color:var(--amber)">&amp;</span><div class="mascot"><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><circle cx="15" cy="17" r="8.5" fill="#f0c98a" stroke="#b45309" stroke-width="1.8"/><text x="15" y="21" text-anchor="middle" font-family="Georgia,serif" font-size="11" font-weight="700" fill="#b45309">$</text><path d="M23 9a9 9 0 0 1 1.8 5.5" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round"/><path d="M21.6 6.5l1.8 3.6-3.9 .8" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="sav-hd"><span class="loan-nm" onclick="openLoansTab()" style="cursor:pointer" title="ver todos os empréstimos">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
+        <div class="sav-hd"><span class="loan-nm" onclick="event.stopPropagation();openLoansTab()" style="cursor:pointer" title="ver todos os empréstimos">emprestado</span><span class="sav-tot c-amber" id="tot-loans">R$ 0,00</span></div>
+          <div class="grp-peek" id="peek-loans"></div>
         <div id="rows-loans"></div>
         <div class="meter hidden" id="meter-loans"></div>
         <div class="grp-ft">
@@ -1926,6 +1949,7 @@ async function bootApp(){
   initSelectors();
   wishInit();
   ensureUsername();
+  initSecCards();
   setTimeout(()=>document.getElementById('loadOverlay').classList.add('fade'),200);
 }
 
@@ -2186,6 +2210,7 @@ function renderRows(key){
       pager.innerHTML=`<button class="pg-btn" onclick="flipPage('${key}',-1)"${pg===0?' disabled':''}>‹</button><span class="pg-lbl">${pg+1}/${nP}</span><button class="pg-btn" onclick="flipPage('${key}',1)"${pg===nP-1?' disabled':''}>›</button>`;
     } else { pager.classList.add('hidden'); pager.innerHTML=''; }
   }
+  peekFill('peek-'+key, items.map(it=>({label:it.desc, value:(it.adj&&it.value>0?'+':'')+fmt(it.value), cls:it.value<0?'neg':''})), 'vazio — toque pra adicionar');
   if(!items.length){
     document.getElementById('rows-'+key).innerHTML='<div class="empty-state">'+(EMPTY_NM[key]||'nenhum lançamento')+'</div>';
     return;
@@ -2230,6 +2255,7 @@ function loanEntries(){
 }
 function renderLoans(){
   const list=loanEntries();
+  peekFill('peek-loans', list.map(({it})=>({label:it.desc, value:fmt(it.value), cls:it.recv?'done':''})), 'ninguém te devendo');
   const sz=PAGE_SZ('loans');
   const nP=Math.max(1,Math.ceil(list.length/sz));
   const pg=Math.min(Math.max(pages['loans']||0,0),nP-1);
@@ -2409,6 +2435,27 @@ function loanAdj(mk){
 }
 
 let jarSeq=0; const lastTot={};
+function peekFill(id, arr, empty){
+  const el=document.getElementById(id); if(!el) return;
+  if(!arr.length){ el.innerHTML=`<div class="peek-empty">${empty}</div>`; return; }
+  const show=arr.slice(0,3), more=arr.length-show.length;
+  let h=show.map((it,i)=>`<div class="peek-slip" style="transform:rotate(${i%2?0.7:-0.7}deg)"><span class="peek-desc">${esc(it.label)}</span><span class="peek-val${it.cls?' '+it.cls:''}">${it.value}</span></div>`).join('');
+  if(more>0) h+=`<div class="peek-more">+${more} ${more===1?'item':'itens'}</div>`;
+  el.innerHTML=h;
+}
+function toggleSec(card,e){
+  if(card.classList.contains('collapsed')){ card.classList.remove('collapsed'); return; }
+  if(e.target.closest('.grp-hd,.sav-hd')) card.classList.add('collapsed');
+}
+function initSecCards(){
+  document.querySelectorAll('.group,.sav-in,.loan-in').forEach(card=>{
+    if(card.dataset.secInit) return; card.dataset.secInit='1';
+    card.classList.add('collapsed');
+    const hd=card.querySelector('.grp-hd,.sav-hd');
+    if(hd&&!hd.querySelector('.grp-caret')){ const c=document.createElement('span'); c.className='grp-caret'; c.textContent='›'; hd.appendChild(c); }
+    card.addEventListener('click',e=>toggleSec(card,e));
+  });
+}
 function setTot(id,v){
   const el=document.getElementById(id); if(!el) return;
   const from=(id in lastTot)?lastTot[id]:0; lastTot[id]=v;
@@ -3390,6 +3437,7 @@ function renderBoxes(){
       <div class="box-bot"><button class="box-add" onclick="event.stopPropagation();depositTo('${b.id}')">+ guardar</button><span class="box-pct">${done?'✓ completa':tgt>0?Math.round(pct)+'%':'livre'}</span></div>
     </div>`;
   }).join('');
+  peekFill('peek-savings', allBoxes().map(b=>({label:b.name, value:fmt(boxBalance(b.id))})), 'sem caixinhas');
   const full=emergFull();
   document.getElementById('newBoxBtn')?.classList.toggle('hidden',!full);
   document.getElementById('boxLock')?.classList.toggle('hidden',full);
