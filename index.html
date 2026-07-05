@@ -35,9 +35,9 @@
   --shadow-red:5px 5px 0 rgba(232,68,46,.5);
 }
 html[data-dark] {
-  --bg:#211d16; --surf:#2a251d; --surf2:#332d23; --bdr:#4a4234; --bdr-soft:#3a3328;
+  --bg:#1b1710; --surf:#2d2818; --surf2:#383121; --bdr:#463f2c; --bdr-soft:#332e20;
   --t1:#f4eedf; --t2:#e3dbc8; --t3:#b3a992; --t4:#877c66;
-  --ink:#efe6d2; --ink-sh:rgba(0,0,0,.6);
+  --ink:#0f0c07; --ink-sh:rgba(0,0,0,.5);
   --pop:#f2b705;
   --blue:#d99a2a; --blue-d:#c78a1e; --blue-bg:rgba(217,154,42,.16);
   --amber:#e08a2a; --amber-bg:rgba(224,138,42,.16);
@@ -1021,11 +1021,8 @@ html[data-dark] .meta-row{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,
 .item-cat,.item-pay-badge,.item-day-badge,.cal-chip,.cal-cell,.due-bar,.due-chip,.due-lb,.card-fatura,.l-pill,.l-pill-badge,
 .wish-form,.wish-it,.wish-pr,.wish-req,.wish-st,.shop-it,.box-row,.nk,.item,.meter,.prog-tr,.prog-fi,.mp,.field,
 .numpad,.numpad .nk,.overlay .modal,.sc-band,.sc-delta,.hst-tr{border-radius:0}
-html[data-dark] .pocket-card,html[data-dark] .scard,html[data-dark] .metas-in,html[data-dark] .meta-row,
-html[data-dark] .chart-in,html[data-dark] .modal,html[data-dark] .ann-modal,html[data-dark] .l-card,
-html[data-dark] .meta-bar,html[data-dark] .tool-strip,html[data-dark] .u-pill,html[data-dark] .u-menu,
-html[data-dark] .mob-bar,html[data-dark] .pin-box,html[data-dark] .icon-btn,html[data-dark] .yr-nav,
-html[data-dark] .m-in,html[data-dark] .field input,html[data-dark] .btn-p{border-color:var(--pop)}
+html[data-dark] .pocket-card,html[data-dark] .scard,html[data-dark] .metas-in,html[data-dark] .meta-row,html[data-dark] .chart-in{box-shadow:5px 6px 0 rgba(0,0,0,.45)}
+html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
 </style>
 </head>
 <body>
@@ -3458,10 +3455,11 @@ function renderMetas(eF,eX,sv,totalSaved){
       <div class="meta-lbl">${r.lbl}</div>
       <div class="meta-val">${fmt(r.alvo)}</div>
       <div class="meta-desc">${r.desc}</div>
-      <div class="meta-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" style="width:${pct.toFixed(1)}%"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div>
+      <div class="meta-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" data-w="${pct.toFixed(1)}" style="width:0"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div>
       <div class="meta-st ${r.ok?'ok':'bad'}">${r.st}</div>
       ${r.extra?`<div class="meta-day">${r.extra}</div>`:''}
     </div>`;}).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{grid.querySelectorAll('.meta-fill').forEach(el=>{el.style.width=el.dataset.w+'%';});}));
 }
 
 // ── Caixinhas ─────────────────────────────────────────
