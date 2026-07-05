@@ -208,8 +208,10 @@ html[data-dark] .sidebar{background:var(--surf)}
 .yr-lbl{font-family:'Newsreader',Georgia,serif;font-size:14px;font-weight:700;color:var(--t1);min-width:40px;text-align:center;letter-spacing:-.3px}
 .sb-footer{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0}
 .sb-footer-btns{display:flex;gap:5px}
-.logo{font-family:'Newsreader',Georgia,serif;font-size:22px;font-weight:900;letter-spacing:-1px;color:var(--t1);flex-shrink:0;line-height:1;user-select:none}
-.logo span{color:var(--blue);font-style:italic;text-decoration:underline;text-decoration-color:rgba(180,83,9,.3);text-underline-offset:3px;text-decoration-thickness:1.5px}
+.logo{display:inline-flex;align-items:baseline;gap:3px;flex-shrink:0;line-height:1;user-select:none;cursor:pointer}
+.lg-mar{font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.01em;background:#1b1b1b;color:#f4eedf;padding:2px 7px 3px;transform:rotate(-2deg)}
+.lg-gem{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:500;font-size:20px;background:#f2b705;color:#1b1b1b;padding:0 7px 2px;transform:rotate(1.5deg);box-shadow:2px 2px 0 rgba(27,27,27,.85)}
+.logo .lg-gem{text-decoration:none}
 html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .3s;flex-shrink:0}
 .save-dot.show{opacity:1}
@@ -392,7 +394,7 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 @media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.6deg);width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}}
 @keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.m-title{display:inline-flex;width:fit-content;background:var(--pop);color:#241c12;border:1.5px solid var(--ink);padding:3px 10px 4px;border-radius:4px 2px 5px 3px;transform:rotate(-1deg);box-shadow:2px 2px 0 var(--ink-sh);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px}
+.m-title{display:inline-flex;width:fit-content;background:var(--ink);color:var(--pop);border:none;padding:3px 12px 4px;border-radius:0;transform:rotate(-1.5deg);box-shadow:2px 2px 0 rgba(232,68,46,.85);font-family:'Anton',sans-serif;font-weight:400;font-size:14px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:20px}
 .m-field{margin-bottom:14px}
 .m-field label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
 .m-in{width:100%;border:1.5px solid var(--bdr);border-radius:10px 8px 10px 8px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--t1);background:var(--bg);outline:none;transition:border-color .15s;-webkit-appearance:none}
@@ -1010,6 +1012,20 @@ html[data-dark] .meta-row{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,
 .cal-noday-item:last-child{border-bottom:none}
 .cal-noday-item span{font-family:'Newsreader',Georgia,serif;font-weight:700;font-size:13px}
 .cal-empty-msg{text-align:center;color:var(--t4);font-style:italic;padding:28px 0;font-size:14px}
+
+/* ── Pop-Colagem · camada 3: cantos retos + borda escura amarela ── */
+.btn-p,.btn-g,.m-ok,.m-cancel,.m-in,.field input,.goal-input,.add-trig,.cover-btn,.bv-add,.buy-verdict,
+.shop-add-btn,.loan-recv-btn,.loan-part-btn,.loan-pp-chip,.loan-paid-badge,.loan-sum,.carry-btn-g,.carry-btn-p,.carry-card,
+.pg-btn,.chart-nav-btn,.yr-nav,.yr-btn,.sel,.icon-btn,.tool-strip,.mob-bar,.mob-bar button,.u-pill,.u-menu,.u-menu button,
+.modal,.ann-modal,.ann-close,.l-card,.pin-box,.u-tile,.u-new,.toast,.toast-undo,.cat-pill,.cat-break-lb,
+.item-cat,.item-pay-badge,.item-day-badge,.cal-chip,.cal-cell,.due-bar,.due-chip,.due-lb,.card-fatura,.l-pill,.l-pill-badge,
+.wish-form,.wish-it,.wish-pr,.wish-req,.wish-st,.shop-it,.box-row,.nk,.item,.meter,.prog-tr,.prog-fi,.mp,.field,
+.numpad,.numpad .nk,.overlay .modal,.sc-band,.sc-delta,.hst-tr{border-radius:0}
+html[data-dark] .pocket-card,html[data-dark] .scard,html[data-dark] .metas-in,html[data-dark] .meta-row,
+html[data-dark] .chart-in,html[data-dark] .modal,html[data-dark] .ann-modal,html[data-dark] .l-card,
+html[data-dark] .meta-bar,html[data-dark] .tool-strip,html[data-dark] .u-pill,html[data-dark] .u-menu,
+html[data-dark] .mob-bar,html[data-dark] .pin-box,html[data-dark] .icon-btn,html[data-dark] .yr-nav,
+html[data-dark] .m-in,html[data-dark] .field input,html[data-dark] .btn-p{border-color:var(--pop)}
 </style>
 </head>
 <body>
@@ -1120,7 +1136,7 @@ html[data-dark] .meta-row{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,
 
   <aside class="sidebar">
     <div class="sb-head">
-      <div class="logo" onclick="logoEgg()">mar<span>gem</span></div>
+      <div class="logo" onclick="logoEgg()"><span class="lg-mar">mar</span><span class="lg-gem">gem</span></div>
       <div class="save-dot" id="saveDot"></div>
     </div>
     <nav class="sb-nav">
