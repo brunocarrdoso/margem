@@ -588,7 +588,7 @@ html[data-dark] .peek-slip{box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35)}
 .peek-empty{font-size:12px;color:var(--t4);font-style:italic;text-align:center;padding:9px 0 5px}
 .dash{padding:16px 22px 0;display:flex;flex-direction:column;gap:26px;animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
 .dash>.metas-wrap{padding:0}
-.pockets{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 22px;align-items:stretch;grid-auto-rows:1fr}
+.pockets{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);grid-auto-flow:column;gap:26px 22px;align-items:stretch}
 .pocket-card{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:150px;background:var(--surf);border:2px solid var(--ink);border-radius:0;box-shadow:var(--shadow-sm);cursor:pointer;padding:20px 22px 18px;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s}
 .pocket-card::before{content:'';position:absolute;top:-11px;left:20%;width:74px;height:22px;background:var(--tape);transform:rotate(calc(var(--rot) * -4deg));box-shadow:0 1px 2px rgba(0,0,0,.2)}
 .pocket-card:nth-child(3n+2)::before{left:auto;right:24%;transform:rotate(calc(var(--rot) * 4deg))} .pocket-card:nth-child(3n)::before{left:38%;transform:rotate(calc(var(--rot) * -1.5deg))}
@@ -618,8 +618,8 @@ html[data-dark] .pc-slip{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,0
 .pc-front .meter{width:100%;align-self:stretch;background:var(--surf);border:1.5px solid var(--bdr);border-radius:11px 8px 11px 9px;padding:10px 13px;margin-top:auto;box-shadow:1.5px 2px 0 rgba(120,90,40,.1)}
 html[data-dark] .pc-front .meter{box-shadow:1.5px 2px 0 rgba(0,0,0,.35)}
 .sec-list{margin-bottom:14px;max-height:min(56vh,520px);overflow-y:auto}
-@media(max-width:680px){.pockets{grid-template-columns:1fr 1fr;gap:20px 14px} .metas-grid{grid-template-columns:1fr}}
-@media(max-width:440px){.pockets{grid-template-columns:1fr}}
+@media(max-width:680px){.pockets{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-flow:row;grid-auto-rows:1fr;gap:20px 14px} .metas-grid{grid-template-columns:1fr}}
+@media(max-width:440px){.pockets{grid-template-columns:1fr;grid-auto-rows:auto}}
 .pager{display:flex;align-items:center;gap:7px;padding-top:10px}
 .pg-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1.5px solid var(--ink);border-radius:7px 4px 7px 5px;font-size:14px;color:var(--t1);cursor:pointer;line-height:1;box-shadow:2px 2px 0 var(--ink-sh);transition:all .14s cubic-bezier(.22,1,.36,1);padding:0;font-family:inherit}
 .pg-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:3px 3px 0 var(--ink-sh)}
@@ -1276,25 +1276,25 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
           <div class="pc-total c-green" id="tot-income-fixed">R$ 0,00</div>
           <div class="pc-sub">entrando todo mês</div>
         </div>
-        <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
-          <span class="pc-chip">gastos fixos</span>
-          <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
-          <div class="pc-sub">saindo todo mês</div>
-        </div>
-        <div class="pocket-card rc-amber" onclick="openSec('loans')">
-          <span class="pc-chip">emprestado</span>
-          <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
-          <div class="pc-sub">a receber</div>
-        </div>
         <div class="pocket-card rc-income" onclick="openSec('income-extra')">
           <span class="pc-chip">renda eventual</span>
           <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
           <div class="pc-sub">um extra este mês</div>
         </div>
+        <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
+          <span class="pc-chip">gastos fixos</span>
+          <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
+          <div class="pc-sub">saindo todo mês</div>
+        </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-extra')">
           <span class="pc-chip">gastos esporádicos</span>
           <div class="pc-total c-red" id="tot-exp-extra">R$ 0,00</div>
           <div class="pc-sub">controle do mês</div>
+        </div>
+        <div class="pocket-card rc-amber" onclick="openSec('loans')">
+          <span class="pc-chip">emprestado</span>
+          <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
+          <div class="pc-sub">a receber</div>
         </div>
         <div class="pocket-card rc-purple" onclick="openSec('savings')">
           <span class="pc-chip">caixinhas</span>
