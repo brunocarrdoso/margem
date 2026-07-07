@@ -341,7 +341,7 @@ html[data-dark] .item:hover{background:rgba(255,255,255,.06)}
 .group-income .item-dot{background:var(--green)}
 .group-expense .item-dot{background:var(--red)}
 .sav-in .item-dot{background:var(--purple)}
-.item-desc{flex:1;font-size:13px;font-weight:500;color:var(--t1);display:flex;flex-direction:column;justify-content:center;min-width:54px;overflow:hidden}
+.item-desc{flex:1;font-size:13px;font-weight:500;color:var(--t1);display:flex;flex-direction:column;justify-content:center;min-width:0;overflow:hidden}
 .item-cat-lb{font-size:9px;font-weight:600;letter-spacing:.3px;margin-top:2px;line-height:1.2;color:var(--t3);text-transform:uppercase}
 .item-val{font-family:'Newsreader',Georgia,serif;font-size:15px;font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap}
 .item-btns{display:flex;gap:2px;opacity:0;transition:opacity .12s;flex-shrink:0;position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--surf);border:1px solid var(--bdr-soft);border-radius:8px;padding:2px 3px;box-shadow:0 2px 8px rgba(0,0,0,.12);pointer-events:none;z-index:2}
@@ -350,7 +350,12 @@ html[data-dark] .item:hover{background:rgba(255,255,255,.06)}
 .del-btn,.edit-btn{width:20px;height:20px;background:none;border:none;cursor:pointer;font-size:13px;border-radius:6px 4px 6px 4px;display:flex;align-items:center;justify-content:center;transition:all .12s;line-height:1;color:var(--t4)}
 .del-btn:hover{color:var(--red);background:var(--red-bg)}
 .edit-btn:hover{color:var(--blue);background:var(--blue-bg)}
-#secList .item-btns{opacity:1;pointer-events:auto;position:static;transform:none;background:none;border:none;box-shadow:none;padding:0;margin-left:8px;gap:6px}
+#secList .item-btns{opacity:1;pointer-events:auto;position:static;transform:none;background:none;border:none;box-shadow:none;padding:0;margin-left:8px;gap:6px;flex-shrink:0}
+#secList .item-day-badge{min-width:44px;text-align:center}
+#secList .item-val{min-width:82px;text-align:right}
+#secOverlay .modal{max-width:480px}
+.sec-list{overflow-x:hidden}
+@media(max-width:520px){#secOverlay .modal{max-width:none} #secList .item-pay-badge{display:none}}
 #secList .del-btn,#secList .edit-btn{width:33px;height:33px;font-size:16px;border:1.5px solid var(--bdr-soft)}
 @media(max-width:660px){#secList .del-btn,#secList .edit-btn{width:40px;height:40px;font-size:18px} #secList .item-btns{gap:9px} #secList .item{padding:11px 12px}}
 .color-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
@@ -391,9 +396,14 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:fi .15s}
 @keyframes fi{from{opacity:0}to{opacity:1}}
-.modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:su .2s;position:relative;margin:auto}
+.modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:su .3s cubic-bezier(.22,1,.36,1);position:relative;margin:auto}
 @media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.6deg);width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}}
-@keyframes su{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes su{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes cardUp{from{opacity:0}to{opacity:1}}
+.pocket-card{animation:cardUp .5s cubic-bezier(.22,1,.36,1) backwards}
+.pocket-card:nth-child(1){animation-delay:.05s}.pocket-card:nth-child(2){animation-delay:.11s}.pocket-card:nth-child(3){animation-delay:.17s}.pocket-card:nth-child(4){animation-delay:.23s}.pocket-card:nth-child(5){animation-delay:.29s}.pocket-card:nth-child(6){animation-delay:.35s}
+.scard{animation:cardUp .5s cubic-bezier(.22,1,.36,1) backwards}
+.scard:nth-child(1){animation-delay:.02s}.scard:nth-child(2){animation-delay:.08s}.scard:nth-child(3){animation-delay:.14s}.scard:nth-child(4){animation-delay:.2s}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .m-title{display:inline-flex;width:fit-content;background:var(--ink);color:var(--pop);border:none;padding:3px 12px 4px;border-radius:0;transform:rotate(calc(var(--rot) * -1.5deg));box-shadow:2px 2px 0 rgba(232,68,46,.85);font-family:'Anton',sans-serif;font-weight:400;font-size:14px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:20px}
 .m-field{margin-bottom:14px}
@@ -580,7 +590,7 @@ html[data-dark] .peek-slip{box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35)}
 .peek-empty{font-size:12px;color:var(--t4);font-style:italic;text-align:center;padding:9px 0 5px}
 .dash{padding:16px 22px 0;display:flex;flex-direction:column;gap:26px;animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
 .dash>.metas-wrap{padding:0}
-.pockets{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 22px}
+.pockets{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 22px;align-items:start}
 .pocket-card{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:150px;background:var(--surf);border:2px solid var(--ink);border-radius:0;box-shadow:var(--shadow-sm);cursor:pointer;padding:20px 22px 18px;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s}
 .pocket-card::before{content:'';position:absolute;top:-11px;left:20%;width:74px;height:22px;background:var(--tape);transform:rotate(calc(var(--rot) * -4deg));box-shadow:0 1px 2px rgba(0,0,0,.2)}
 .pocket-card:nth-child(3n+2)::before{left:auto;right:24%;transform:rotate(calc(var(--rot) * 4deg))} .pocket-card:nth-child(3n)::before{left:38%;transform:rotate(calc(var(--rot) * -1.5deg))}
@@ -984,6 +994,14 @@ html[data-dark] .meta-row{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,
 .meta-fill.goal{background:repeating-linear-gradient(-45deg,var(--green) 0 7px,#255c42 7px 14px)}
 .meta-fill.over{background:repeating-linear-gradient(-45deg,var(--red) 0 7px,#c23824 7px 14px)}
 .meta-ceil{position:absolute;top:-6px;bottom:-6px;right:-1px;width:3px;background:var(--ink)}
+.scard-meta{margin-top:11px;padding-top:10px;border-top:1.5px dashed var(--bdr-soft)}
+.scard-meta:empty,.rc-metas:empty{display:none;border:none;padding:0;margin:0}
+.mm+.mm{margin-top:9px}
+.mm-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px}
+.mm-top>span:first-child{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)}
+.mm-v{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:12.5px;color:var(--t2);white-space:nowrap}
+.mm-bar{height:11px;margin:0}
+.rc-metas{margin-top:14px;padding-top:12px;border-top:1.5px dashed var(--bdr-soft);width:100%;text-align:left}
 .meta-row.ok::before{background:var(--green);opacity:1}
 .meta-row.bad::before{background:var(--red);opacity:1}
 .meta-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--t4);margin-bottom:4px}
@@ -1214,17 +1232,20 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
         <div class="scard-lb">renda</div>
         <div class="scard-val c-green" id="hInc">R$ 0,00</div>
         <div class="hst-tr" id="trInc"></div>
+        <div class="scard-meta" id="metaRenda"></div>
       </div>
       <div class="scard">
         <div class="scard-lb">gastos</div>
         <div class="scard-val c-red" id="hExp">R$ 0,00</div>
         <div class="hst-tr" id="trExp"></div>
+        <div class="scard-meta" id="metaGastos"></div>
         <button class="card-fatura hidden" id="faturaLine" onclick="openFatura()"></button>
       </div>
       <div class="scard">
         <div class="scard-lb">guardado</div>
         <div class="scard-val c-purple" id="hSav">R$ 0,00</div>
         <div class="hst-tr" id="trSav"></div>
+        <div class="scard-meta" id="metaGuardado"></div>
       </div>
       <div class="scard scard-avail" id="scardAvail">
         <div class="scard-lb">disponível este mês</div>
@@ -1261,15 +1282,20 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
           <div class="pc-total c-green" id="tot-income-fixed">R$ 0,00</div>
           <div class="pc-sub">entrando todo mês</div>
         </div>
-        <div class="pocket-card rc-income" onclick="openSec('income-extra')">
-          <span class="pc-chip">renda eventual</span>
-          <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
-          <div class="pc-sub">um extra este mês</div>
-        </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
           <span class="pc-chip">gastos fixos</span>
           <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
           <div class="pc-sub">saindo todo mês</div>
+        </div>
+        <div class="pocket-card rc-amber" onclick="openSec('loans')">
+          <span class="pc-chip">emprestado</span>
+          <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
+          <div class="pc-sub">a receber</div>
+        </div>
+        <div class="pocket-card rc-income" onclick="openSec('income-extra')">
+          <span class="pc-chip">renda eventual</span>
+          <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
+          <div class="pc-sub">um extra este mês</div>
         </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-extra')">
           <span class="pc-chip">gastos esporádicos</span>
@@ -1280,50 +1306,10 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
           <span class="pc-chip">caixinhas</span>
           <div class="pc-total c-purple" id="tot-savings">R$ 0,00</div>
           <div class="pc-sub" id="sub-savings">total guardado</div>
-        </div>
-        <div class="pocket-card rc-amber" onclick="openSec('loans')">
-          <span class="pc-chip">emprestado</span>
-          <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
-          <div class="pc-sub">a receber</div>
+          <div class="rc-metas" id="metaCaix"></div>
         </div>
     </div>
 
-    <div class="metas-wrap">
-      <div class="metas-in">
-        <div class="pc-mascot metas-masc"><svg viewBox="0 0 32 32" width="23" height="23" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="#fde3b0" stroke="#b45309" stroke-width="1.8"/><circle cx="16" cy="16" r="6" fill="#fffdf7" stroke="#b45309" stroke-width="1.6"/><circle cx="16" cy="16" r="2.2" fill="#b45309"/><path d="M16 3.5v3.5M16 25v3.5M3.5 16h3.5M25 16h3.5" stroke="#b45309" stroke-width="1.7" stroke-linecap="round"/></svg></div>
-        <div class="metas-hd">
-          <span class="metas-nm">metas do salário</span>
-          <div class="metas-sal-row">
-            <span class="metas-sal-lb">base · renda fixa</span>
-            <span class="metas-sal-val" id="metasBase">R$ 0,00</span>
-          </div>
-        </div>
-        <div class="metas-grid" id="metasGrid"></div>
-      </div>
-    </div>
-
-    </div>
-
-    <div class="chart-sec">
-      <div class="chart-in">
-        <div class="chart-hd">
-          <div class="chart-lb">evolução</div>
-          <div class="chart-nav">
-            <button class="chart-nav-btn" onclick="changeChartYear(-1)">‹</button>
-            <span class="chart-year-lbl" id="chartYearLbl">2025</span>
-            <button class="chart-nav-btn" onclick="changeChartYear(1)">›</button>
-          </div>
-        </div>
-        <div class="chart-h">
-          <div class="chart-empty" id="chartEmpty">adicione dados para ver a evolução</div>
-          <canvas id="myChart" class="hidden"></canvas>
-        </div>
-        <div class="cat-break hidden" id="catBreak">
-          <div class="cat-break-lb">gastos por categoria</div>
-          <div class="cat-seg-tr" id="catSegBar"></div>
-          <div class="cat-leg" id="catLegend"></div>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -1580,7 +1566,7 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
     </div>
     <div style="border-top:1px solid var(--bdr);margin:16px 0 18px"></div>
     <div class="m-field">
-      <label>E-mail <span class="lbl-hint">(trocar envia confirmação)</span></label>
+      <label>E-mail</label>
       <input class="m-in" id="editEmail" type="email" autocomplete="email" />
     </div>
     <div class="m-field pw-field">
@@ -1588,7 +1574,6 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
       <input class="m-in" id="editPass" type="password" />
       <button type="button" class="pw-eye" onclick="togglePw('editPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
-    <p class="lbl-hint" style="margin:-6px 0 0">use o olho pra ver; edite o campo pra trocar a senha.</p>
     <div class="auth-err hidden" id="editErr"></div>
     <div class="m-actions">
       <button class="m-cancel" onclick="closeProfileModal()">cancelar</button>
@@ -2506,7 +2491,7 @@ function openBoxesModal(){
   secKey='savings';
   document.getElementById('secTitle').textContent='caixinhas';
   const add=document.getElementById('secAddBtn');
-  document.getElementById('secList').innerHTML='<div id="boxesList"></div><div class="box-lock hidden" id="boxLock">complete a reserva de emergência pra liberar novas caixinhas (sonhos)</div>';
+  document.getElementById('secList').innerHTML='<div id="boxesList"></div><div class="box-lock hidden" id="boxLock"></div>';
   add.textContent='+ nova caixinha'; add.onclick=()=>openNewBox();
   renderBoxes();
   add.style.display=emergFull()?'':'none';
@@ -2996,6 +2981,7 @@ const curBandPlugin={id:'curBand',afterDraw(c){
   ctx.restore();
 }};
 function drawChart(){
+  if(!document.getElementById('myChart')) return;
   const nowD=new Date();
   chartNowIdx = chartYear===nowD.getFullYear() ? nowD.getMonth() : -1;
   const mns=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -3399,6 +3385,7 @@ function renderPayPills(){
 }
 function selectPay(id){ selPay=selPay===id?null:id; renderPayPills(); }
 function drawCatBreak(){
+  if(!document.getElementById('catBreak')) return;
   const d=monthLocal(curMonth);
   const items=[...(d['exp-fixed']||[]),...(d['exp-extra']||[])].filter(i=>i.cat);
   const wrap=document.getElementById('catBreak');
@@ -3432,50 +3419,25 @@ async function confirmDelMonth(){
 
 // ── Metas do salário (seção incorporada) ───────────────
 function renderMetas(eF,eX,sv,totalSaved){
-  const grid=document.getElementById('metasGrid');
-  if(!grid) return;
   const s=salaryOf(curMonth);
-  const baseEl=document.getElementById('metasBase'); if(baseEl) baseEl.textContent=fmt(s);
-  if(!s){
-    grid.innerHTML='<div class="metas-empty">adicione sua <b>renda fixa</b> e as metas aparecem aqui sozinhas — quanto guardar, quanto pode gastar e onde você está em cada uma.</div>';
-    return;
-  }
-  const pctOf=(v,alvo)=>alvo>0?Math.min(Math.round(v/alvo*100),999):0;
-  // ritmo diário: só faz sentido no mês corrente de verdade
-  let dayLine='';
-  if(curMonth===nowKey()){
-    const nd=new Date();
-    const dim=new Date(nd.getFullYear(),nd.getMonth()+1,0).getDate();
-    const hoje=nd.getDate(), restam=dim-hoje+1;
-    const teto=s*.3;
-    dayLine = eX<=teto
-      ? `dá pra gastar ${fmt((teto-eX)/restam)} por dia até o fim do mês`
-      : `seus variáveis já estão em ${fmt(eX/hoje)} por dia`;
-  }
+  const set=(id,h)=>{const el=document.getElementById(id); if(el) el.innerHTML=h;};
+  if(!s){ ['metaRenda','metaGastos','metaGuardado','metaCaix'].forEach(id=>set(id,'')); return; }
   const rows=[
-    {lbl:'gasto mensal máximo', alvo:s*.3, cur:eX, teto:1, desc:'30% da renda — teto pros gastos variáveis (esporádicos)',
-     ok:eX<=s*.3, st:eX<=s*.3?`✓ dentro do teto — sobram ${fmt(s*.3-eX)}`:`passou ${fmt(eX-s*.3)} do teto`, extra:dayLine},
-    {lbl:'despesas fixas máximas', alvo:s/2, cur:eF, teto:1, desc:'metade da renda — máximo em compromissos fixos',
-     ok:eF<=s/2, st:eF<=s/2?`✓ fixos sob controle — folga de ${fmt(s/2-eF)}`:`fixos estouraram ${fmt(eF-s/2)}`},
-    {lbl:'investimento mensal', alvo:s*.2, cur:sv, teto:0, desc:'20% da renda — quanto guardar todo mês',
-     ok:sv>=s*.2, st:sv>=s*.2?`✓ meta do mês batida (${fmt(sv)})`:`faltam ${fmt(s*.2-sv)} este mês`},
-    {lbl:'reserva de emergência', alvo:s*6, cur:totalSaved, teto:0, desc:'6× a renda — sua primeira grande meta',
-     ok:totalSaved>=s*6, st:`${pctOf(totalSaved,s*6)}% — ${fmt(totalSaved)} guardados`},
-    {lbl:'patrimônio-alvo', alvo:s*36, cur:totalSaved, teto:0, desc:'36× a renda — patrimônio de longo prazo',
-     ok:totalSaved>=s*36, st:`${pctOf(totalSaved,s*36)}% do caminho`},
+    {cap:'gasto máx', alvo:s*.3, cur:eX, teto:1, ok:eX<=s*.3},
+    {cap:'fixos máx', alvo:s/2, cur:eF, teto:1, ok:eF<=s/2},
+    {cap:'guardar/mês', alvo:s*.2, cur:sv, teto:0, ok:sv>=s*.2},
+    {cap:'reserva 6×', alvo:s*6, cur:totalSaved, teto:0, ok:totalSaved>=s*6},
+    {cap:'patrimônio 36×', alvo:s*36, cur:totalSaved, teto:0, ok:totalSaved>=s*36},
   ];
-  grid.innerHTML=rows.map(r=>{
+  const mini=r=>{
     const pct=r.alvo>0?Math.min(r.cur/r.alvo*100,100):0, over=r.teto&&!r.ok;
-    return `
-    <div class="meta-row ${r.ok?'ok':'bad'}">
-      <div class="meta-lbl">${r.lbl}</div>
-      <div class="meta-val">${fmt(r.alvo)}</div>
-      <div class="meta-desc">${r.desc}</div>
-      <div class="meta-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" data-w="${pct.toFixed(1)}" style="width:0"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div>
-      <div class="meta-st ${r.ok?'ok':'bad'}">${r.st}</div>
-      ${r.extra?`<div class="meta-day">${r.extra}</div>`:''}
-    </div>`;}).join('');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{grid.querySelectorAll('.meta-fill').forEach(el=>{el.style.width=el.dataset.w+'%';});}));
+    return `<div class="mm"><div class="mm-top"><span>${r.cap}</span><span class="mm-v">${fmt(r.alvo)}</span></div><div class="meta-bar mm-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" data-w="${pct.toFixed(1)}" style="width:0"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div></div>`;
+  };
+  set('metaRenda', mini(rows[0]));
+  set('metaGastos', mini(rows[1]));
+  set('metaGuardado', mini(rows[2]));
+  set('metaCaix', mini(rows[3])+mini(rows[4]));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('.mm-bar .meta-fill').forEach(el=>{el.style.width=el.dataset.w+'%';});}));
 }
 
 // ── Caixinhas ─────────────────────────────────────────
