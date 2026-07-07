@@ -276,10 +276,7 @@ html[data-dark] .dk-sw .dk-knob{left:23px}
 .scard:nth-child(4){transform:rotate(0.15deg)} .scard:nth-child(4)::before{transform:rotate(-2deg);width:36px;left:calc(65% - 18px)}
 @keyframes swingA{0%{transform:rotate(-0.3deg) translateY(0)}35%{transform:rotate(0.85deg) translateY(-4px)}65%{transform:rotate(-0.55deg) translateY(-3px)}100%{transform:rotate(0.3deg) translateY(-3px)}}
 @keyframes swingB{0%{transform:rotate(0.3deg) translateY(0)}35%{transform:rotate(-0.85deg) translateY(-4px)}65%{transform:rotate(0.55deg) translateY(-3px)}100%{transform:rotate(-0.3deg) translateY(-3px)}}
-.scard:nth-child(1):hover{animation:swingB .55s cubic-bezier(.22,1,.36,1) forwards;box-shadow:6px 6px 0 var(--ink-sh)}
-.scard:nth-child(2):hover{animation:swingA .55s cubic-bezier(.22,1,.36,1) forwards;box-shadow:6px 6px 0 var(--ink-sh)}
-.scard:nth-child(3):hover{animation:swingB .6s cubic-bezier(.22,1,.36,1) forwards;box-shadow:6px 6px 0 var(--ink-sh)}
-.scard:nth-child(4):hover{animation:swingA .55s cubic-bezier(.22,1,.36,1) forwards;box-shadow:6px 6px 0 rgba(180,83,9,.55)}
+.scard:hover{transform:translateY(-2px);box-shadow:6px 7px 0 var(--ink-sh)}
 .scard-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:10px}
 .scard-val{font-family:'Newsreader',Georgia,serif;font-size:26px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:8px}
 /* card disponível */
@@ -395,6 +392,7 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .chart-empty{height:190px;display:flex;align-items:center;justify-content:center;font-size:15px;font-style:italic;color:var(--t4);text-align:center;padding:0 20px}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:fi .15s}
+#secOverlay{z-index:96}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 .modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:su .3s cubic-bezier(.22,1,.36,1);position:relative;margin:auto}
 @media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.6deg);width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}}
