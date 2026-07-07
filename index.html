@@ -1174,9 +1174,6 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
         <button class="icon-btn" onclick="openCal()" title="calendário">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
         </button>
-        <button class="icon-btn" onclick="openLoansTab()" title="empréstimos">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6.2 12h.01M17.8 12h.01"/></svg>
-        </button>
         <button class="icon-btn" onclick="openScore()" title="seu score">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18a8 8 0 1 1 14 0"/><path d="M12 14l3.5-3.5"/></svg>
         </button>
@@ -1213,7 +1210,6 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
   </aside>
   <nav class="mob-bar" id="mobBar" aria-label="atalhos">
     <button onclick="openCal()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg><span>agenda</span></button>
-    <button onclick="openLoansTab()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6.2 12h.01M17.8 12h.01"/></svg><span>emprest.</span></button>
     <button onclick="openScore()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18a8 8 0 1 1 14 0"/><path d="M12 14l3.5-3.5"/></svg><span>score</span></button>
     <button onclick="openBuy()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg><span>posso?</span></button>
     <button onclick="openShop()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12l2 2 4-4"/></svg><span>compras</span></button>
@@ -2476,7 +2472,15 @@ function peekFill(id, arr, empty){
 const SEC_NAME={'income-fixed':'renda fixa','income-extra':'renda eventual','exp-fixed':'gastos fixos','exp-extra':'gastos esporádicos'};
 let secKey=null;
 function openSec(key){
-  if(key==='loans'){ openLoansTab(); return; }
+  if(key==='loans'){
+    secKey='loans';
+    document.getElementById('secTitle').textContent='emprestado';
+    const add=document.getElementById('secAddBtn'); add.style.display=''; add.textContent='+ emprestar'; add.onclick=()=>openModal('loans');
+    document.getElementById('secList').innerHTML='<div id="rows-loans"></div><div class="pager hidden" id="pager-loans" style="justify-content:center;padding-top:6px"></div>';
+    renderLoans();
+    document.getElementById('secOverlay').classList.remove('hidden');
+    return;
+  }
   if(key==='savings'){ openBoxesModal(); return; }
   secKey=key;
   document.getElementById('secTitle').textContent=SEC_NAME[key]||key;
