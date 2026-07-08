@@ -65,8 +65,8 @@ html[data-dark] body{background-image:radial-gradient(rgba(255,200,100,var(--tex
 /* ── LOGIN ─────────────────────────────────── */
 #loginScreen{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(180,83,9,.07) 0%,transparent 65%),var(--bg)}
 html[data-dark] #loginScreen{background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(245,158,11,.09) 0%,transparent 65%),var(--bg)}
-.l-card{width:100%;max-width:380px;text-align:center;background:var(--surf);border:2px solid var(--ink);border-radius:18px 12px 20px 14px;padding:44px 36px 36px;box-shadow:var(--shadow-sm);position:relative}
-.l-card::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-1.4deg);width:90px;height:15px;background:var(--tape);border-radius:4px 3px 4px 3px}
+.l-card{width:100%;max-width:380px;text-align:center;background:var(--surf);border:2px solid var(--ink);border-radius:18px 12px 20px 14px;padding:44px 36px 36px;box-shadow:var(--shadow-sm);position:relative;--r:calc(var(--rot) * -.8deg);transform:rotate(var(--r));animation:mg-rise .6s cubic-bezier(.2,.8,.3,1) .35s backwards}
+.l-card::before{content:'';position:absolute;top:-10px;left:calc(50% - 45px);--tr:-1.4deg;transform:rotate(var(--tr));width:90px;height:15px;background:var(--tape);border-radius:4px 3px 4px 3px;animation:mg-tape .4s cubic-bezier(.3,1.5,.4,1) .85s backwards}
 .l-logo{font-family:'Newsreader',Georgia,serif;font-size:54px;font-weight:900;letter-spacing:-3px;color:var(--t1);margin-bottom:4px;line-height:1}
 .l-logo span{color:var(--blue);font-style:italic;text-decoration:underline;text-decoration-color:rgba(180,83,9,.25);text-underline-offset:5px;text-decoration-thickness:2px}
 html[data-dark] .l-logo span{text-decoration-color:rgba(245,158,11,.25)}
@@ -118,11 +118,11 @@ html[data-dark] .l-logo span{text-decoration-color:rgba(245,158,11,.25)}
 .divider span{font-size:11px;color:var(--t4);white-space:nowrap}
 .l-wrap{width:100%;max-width:392px;position:relative;z-index:1}
 .l-hero{text-align:center;margin-bottom:20px}
-.l-pill{display:inline-flex;align-items:center;gap:7px;background:var(--surf);border:1.6px solid var(--ink);border-radius:9px 6px 9px 7px;padding:5px 12px 5px 6px;font-size:12px;font-weight:600;color:var(--t3);box-shadow:2px 2px 0 var(--ink-sh);margin-bottom:15px}
+.l-pill{animation:mg-drop .5s cubic-bezier(.2,.8,.3,1) .05s backwards;display:inline-flex;align-items:center;gap:7px;background:var(--surf);border:1.6px solid var(--ink);border-radius:9px 6px 9px 7px;padding:5px 12px 5px 6px;font-size:12px;font-weight:600;color:var(--t3);box-shadow:2px 2px 0 var(--ink-sh);margin-bottom:15px}
 .l-pill-badge{background:var(--pop);color:#241c12;border:1.2px solid var(--ink);border-radius:5px 3px 5px 4px;padding:1px 7px;font-size:11px;font-weight:700}
-.l-hero-title{font-family:'Oswald',system-ui,sans-serif;font-size:32px;font-weight:600;letter-spacing:-1.5px;line-height:1.13;color:var(--t1);margin-bottom:10px;cursor:default}
+.l-hero-title{animation:mg-drop .55s cubic-bezier(.2,.8,.3,1) .15s backwards;font-family:'Oswald',system-ui,sans-serif;font-size:32px;font-weight:600;letter-spacing:-1.5px;line-height:1.13;color:var(--t1);margin-bottom:10px;cursor:default}
 .l-hero-title em{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:400;color:var(--blue);letter-spacing:-1px}
-.l-hero-sub{font-size:13px;font-weight:400;color:var(--t3);line-height:1.5;max-width:320px;margin:0 auto}
+.l-hero-sub{animation:mg-rise .5s cubic-bezier(.2,.8,.3,1) .28s backwards;font-size:13px;font-weight:400;color:var(--t3);line-height:1.5;max-width:320px;margin:0 auto}
 .grid-empty{font-size:12px;color:var(--t4);text-align:center;padding:4px 0 14px}
 .pw-field{position:relative}
 .pw-field input{padding-right:38px}
@@ -179,7 +179,6 @@ html[data-dark] body::before{opacity:.1}
   60% {opacity:1;transform:scale(.97) rotate(0.3deg)}
   100%{transform:scale(1) rotate(0deg)}
 }
-.stats-row{animation:dropIn .52s cubic-bezier(.22,1,.36,1) both}
 .cols     {animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
 .sav-wrap {animation:dropIn .55s .14s cubic-bezier(.22,1,.36,1) both}
 .chart-sec{animation:dropIn .55s .18s cubic-bezier(.22,1,.36,1) both}
@@ -196,6 +195,7 @@ html[data-dark] .sidebar{background:var(--surf)}
 .sb-head{display:flex;align-items:center;gap:8px;flex-shrink:0;padding:0}
 .sb-nav{flex:1;display:flex;align-items:center;gap:8px;overflow:hidden;padding:0;min-width:0}
 .sb-nav-lb{display:none}
+.month-pills{animation:mg-left .5s cubic-bezier(.2,.8,.3,1) .35s backwards}
 .month-pills{display:flex;flex-direction:row;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding:5px 0;flex:1}
 .month-pills::-webkit-scrollbar{display:none}
 .mp{padding:5px 10px;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;border:none;color:var(--t3);background:none;transition:background .14s,color .14s;white-space:nowrap;flex:1 0 auto;text-align:center;line-height:1.3;letter-spacing:.1px}
@@ -210,15 +210,15 @@ html[data-dark] .sidebar{background:var(--surf)}
 .sb-footer{display:flex;flex-direction:row;align-items:center;gap:8px;flex-shrink:0;padding:0}
 .sb-footer-btns{display:flex;gap:5px}
 .logo{display:inline-flex;align-items:baseline;gap:3px;flex-shrink:0;line-height:1;user-select:none;cursor:pointer}
-.lg-mar{font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.01em;background:#1b1b1b;color:#f4eedf;padding:2px 7px 3px;transform:rotate(calc(var(--rot) * -2deg))}
-.lg-gem{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:500;font-size:20px;background:#f2b705;color:#1b1b1b;padding:0 7px 2px;transform:rotate(calc(var(--rot) * 1.5deg));box-shadow:2px 2px 0 rgba(27,27,27,.85)}
+.lg-mar{font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.01em;background:#1b1b1b;color:#f4eedf;padding:2px 7px 3px;--r:calc(var(--rot) * -2deg);transform:rotate(var(--r));animation:mg-drop .55s cubic-bezier(.2,.8,.3,1) .05s backwards}
+.lg-gem{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:500;font-size:20px;background:#f2b705;color:#1b1b1b;padding:0 7px 2px;--r:calc(var(--rot) * 1.5deg);transform:rotate(var(--r));box-shadow:2px 2px 0 rgba(27,27,27,.85);animation:mg-drop .55s cubic-bezier(.2,.8,.3,1) .18s backwards}
 .logo .lg-gem{text-decoration:none}
 html[data-dark] .logo span{text-decoration-color:rgba(245,158,11,.3)}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .3s;flex-shrink:0}
 .save-dot.show{opacity:1}
 .save-dot.err{background:var(--red);opacity:1}
 .u-pill-wrap{position:relative}
-.u-pill{display:flex;align-items:center;gap:6px;background:var(--surf);border:1.5px solid var(--ink);border-radius:10px 7px 10px 8px;padding:5px 10px 5px 6px;cursor:pointer;transition:all .14s;font-family:inherit;box-shadow:2px 2px 0 var(--ink-sh)}
+.u-pill{animation:mg-right .5s cubic-bezier(.2,.8,.3,1) .45s backwards;display:flex;align-items:center;gap:6px;background:var(--surf);border:1.5px solid var(--ink);border-radius:10px 7px 10px 8px;padding:5px 10px 5px 6px;cursor:pointer;transition:all .14s;font-family:inherit;box-shadow:2px 2px 0 var(--ink-sh)}
 .u-pill:active{transform:translateY(1px);box-shadow:none}
 .u-pill:hover{border-color:var(--t3);background:var(--surf2)}
 .u-menu{position:absolute;top:calc(100% + 8px);right:0;left:auto;bottom:auto;background:var(--surf);border:2px solid var(--ink);border-radius:12px 8px 11px 9px;box-shadow:3px 3px 0 var(--ink-sh);overflow:hidden;z-index:40;min-width:170px;animation:su .16s}
@@ -238,13 +238,13 @@ html[data-dark] .dk-sw .dk-knob{left:23px}
 .dk-sw:active .dk-knob{transform:scale(.9)}
 .icon-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:none;border:1.5px solid var(--bdr);border-radius:8px;cursor:pointer;font-size:14px;transition:all .14s;color:var(--t3)}
 .icon-btn:hover{border-color:var(--t2);color:var(--t1);background:var(--surf2)}
-.tool-strip{display:flex;background:var(--surf);border:2px solid var(--ink);border-radius:11px 7px 10px 8px;box-shadow:2px 2px 0 var(--ink-sh);overflow:hidden}
+.tool-strip{display:flex;background:var(--surf);border:2px solid var(--ink);border-radius:11px 7px 10px 8px;box-shadow:2px 2px 0 var(--ink-sh);overflow:hidden;animation:mg-left .5s cubic-bezier(.2,.8,.3,1) .35s backwards}
 .tool-strip .icon-btn{width:36px;height:30px;border:none;border-radius:0;box-shadow:none;border-left:1.5px solid var(--bdr-soft)}
 .tool-strip .icon-btn:first-child{border-left:none}
 .tool-strip .icon-btn:hover{background:var(--pop);color:#241c12;border-color:var(--bdr-soft)}
 .tool-strip .icon-btn:focus-visible{outline-offset:-3px;border-radius:8px}
 .tool-strip .icon-btn:active{transform:translateY(1px)}
-.mob-bar{display:none;position:fixed;left:9px;right:9px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--surf);border:2px solid var(--ink);border-radius:17px 14px 16px 15px;padding:7px 4px;justify-content:space-around;box-shadow:3px 4px 0 var(--ink-sh)}
+.mob-bar{animation:mg-rise .5s cubic-bezier(.2,.8,.3,1) .45s backwards;display:none;position:fixed;left:9px;right:9px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--surf);border:2px solid var(--ink);border-radius:17px 14px 16px 15px;padding:7px 4px;justify-content:space-around;box-shadow:3px 4px 0 var(--ink-sh)}
 .mob-bar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--t3);font-family:inherit;font-size:9px;font-weight:700;letter-spacing:.2px;cursor:pointer;padding:6px 0 4px;min-width:0;border-radius:11px 8px 11px 9px;transition:color .15s,background .15s}
 .mob-bar button:active{color:#241c12;background:var(--pop);transform:translateY(1px) scale(.96)}
 .mob-bar button svg{flex-shrink:0}
@@ -268,15 +268,15 @@ html[data-dark] .dk-sw .dk-knob{left:23px}
 
 /* ── STATS ROW ────────────────────────────────────────── */
 .stats-row{padding:28px 20px 0;display:grid;grid-template-columns:1fr 1fr 1fr 1.5fr;gap:16px}
-.scard{background:var(--surf);border:2px solid var(--ink);border-radius:0;padding:18px 20px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);position:relative;overflow:visible;margin-top:10px;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s}
-.scard::before{content:'';position:absolute;top:-9px;left:calc(50% - 24px);width:48px;height:14px;background:var(--tape);border-radius:4px 3px 4px 3px;transform:rotate(-1.8deg)}
-.scard:nth-child(1){transform:rotate(-0.4deg)} .scard:nth-child(1)::before{transform:rotate(2deg);left:calc(40% - 24px)}
-.scard:nth-child(2){transform:rotate(0.3deg)} .scard:nth-child(2)::before{transform:rotate(-1.5deg);left:calc(55% - 24px)}
-.scard:nth-child(3){transform:rotate(-0.2deg)} .scard:nth-child(3)::before{transform:rotate(1deg);left:calc(45% - 24px)}
-.scard:nth-child(4){transform:rotate(0.15deg)} .scard:nth-child(4)::before{transform:rotate(-2deg);width:36px;left:calc(65% - 18px)}
+.scard{background:var(--surf);border:2px solid var(--ink);border-radius:0;padding:18px 20px;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);position:relative;overflow:visible;margin-top:10px;transform:rotate(var(--r,0deg));transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s}
+.scard::before{content:'';position:absolute;top:-9px;left:calc(50% - 24px);width:48px;height:14px;background:var(--tape);border-radius:4px 3px 4px 3px;--tr:-1.8deg;transform:rotate(var(--tr));animation:mg-tape .45s cubic-bezier(.3,1.5,.4,1) var(--tape-d,1.05s) backwards}
+.scard:nth-child(1){--r:-0.4deg} .scard:nth-child(1)::before{--tr:2deg;--tape-d:1.05s;left:calc(40% - 24px)}
+.scard:nth-child(2){--r:0.3deg} .scard:nth-child(2)::before{--tr:-1.5deg;--tape-d:1.18s;left:calc(55% - 24px)}
+.scard:nth-child(3){--r:-0.2deg} .scard:nth-child(3)::before{--tr:1deg;--tape-d:1.3s;left:calc(45% - 24px)}
+.scard:nth-child(4){--r:0.15deg} .scard:nth-child(4)::before{--tr:-2deg;width:36px;left:calc(65% - 18px)}
 @keyframes swingA{0%{transform:rotate(-0.3deg) translateY(0)}35%{transform:rotate(0.85deg) translateY(-4px)}65%{transform:rotate(-0.55deg) translateY(-3px)}100%{transform:rotate(0.3deg) translateY(-3px)}}
 @keyframes swingB{0%{transform:rotate(0.3deg) translateY(0)}35%{transform:rotate(-0.85deg) translateY(-4px)}65%{transform:rotate(0.55deg) translateY(-3px)}100%{transform:rotate(-0.3deg) translateY(-3px)}}
-.scard:hover{transform:translateY(-2px);box-shadow:6px 7px 0 var(--ink-sh)}
+.scard:hover{transform:translateY(-2px) rotate(var(--r,0deg));box-shadow:6px 7px 0 var(--ink-sh)}
 .scard-lb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin-bottom:10px}
 .scard-val{font-family:'Newsreader',Georgia,serif;font-size:26px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:8px}
 /* card disponível */
@@ -391,17 +391,20 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .chart-h{position:relative;height:190px}
 .chart-empty{height:190px;display:flex;align-items:center;justify-content:center;font-size:15px;font-style:italic;color:var(--t4);text-align:center;padding:0 20px}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:fi .15s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
 #secOverlay{z-index:96}
 @keyframes fi{from{opacity:0}to{opacity:1}}
-.modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:su .3s cubic-bezier(.22,1,.36,1);position:relative;margin:auto}
-@media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1.6deg);width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none}}
+.modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:mg-popup-in .45s cubic-bezier(.2,1.2,.4,1);position:relative;margin:auto;--mr:calc(var(--rot) * -1deg);transform:rotate(var(--mr))}
+@media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:calc(50% - 26px);--tr:-1.6deg;transform:rotate(var(--tr));width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none;animation:mg-tape .4s cubic-bezier(.3,1.5,.4,1) .3s backwards}}
 @keyframes su{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
 @keyframes cardUp{from{opacity:0}to{opacity:1}}
-.pocket-card{animation:cardUp .5s cubic-bezier(.22,1,.36,1) backwards}
-.pocket-card:nth-child(1){animation-delay:.05s}.pocket-card:nth-child(2){animation-delay:.11s}.pocket-card:nth-child(3){animation-delay:.17s}.pocket-card:nth-child(4){animation-delay:.23s}.pocket-card:nth-child(5){animation-delay:.29s}.pocket-card:nth-child(6){animation-delay:.35s}
-.scard{animation:cardUp .5s cubic-bezier(.22,1,.36,1) backwards}
-.scard:nth-child(1){animation-delay:.02s}.scard:nth-child(2){animation-delay:.08s}.scard:nth-child(3){animation-delay:.14s}.scard:nth-child(4){animation-delay:.2s}
+.pocket-card{animation:mg-drop .55s cubic-bezier(.2,.8,.3,1) backwards}
+.pocket-card:nth-child(1){animation-delay:1s}.pocket-card:nth-child(2){animation-delay:1.12s}.pocket-card:nth-child(3){animation-delay:1.24s}.pocket-card:nth-child(4){animation-delay:1.36s}.pocket-card:nth-child(5){animation-delay:1.48s}.pocket-card:nth-child(6){animation-delay:1.6s}
+.pocket-card:nth-child(1)::before{--tape-d:1.5s}.pocket-card:nth-child(2)::before{--tape-d:1.62s}.pocket-card:nth-child(3)::before{--tape-d:1.74s}.pocket-card:nth-child(4)::before{--tape-d:1.86s}.pocket-card:nth-child(5)::before{--tape-d:1.98s}.pocket-card:nth-child(6)::before{--tape-d:2.1s}
+.scard:nth-child(1){animation:mg-right .55s cubic-bezier(.2,.8,.3,1) .7s backwards}
+.scard:nth-child(2){animation:mg-right .55s cubic-bezier(.2,.8,.3,1) .85s backwards}
+.scard:nth-child(3){animation:mg-rise .55s cubic-bezier(.2,.8,.3,1) .95s backwards}
+.scard:nth-child(4){animation:mg-rise .6s cubic-bezier(.2,.8,.3,1) .55s backwards}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .m-title{display:inline-flex;width:fit-content;background:var(--ink);color:var(--pop);border:none;padding:3px 12px 4px;border-radius:0;transform:rotate(calc(var(--rot) * -1.5deg));box-shadow:2px 2px 0 rgba(232,68,46,.85);font-family:'Anton',sans-serif;font-weight:400;font-size:14px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:20px}
 .m-field{margin-bottom:14px}
@@ -457,8 +460,8 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 .cat-leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
 
 /* ── RESUMO ANUAL ─────────────────────────────────────── */
-.ann-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:fi .15s}
-.ann-modal{background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;width:100%;max-width:680px;padding:28px;box-shadow:var(--shadow-sm);animation:su .2s;margin:auto;position:relative}
+.ann-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
+.ann-modal{background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;width:100%;max-width:680px;padding:28px;box-shadow:var(--shadow-sm);animation:mg-popup-in .45s cubic-bezier(.2,1.2,.4,1);margin:auto;position:relative;--mr:calc(var(--rot) * -.6deg);transform:rotate(var(--mr))}
 .ann-modal::before{content:'';position:absolute;top:-9px;left:8%;width:46px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-2deg);pointer-events:none}
 .ann-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .ann-title{font-family:'Newsreader',Georgia,serif;font-size:20px;font-weight:700;color:var(--t1)}
@@ -509,7 +512,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
   /* bottom sheet */
   .overlay{align-items:flex-end;padding:0}
-  .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1)}
+  .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1);--mr:0deg;transform:none}
   .modal::before{content:'';display:block;width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
 }
 
@@ -524,10 +527,10 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 /* legendas entram como carimbo */
 @keyframes chipStamp{0%{opacity:0;transform:scale(1.6) rotate(4deg)}55%{opacity:1;transform:scale(.92) rotate(-2.6deg)}100%{opacity:1;transform:scale(1) rotate(-1.2deg)}}
 .scard-lb,.grp-nm,.sav-nm,.loan-nm,.chart-lb,.metas-nm{animation:chipStamp .45s cubic-bezier(.22,1,.36,1) both}
-.scard:nth-child(1) .scard-lb{animation-delay:.18s}
-.scard:nth-child(2) .scard-lb{animation-delay:.26s}
-.scard:nth-child(3) .scard-lb{animation-delay:.34s}
-.scard:nth-child(4) .scard-lb{animation-delay:.42s}
+.scard:nth-child(1) .scard-lb{animation-delay:1.15s}
+.scard:nth-child(2) .scard-lb{animation-delay:1.3s}
+.scard:nth-child(3) .scard-lb{animation-delay:1.4s}
+.scard:nth-child(4) .scard-lb{animation-delay:1s}
 .grp-nm{animation-delay:.32s}
 .sav-nm{animation-delay:.4s}
 .loan-nm{animation-delay:.44s}
@@ -544,7 +547,6 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 /* logo balança no hover */
 @keyframes wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-4deg)}60%{transform:rotate(3deg)}}
 .logo span{display:inline-block}
-.logo:hover span{animation:wiggle .55s ease-in-out}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 /* ── ALTURA FIXA + PAGINAÇÃO nos cards de lançamentos ── */
@@ -586,14 +588,14 @@ html[data-dark] .peek-slip{box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35)}
 .peek-val.neg{color:var(--red)} .peek-val.done{text-decoration:line-through;color:var(--t4)}
 .peek-more{font-size:11px;font-weight:600;color:var(--t4);text-align:center;padding-top:1px}
 .peek-empty{font-size:12px;color:var(--t4);font-style:italic;text-align:center;padding:9px 0 5px}
-.dash{padding:16px 22px 0;display:flex;flex-direction:column;gap:26px;animation:dropIn .55s .1s cubic-bezier(.22,1,.36,1) both}
+.dash{padding:16px 22px 0;display:flex;flex-direction:column;gap:26px}
 .dash>.metas-wrap{padding:0}
 .pockets{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);grid-auto-flow:column;gap:26px 22px;align-items:stretch}
-.pocket-card{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:150px;background:var(--surf);border:2px solid var(--ink);border-radius:0;box-shadow:var(--shadow-sm);cursor:pointer;padding:20px 22px 18px;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s}
-.pocket-card::before{content:'';position:absolute;top:-11px;left:20%;width:74px;height:22px;background:var(--tape);transform:rotate(calc(var(--rot) * -4deg));box-shadow:0 1px 2px rgba(0,0,0,.2)}
-.pocket-card:nth-child(3n+2)::before{left:auto;right:24%;transform:rotate(calc(var(--rot) * 4deg))} .pocket-card:nth-child(3n)::before{left:38%;transform:rotate(calc(var(--rot) * -1.5deg))}
-.pocket-card:nth-child(odd){transform:rotate(calc(var(--rot) * -.6deg))} .pocket-card:nth-child(even){transform:rotate(calc(var(--rot) * .5deg))}
-.pocket-card:hover{transform:translateY(-3px);box-shadow:8px 9px 0 var(--ink-sh);z-index:2}
+.pocket-card{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:150px;background:var(--surf);border:2px solid var(--ink);border-radius:0;box-shadow:var(--shadow-sm);cursor:pointer;padding:20px 22px 18px;transform:rotate(var(--r,0deg));transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s}
+.pocket-card::before{content:'';position:absolute;top:-11px;left:20%;width:74px;height:22px;background:var(--tape);--tr:calc(var(--rot) * -4deg);transform:rotate(var(--tr));box-shadow:0 1px 2px rgba(0,0,0,.2);animation:mg-tape .45s cubic-bezier(.3,1.5,.4,1) var(--tape-d,1.5s) backwards}
+.pocket-card:nth-child(3n+2)::before{left:auto;right:24%;--tr:calc(var(--rot) * 4deg)} .pocket-card:nth-child(3n)::before{left:38%;--tr:calc(var(--rot) * -1.5deg)}
+.pocket-card:nth-child(odd){--r:calc(var(--rot) * -.6deg)} .pocket-card:nth-child(even){--r:calc(var(--rot) * .5deg)}
+.pocket-card:hover{transform:translateY(-3px) rotate(var(--r,0deg));box-shadow:8px 9px 0 var(--ink-sh);z-index:2}
 .pc-slips{display:flex;flex-direction:column;gap:0;padding:12px 15px 0;height:56px;overflow:hidden}
 .pc-slips .pc-slip+.pc-slip{margin-top:-13px}
 .pc-slip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surf);border:1.5px solid var(--bdr);border-radius:7px 5px 8px 6px;padding:7px 12px;box-shadow:1.5px 2px 0 rgba(120,90,40,.13);animation:itemIn .28s cubic-bezier(.22,1,.36,1) backwards}
@@ -1041,6 +1043,64 @@ html.int-mid{--rot:.5;--tex:.03} html.int-calm{--rot:.12;--tex:0}
 .numpad,.numpad .nk,.overlay .modal,.sc-band,.sc-delta,.hst-tr{border-radius:0}
 html[data-dark] .pocket-card,html[data-dark] .scard,html[data-dark] .metas-in,html[data-dark] .meta-row,html[data-dark] .chart-in{box-shadow:5px 6px 0 rgba(0,0,0,.45)}
 html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
+
+/* ══ Pop-Colagem · animações (handoff): a colagem se monta à mão ══ */
+@keyframes mg-drop{0%{opacity:0;transform:translateY(-46px) rotate(0deg)}60%{opacity:1}100%{opacity:1;transform:translateY(0) rotate(var(--r,0deg))}}
+@keyframes mg-rise{0%{opacity:0;transform:translateY(40px) rotate(0deg)}100%{opacity:1;transform:translateY(0) rotate(var(--r,0deg))}}
+@keyframes mg-left{0%{opacity:0;transform:translateX(-36px) rotate(0deg)}100%{opacity:1;transform:translateX(0) rotate(var(--r,0deg))}}
+@keyframes mg-right{0%{opacity:0;transform:translateX(36px) rotate(0deg)}100%{opacity:1;transform:translateX(0) rotate(var(--r,0deg))}}
+@keyframes mg-tape{0%{opacity:0;transform:scale(.2) rotate(var(--tr,0deg))}70%{opacity:var(--tape-o,1);transform:scale(1.15) rotate(var(--tr,0deg))}100%{opacity:var(--tape-o,1);transform:scale(1) rotate(var(--tr,0deg))}}
+@keyframes mg-fill{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes mg-pop{0%{opacity:0;transform:scale(.4) rotate(var(--r,0deg))}65%{opacity:1;transform:scale(1.1) rotate(var(--r,0deg))}100%{opacity:1;transform:scale(1) rotate(var(--r,0deg))}}
+@keyframes mg-login-exit{0%{opacity:1;transform:scale(1) translateY(0)}100%{opacity:0;transform:scale(.92) translateY(-30px)}}
+@keyframes mg-overlay-in{0%{opacity:0}100%{opacity:1}}
+@keyframes mg-overlay-out{0%{opacity:1}100%{opacity:0}}
+@keyframes mg-popup-in{0%{opacity:0;transform:scale(1.18) rotate(calc(var(--mr,0deg) + 5deg)) translateY(14px)}55%{opacity:1;transform:scale(.97) rotate(calc(var(--mr,0deg) - .6deg)) translateY(0)}100%{opacity:1;transform:scale(1) rotate(var(--mr,0deg)) translateY(0)}}
+@keyframes mg-popup-out{0%{opacity:1;transform:scale(1) rotate(var(--mr,0deg)) translateY(0)}100%{opacity:0;transform:scale(.9) rotate(calc(var(--mr,0deg) + 6deg)) translateY(-46px)}}
+@keyframes mg-sheet-out{to{transform:translateY(105%)}}
+html[data-dark] .pocket-card::before,html[data-dark] .scard::before{--tape-o:.5}
+
+/* fechar = descolar o papel */
+.overlay.closing,.ann-overlay.closing{animation:mg-overlay-out .35s ease-in both}
+.overlay.closing .modal{animation:mg-popup-out .36s cubic-bezier(.5,0,.8,.4) both}
+.ann-overlay.closing .ann-modal{animation:mg-popup-out .36s cubic-bezier(.5,0,.8,.4) both}
+@media(max-width:660px){.overlay.closing .modal{animation:mg-sheet-out .3s cubic-bezier(.5,0,.8,.4) both}}
+
+/* barras preenchem por último (scaleX, nunca width) */
+.scard-avail .prog-fi{transform-origin:left;animation:mg-fill .8s cubic-bezier(.2,.7,.2,1) 1.15s backwards}
+.mm-bar .meta-fill{transform-origin:left;animation:mg-fill .7s cubic-bezier(.2,.7,.2,1) var(--fill-d,.15s) backwards}
+#app.entering .mm-bar .meta-fill{--fill-d:2.55s}
+
+/* tela de entrada: campos e botões chegam em cascata */
+#loginScreen .user-grid,#loginScreen .pass-who,#loginScreen .l-form h2,#loginScreen .l-form-sub{animation:mg-left .45s ease-out .5s backwards}
+#loginScreen .field{animation:mg-left .45s ease-out .58s backwards}
+#loginScreen .field + .field{animation-delay:.68s}
+#loginScreen .btn-p{animation:mg-pop .5s cubic-bezier(.3,1.4,.4,1) .72s backwards;--r:calc(var(--rot) * .6deg);transform:rotate(var(--r))}
+#loginScreen .divider{animation:mg-pop .4s cubic-bezier(.3,1.4,.4,1) .8s backwards}
+#loginScreen .btn-g{animation:mg-pop .4s cubic-bezier(.3,1.4,.4,1) .84s backwards}
+#loginScreen .btn-link{animation:mg-pop .4s cubic-bezier(.3,1.4,.4,1) .9s backwards}
+#loginScreen .auth-err,#loginScreen .auth-info{animation:mg-pop .35s cubic-bezier(.3,1.4,.4,1)}
+#loginScreen.exiting{animation:mg-login-exit .48s cubic-bezier(.5,0,.8,.4) both}
+
+/* mobile: timeline comprimida (handoff) */
+@media(max-width:680px){
+  .scard:nth-child(1){animation-delay:.65s}.scard:nth-child(2){animation-delay:.8s}.scard:nth-child(3){animation-delay:.9s}.scard:nth-child(4){animation-delay:.5s}
+  .scard:nth-child(1) .scard-lb{animation-delay:1.05s}.scard:nth-child(2) .scard-lb{animation-delay:1.2s}.scard:nth-child(3) .scard-lb{animation-delay:1.3s}.scard:nth-child(4) .scard-lb{animation-delay:.95s}
+  .pocket-card:nth-child(1){animation-delay:.95s}.pocket-card:nth-child(2){animation-delay:1.07s}.pocket-card:nth-child(3){animation-delay:1.19s}.pocket-card:nth-child(4){animation-delay:1.31s}.pocket-card:nth-child(5){animation-delay:1.43s}.pocket-card:nth-child(6){animation-delay:1.55s}
+  .pocket-card:nth-child(1)::before{--tape-d:1.45s}.pocket-card:nth-child(2)::before{--tape-d:1.57s}.pocket-card:nth-child(3)::before{--tape-d:1.69s}.pocket-card:nth-child(4)::before{--tape-d:1.81s}.pocket-card:nth-child(5)::before{--tape-d:1.93s}.pocket-card:nth-child(6)::before{--tape-d:2.05s}
+  .scard-avail .prog-fi{animation-delay:1.05s}
+}
+
+/* reduzir movimento: mostra o estado final, mantém só fades */
+@media(prefers-reduced-motion:reduce){
+  .lg-mar,.lg-gem,.tool-strip,.u-pill,.mob-bar,.month-pills,.scard,.scard::before,.scard-lb,
+  .pocket-card,.pocket-card::before,.modal::after,.scard-avail .prog-fi,.mm-bar .meta-fill,
+  .l-pill,.l-hero-title,.l-hero-sub,.l-card,.l-card::before,#loginScreen .user-grid,#loginScreen .pass-who,
+  #loginScreen .l-form h2,#loginScreen .l-form-sub,#loginScreen .field,#loginScreen .btn-p,#loginScreen .divider,
+  #loginScreen .btn-g,#loginScreen .btn-link,#loginScreen.exiting{animation:none!important}
+  .modal,.ann-modal{animation:mg-overlay-in .18s!important}
+  .overlay.closing,.ann-overlay.closing,.overlay.closing .modal,.ann-overlay.closing .ann-modal{animation:mg-overlay-out .18s both!important}
+}
 </style>
 </head>
 <body>
@@ -1841,7 +1901,7 @@ async function loginWith(email,pw,errEl,btn){
   if(error){ errEl.textContent=traduzErro(error.message); errEl.classList.remove('hidden'); return false; }
   curUser=data.user; loggedWithPin=legacy;
   if(!legacy) cacheCred(curUser.id,pw);
-  await bootApp();
+  await bootApp(true);
   return true;
 }
 async function doTileLogin(){
@@ -1900,7 +1960,7 @@ async function doSaveNewPass(){
   if(curUser) cacheCred(curUser.id,p1);
   recoveryMode=false;
   toast('senha redefinida ✓');
-  await bootApp();
+  await bootApp(true);
 }
 
 // Criar conta
@@ -1930,7 +1990,7 @@ async function createProfile(){
   cacheCred(curUser.id,pw);
   try{ await sb.from('usernames').upsert({user_id:curUser.id,username:user,updated_at:new Date().toISOString()}); }catch(_){}
   saveProfileLocal({id:curUser.id,name:user,username:user,email,avatar_color:color});
-  await bootApp();
+  await bootApp(true);
 }
 
 function traduzErro(msg){
@@ -1943,6 +2003,17 @@ function traduzErro(msg){
   return msg;
 }
 
+// ── Pop-ups: colar/descolar (handoff animações) ──
+const RMOTION=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function showOv(id){ const el=document.getElementById(id); clearTimeout(el._ct); el.classList.remove('closing'); el.classList.remove('hidden'); }
+function hideOv(id,after){
+  const el=document.getElementById(id);
+  if(el.classList.contains('hidden')||el.classList.contains('closing')) return;
+  if(RMOTION){ el.classList.add('hidden'); if(after)after(); return; }
+  el.classList.add('closing');
+  el._ct=setTimeout(()=>{ el.classList.remove('closing'); el.classList.add('hidden'); if(after)after(); },370);
+}
+
 async function logout(){
   await sb.auth.signOut();
   curUser=null; curMonth=null; allMonths={}; heroVal=null; prevInc=null; prevExp=null; prevSav=null; chartYear=new Date().getFullYear();
@@ -1951,9 +2022,17 @@ async function logout(){
 }
 
 // ── App ───────────────────────────────────────────────
-async function bootApp(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').classList.remove('hidden');
+async function bootApp(fromLogin){
+  const ls=document.getElementById('loginScreen');
+  if(fromLogin && !RMOTION && ls.style.display!=='none'){
+    ls.classList.add('exiting');
+    await new Promise(r=>setTimeout(r,470));
+  }
+  ls.style.display='none'; ls.classList.remove('exiting');
+  const appEl=document.getElementById('app');
+  appEl.classList.add('entering');
+  setTimeout(()=>appEl.classList.remove('entering'),3600);
+  appEl.classList.remove('hidden');
 
   // Nome e cor do perfil
   loadProfilesLocal();
@@ -2011,10 +2090,10 @@ function openMigrateModal(){
   document.getElementById('migPw1').value='';
   document.getElementById('migPw2').value='';
   document.getElementById('migErr').classList.add('hidden');
-  document.getElementById('migrateOverlay').classList.remove('hidden');
+  showOv('migrateOverlay');
   setTimeout(()=>document.getElementById('migUser').focus(),80);
 }
-function closeMigrate(){ document.getElementById('migrateOverlay').classList.add('hidden'); }
+function closeMigrate(){ hideOv('migrateOverlay'); }
 async function saveMigrate(){
   const user=document.getElementById('migUser').value.trim();
   const err=document.getElementById('migErr'); err.classList.add('hidden');
@@ -2374,7 +2453,7 @@ function openPartial(mk,idx){
   document.getElementById('partialMsg').innerHTML=`<strong>${esc(it.desc)}</strong> te deve <strong>${fmt(it.value)}</strong> — registra quanto já caiu, o resto continua em aberto.`;
   document.getElementById('partialVal').value='';
   document.getElementById('partialHint').textContent='';
-  document.getElementById('partialOverlay').classList.remove('hidden');
+  showOv('partialOverlay');
   setTimeout(()=>document.getElementById('partialVal').focus(),60);
 }
 function partialHintUpd(){
@@ -2384,7 +2463,7 @@ function partialHintUpd(){
   document.getElementById('partialHint').textContent =
     amt<=0 ? '' : (amt>=it.value-0.004 ? 'isso quita tudo ✓' : `ficam em aberto ${fmt(it.value-amt)}`);
 }
-function closePartial(){ document.getElementById('partialOverlay').classList.add('hidden'); partialRef=null; }
+function closePartial(){ hideOv('partialOverlay'); partialRef=null; }
 async function confirmPartial(){
   if(!partialRef) return;
   const {mk,idx}=partialRef;
@@ -2406,9 +2485,9 @@ async function confirmPartial(){
 function openLoansTab(){
   document.getElementById('uMenu')?.classList.add('hidden');
   buildLoansTab();
-  document.getElementById('loansOverlay').classList.remove('hidden');
+  showOv('loansOverlay');
 }
-function closeLoansTab(){ document.getElementById('loansOverlay').classList.add('hidden'); }
+function closeLoansTab(){ hideOv('loansOverlay'); }
 function buildLoansTab(){
   const all=[];
   Object.keys(allMonths).sort().forEach(mk=>{
@@ -2478,7 +2557,7 @@ function openSec(key){
     const add=document.getElementById('secAddBtn'); add.style.display=''; add.textContent='+ emprestar'; add.onclick=()=>openModal('loans');
     document.getElementById('secList').innerHTML='<div id="rows-loans"></div><div class="pager hidden" id="pager-loans" style="justify-content:center;padding-top:6px"></div>';
     renderLoans();
-    document.getElementById('secOverlay').classList.remove('hidden');
+    showOv('secOverlay');
     return;
   }
   if(key==='savings'){ openBoxesModal(); return; }
@@ -2487,7 +2566,7 @@ function openSec(key){
   const add=document.getElementById('secAddBtn'); add.style.display=''; add.textContent='+ adicionar'; add.onclick=()=>openModal(key);
   document.getElementById('secList').innerHTML=`<div id="rows-${key}"></div><div class="pager hidden" id="pager-${key}" style="justify-content:center;padding-top:6px"></div>`;
   renderRows(key);
-  document.getElementById('secOverlay').classList.remove('hidden');
+  showOv('secOverlay');
 }
 function openBoxesModal(){
   secKey='savings';
@@ -2497,9 +2576,9 @@ function openBoxesModal(){
   add.textContent='+ nova caixinha'; add.onclick=()=>openNewBox();
   renderBoxes();
   add.style.display=emergFull()?'':'none';
-  document.getElementById('secOverlay').classList.remove('hidden');
+  showOv('secOverlay');
 }
-function closeSec(){ document.getElementById('secOverlay').classList.add('hidden'); document.getElementById('secList').innerHTML=''; secKey=null; }
+function closeSec(){ hideOv('secOverlay',()=>{document.getElementById('secList').innerHTML='';}); secKey=null; }
 function toggleSec(card,e){
   if(card.classList.contains('collapsed')){ card.classList.remove('collapsed'); return; }
   if(e.target.closest('.grp-hd,.sav-hd')) card.classList.add('collapsed');
@@ -2634,7 +2713,7 @@ function removeItem(key,i){
     if(hits>0){
       pendingDel={key,i,desc:it.desc};
       document.getElementById('delPropMsg').innerHTML=`<strong>${esc(it.desc)}</strong> também está em ${hits} ${hits===1?'mês seguinte':'meses seguintes'}. remover daqui pra frente ou só deste mês?`;
-      document.getElementById('delPropOverlay').classList.remove('hidden');
+      showOv('delPropOverlay');
       return;
     }
   }
@@ -2691,10 +2770,10 @@ function openModal(key, idx=-1){
   if(hasCat) renderCatPills();
   if(hasPay) renderPayPills();
   buildDescSuggestions(key);
-  document.getElementById('overlay').classList.remove('hidden');
+  showOv('overlay');
   setTimeout(()=>document.getElementById('mDesc').focus(),60);
 }
-function closeModal(){ document.getElementById('overlay').classList.add('hidden'); modalKey=null; editIdx=-1; isParcelado=false; editLoanMk=null; depositBox='emerg'; }
+function closeModal(){ hideOv('overlay'); modalKey=null; editIdx=-1; isParcelado=false; editLoanMk=null; depositBox='emerg'; }
 function confirmModal(){
   let desc=document.getElementById('mDesc').value.trim();
   const val=parseMoney(document.getElementById('mVal').value);
@@ -2725,7 +2804,7 @@ function confirmModal(){
   if(editIdx<0 && modalKey==='exp-extra' && item.pay==='credito' && curMonth===nowKey()){
     pendingCredit=item;
     document.getElementById('creditNextLbl').textContent=mkLbl(nextKeyOf(curMonth));
-    document.getElementById('creditOverlay').classList.remove('hidden');
+    showOv('creditOverlay');
     return;
   }
   pushItem(item);
@@ -2766,11 +2845,11 @@ function maybeOfferPropagate(item,key){
   pendingProp={item:{...item},key};
   delete pendingProp.item.tp; // o "a receber" não se repete sozinho
   document.getElementById('propMsg').innerHTML=`<strong>${esc(item.desc)}</strong> é fixo — aplicar também de ${mkLbl(rest[0])} até ${mkLbl(rest[rest.length-1])}?`;
-  document.getElementById('propOverlay').classList.remove('hidden');
+  showOv('propOverlay');
 }
-function propKeep(){ document.getElementById('propOverlay').classList.add('hidden'); pendingProp=null; }
+function propKeep(){ hideOv('propOverlay'); pendingProp=null; }
 async function propApply(){
-  document.getElementById('propOverlay').classList.add('hidden');
+  hideOv('propOverlay');
   if(!pendingProp) return;
   const {item,key}=pendingProp; pendingProp=null;
   const rest=monthsUntilDec(curMonth);
@@ -2789,13 +2868,13 @@ async function propApply(){
   drawChart(); recalc();
   toast('aplicado até dez ✓');
 }
-function delPropCancel(){ document.getElementById('delPropOverlay').classList.add('hidden'); pendingDel=null; }
+function delPropCancel(){ hideOv('delPropOverlay'); pendingDel=null; }
 function delPropOne(){
-  document.getElementById('delPropOverlay').classList.add('hidden');
+  hideOv('delPropOverlay');
   if(pendingDel){ doRemoveItem(pendingDel.key,pendingDel.i); pendingDel=null; }
 }
 async function delPropAll(){
-  document.getElementById('delPropOverlay').classList.add('hidden');
+  hideOv('delPropOverlay');
   if(!pendingDel) return;
   const {key,i,desc}=pendingDel; pendingDel=null;
   const low=desc.trim().toLowerCase();
@@ -2827,7 +2906,7 @@ function creditKeep(){
   if(pendingCredit){ pushItem(pendingCredit); pendingCredit=null; }
 }
 async function creditPushNext(){
-  document.getElementById('creditOverlay').classList.add('hidden');
+  hideOv('creditOverlay');
   if(!pendingCredit) return;
   const nk=nextKeyOf(curMonth);
   const nm=monthLocal(nk);
@@ -3072,7 +3151,7 @@ function openProfileModal(){
     <div class="cswatch${c===selectedColor?' sel':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
   `).join('');
 
-  document.getElementById('profileOverlay').classList.remove('hidden');
+  showOv('profileOverlay');
   setTimeout(()=>document.getElementById('editUser').focus(),60);
 }
 
@@ -3082,7 +3161,7 @@ function selectColor(c){
     el.classList.toggle('sel', el.style.background===c || el.style.backgroundColor===c);
   });
 }
-function closeProfileModal(){ document.getElementById('profileOverlay').classList.add('hidden'); }
+function closeProfileModal(){ hideOv('profileOverlay'); }
 function profileOverlayClick(e){ if(e.target===document.getElementById('profileOverlay')) closeProfileModal(); }
 
 async function saveProfile(){
@@ -3227,9 +3306,9 @@ function openCover(){
   document.getElementById('coverMsg').innerHTML=
     `tirar <strong>${fmt(coverAmt)}</strong> do guardado pra cobrir o saldo negativo deste mês?`+
     (partial?`<br><span style="font-size:11px;color:var(--t4)">o guardado cobre só parte — ainda faltam ${fmt(deficit-coverAmt)}</span>`:'');
-  document.getElementById('coverOverlay').classList.remove('hidden');
+  showOv('coverOverlay');
 }
-function closeCover(){ document.getElementById('coverOverlay').classList.add('hidden'); }
+function closeCover(){ hideOv('coverOverlay'); }
 function confirmCover(){
   closeCover();
   monthLocal(curMonth)['savings'].push({desc:'resgate — cobrir o mês',value:-coverAmt});
@@ -3257,9 +3336,9 @@ function openFatura(){
        <tfoot><tr><td>total no cartão</td><td>${fmt(tot)}</td></tr></tfoot></table>`+
       (tp>0?`<div class="ann-avg">desse total, <span>${fmt(tp)}</span> é de outras pessoas (vão te pagar)</div>`:'')
     : '<div class="cal-empty-msg">nada no cartão este mês</div>';
-  document.getElementById('faturaOverlay').classList.remove('hidden');
+  showOv('faturaOverlay');
 }
-function closeFatura(){ document.getElementById('faturaOverlay').classList.add('hidden'); }
+function closeFatura(){ hideOv('faturaOverlay'); }
 
 // ── Comentário do mês ─────────────────────────────────
 function updateMood(av,tI,tE,svFlow){
@@ -3367,9 +3446,9 @@ function openAnnual(){
     </table>
     ${count>1?`<div class="ann-avg">média mensal (${count} meses): renda <span>${fmt(totI/count)}</span> · gastos <span>${fmt(totE/count)}</span> · reserva <span>${fmt(totS/count)}</span></div>`:''}
   `;
-  document.getElementById('annOverlay').classList.remove('hidden');
+  showOv('annOverlay');
 }
-function closeAnnual(){ document.getElementById('annOverlay').classList.add('hidden'); }
+function closeAnnual(){ hideOv('annOverlay'); }
 
 // ── Categorias ────────────────────────────────────────
 function renderCatPills(){
@@ -3406,9 +3485,9 @@ function openDelMonth(){
   const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   const [y,m]=curMonth.split('-').map(Number);
   document.getElementById('delMonthMsg').innerHTML=`Excluir todos os dados de <strong>${mns[m-1]} ${y}</strong>?<br><span style="color:var(--t4);font-size:12px;margin-top:4px;display:block">Esta ação não pode ser desfeita.</span>`;
-  document.getElementById('delMonthOverlay').classList.remove('hidden');
+  showOv('delMonthOverlay');
 }
-function closeDelMonth(){ document.getElementById('delMonthOverlay').classList.add('hidden'); }
+function closeDelMonth(){ hideOv('delMonthOverlay'); }
 async function confirmDelMonth(){
   closeDelMonth();
   delete allMonths[curMonth];
@@ -3433,13 +3512,12 @@ function renderMetas(eF,eX,sv,totalSaved){
   ];
   const mini=r=>{
     const pct=r.alvo>0?Math.min(r.cur/r.alvo*100,100):0, over=r.teto&&!r.ok;
-    return `<div class="mm"><div class="mm-top"><span>${r.cap}</span><span class="mm-v">${fmt(r.alvo)}</span></div><div class="meta-bar mm-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" data-w="${pct.toFixed(1)}" style="width:0"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div></div>`;
+    return `<div class="mm"><div class="mm-top"><span>${r.cap}</span><span class="mm-v">${fmt(r.alvo)}</span></div><div class="meta-bar mm-bar"><span class="meta-fill${over?' over':(r.teto?'':' goal')}" style="width:${pct.toFixed(1)}%"></span>${r.teto?'<i class="meta-ceil"></i>':''}</div></div>`;
   };
   set('metaRenda', mini(rows[0]));
   set('metaGastos', mini(rows[1]));
   set('metaGuardado', mini(rows[2]));
   set('metaCaix', mini(rows[3])+mini(rows[4]));
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('.mm-bar .meta-fill').forEach(el=>{el.style.width=el.dataset.w+'%';});}));
 }
 
 // ── Caixinhas ─────────────────────────────────────────
@@ -3478,10 +3556,10 @@ function openNewBox(){
   if(!emergFull()){ toast('complete a reserva de emergência primeiro'); return; }
   document.getElementById('uMenu')?.classList.add('hidden');
   document.getElementById('boxName').value=''; document.getElementById('boxTarget').value='';
-  document.getElementById('newBoxOverlay').classList.remove('hidden');
+  showOv('newBoxOverlay');
   setTimeout(()=>document.getElementById('boxName').focus(),60);
 }
-function closeNewBox(){ document.getElementById('newBoxOverlay').classList.add('hidden'); }
+function closeNewBox(){ hideOv('newBoxOverlay'); }
 function confirmNewBox(){
   const name=document.getElementById('boxName').value.trim();
   const tgt=parseMoney(document.getElementById('boxTarget').value)||0;
@@ -3489,8 +3567,8 @@ function confirmNewBox(){
   const a=customBoxes(); a.push({id:'b'+Date.now().toString(36),name,target:tgt}); saveCustomBoxes(a);
   closeNewBox(); renderBoxes(); toast('caixinha criada ✓');
 }
-function openBoxDetail(id){ boxDetailId=id; boxFixOpen=false; buildBoxDetail(); document.getElementById('boxOverlay').classList.remove('hidden'); }
-function closeBoxDetail(){ document.getElementById('boxOverlay').classList.add('hidden'); boxDetailId=null; boxFixOpen=false; }
+function openBoxDetail(id){ boxDetailId=id; boxFixOpen=false; buildBoxDetail(); showOv('boxOverlay'); }
+function closeBoxDetail(){ hideOv('boxOverlay'); boxDetailId=null; boxFixOpen=false; }
 function buildBoxDetail(){
   const id=boxDetailId, b=allBoxes().find(x=>x.id===id); if(!b) return;
   document.getElementById('boxTitle').textContent=b.name;
@@ -3564,8 +3642,8 @@ function wishBadge(){
   document.querySelectorAll('.wish-dot').forEach(d=>d.classList.toggle('hidden',!n));
   if(n&&!wishBadge._t){ wishBadge._t=1; toast(n===1?'alguém quer ver seus desejos!':n+' pedidos pra ver seus desejos!'); }
 }
-function openWish(){ wishView='mine'; buildWish(); document.getElementById('wishOverlay').classList.remove('hidden'); }
-function closeWish(){ document.getElementById('wishOverlay').classList.add('hidden'); wishEditId=null; }
+function openWish(){ wishView='mine'; buildWish(); showOv('wishOverlay'); }
+function closeWish(){ hideOv('wishOverlay'); wishEditId=null; }
 function wishPrPills(){
   return Object.keys(WISH_PR).map(k=>{
     const on=wishPr===k,c=WISH_PR[k].c;
@@ -3684,9 +3762,9 @@ function wishBuy(id){
   const it=wishItems.find(x=>x.id===id); if(!it) return;
   document.getElementById('wishBuyMsg').innerHTML=`<strong>${esc(it.name)}</strong> por <strong>${fmt(it.value)}</strong> — como pagou?`;
   renderWishPays();
-  document.getElementById('wishBuyOverlay').classList.remove('hidden');
+  showOv('wishBuyOverlay');
 }
-function closeWishBuy(){ document.getElementById('wishBuyOverlay').classList.add('hidden'); wishBuyId=null; wishIsParc=false; }
+function closeWishBuy(){ hideOv('wishBuyOverlay'); wishBuyId=null; wishIsParc=false; }
 function wishToggleParc(){
   wishIsParc=!wishIsParc;
   document.getElementById('wishParcSw').classList.toggle('on',wishIsParc);
@@ -3822,7 +3900,7 @@ function openScore(){
   document.getElementById('uMenu')?.classList.add('hidden');
   const sc=currentScore();
   const wrap=document.getElementById('scoreContent');
-  if(sc==null){ wrap.innerHTML='<div class="cal-empty-msg">adicione renda e gastos pra calcular seu score</div>'; document.getElementById('scoreOverlay').classList.remove('hidden'); return; }
+  if(sc==null){ wrap.innerHTML='<div class="cal-empty-msg">adicione renda e gastos pra calcular seu score</div>'; showOv('scoreOverlay'); return; }
   const b=scoreBand(sc);
   const lastDone=prevMonthKey(nowKey());
   const prev=scoreUpTo(prevMonthKey(lastDone));
@@ -3854,7 +3932,7 @@ function openScore(){
     </div>
     ${factors}
     <div class="sc-foot" style="animation:introSub .45s ease .8s both">${SCORE_MSG[b.lb]||''}</div>`;
-  document.getElementById('scoreOverlay').classList.remove('hidden');
+  showOv('scoreOverlay');
   // abertura: número conta, arco varre, barras crescem em cascata
   const arcEl=document.getElementById('scArc'), numEl=document.getElementById('scNum');
   const fills=document.querySelectorAll('#scoreContent .sc-fill');
@@ -3875,7 +3953,7 @@ function openScore(){
     })();
   }
 }
-function closeScore(){ document.getElementById('scoreOverlay').classList.add('hidden'); }
+function closeScore(){ hideOv('scoreOverlay'); }
 
 // ── Posso comprar? ────────────────────────────────────
 function monthAvail(k){
@@ -3912,7 +3990,7 @@ function openBuy(){
   document.getElementById('buyParcWrap').classList.add('hidden');
   document.getElementById('buyVerdict').classList.add('hidden');
   renderBuyPays();
-  document.getElementById('buyOverlay').classList.remove('hidden');
+  showOv('buyOverlay');
   setTimeout(()=>document.getElementById('buyVal').focus(),60);
 }
 function closeBuy(){ const ov=document.getElementById('buyOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); buyTrigger?.focus?.(); buyTrigger=null; }
@@ -4043,7 +4121,7 @@ function openShop(){
   document.getElementById('shopVal').value='';
   document.getElementById('shopNew').value='';
   renderShopPays(); renderShop();
-  document.getElementById('shopOverlay').classList.remove('hidden');
+  showOv('shopOverlay');
   setTimeout(()=>document.getElementById('shopNew').focus(),60);
 }
 function closeShop(){ const ov=document.getElementById('shopOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); shopTrigger?.focus?.(); shopTrigger=null; }
@@ -4105,9 +4183,9 @@ function openCal(){
   const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   document.getElementById('calTitle').textContent=mns[m-1]+' '+y;
   buildCal(y,m);
-  document.getElementById('calOverlay').classList.remove('hidden');
+  showOv('calOverlay');
 }
-function closeCal(){ document.getElementById('calOverlay').classList.add('hidden'); }
+function closeCal(){ hideOv('calOverlay'); }
 function buildCal(y,m){
   const d=monthLocal(curMonth);
   const byDay={};
