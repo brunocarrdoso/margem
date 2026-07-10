@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="pre-mount">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -400,7 +400,7 @@ html[data-dark] .chart-in{border-color:var(--ink)}
 @keyframes cardUp{from{opacity:0}to{opacity:1}}
 .pocket-card{animation:mg-drop .55s cubic-bezier(.2,.8,.3,1) backwards}
 .pocket-card:nth-child(1){animation-delay:1s}.pocket-card:nth-child(2){animation-delay:1.12s}.pocket-card:nth-child(3){animation-delay:1.24s}.pocket-card:nth-child(4){animation-delay:1.36s}.pocket-card:nth-child(5){animation-delay:1.48s}.pocket-card:nth-child(6){animation-delay:1.6s}
-.pocket-card:nth-child(1)::before{--tape-d:1.5s}.pocket-card:nth-child(2)::before{--tape-d:1.62s}.pocket-card:nth-child(3)::before{--tape-d:1.74s}.pocket-card:nth-child(4)::before{--tape-d:1.86s}.pocket-card:nth-child(5)::before{--tape-d:1.98s}.pocket-card:nth-child(6)::before{--tape-d:2.1s}
+.pocket-card:nth-child(1){--tape-d:1.5s}.pocket-card:nth-child(2){--tape-d:1.62s}.pocket-card:nth-child(3){--tape-d:1.74s}.pocket-card:nth-child(4){--tape-d:1.86s}.pocket-card:nth-child(5){--tape-d:1.98s}.pocket-card:nth-child(6){--tape-d:2.1s}
 .scard:nth-child(1){animation:mg-right .55s cubic-bezier(.2,.8,.3,1) .7s backwards}
 .scard:nth-child(2){animation:mg-right .55s cubic-bezier(.2,.8,.3,1) .85s backwards}
 .scard:nth-child(3){animation:mg-rise .55s cubic-bezier(.2,.8,.3,1) .95s backwards}
@@ -1087,7 +1087,7 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{--tape-o:.5}
   .scard:nth-child(1){animation-delay:.65s}.scard:nth-child(2){animation-delay:.8s}.scard:nth-child(3){animation-delay:.9s}.scard:nth-child(4){animation-delay:.5s}
   .scard:nth-child(1) .scard-lb{animation-delay:1.05s}.scard:nth-child(2) .scard-lb{animation-delay:1.2s}.scard:nth-child(3) .scard-lb{animation-delay:1.3s}.scard:nth-child(4) .scard-lb{animation-delay:.95s}
   .pocket-card:nth-child(1){animation-delay:.95s}.pocket-card:nth-child(2){animation-delay:1.07s}.pocket-card:nth-child(3){animation-delay:1.19s}.pocket-card:nth-child(4){animation-delay:1.31s}.pocket-card:nth-child(5){animation-delay:1.43s}.pocket-card:nth-child(6){animation-delay:1.55s}
-  .pocket-card:nth-child(1)::before{--tape-d:1.45s}.pocket-card:nth-child(2)::before{--tape-d:1.57s}.pocket-card:nth-child(3)::before{--tape-d:1.69s}.pocket-card:nth-child(4)::before{--tape-d:1.81s}.pocket-card:nth-child(5)::before{--tape-d:1.93s}.pocket-card:nth-child(6)::before{--tape-d:2.05s}
+  .pocket-card:nth-child(1){--tape-d:1.45s}.pocket-card:nth-child(2){--tape-d:1.57s}.pocket-card:nth-child(3){--tape-d:1.69s}.pocket-card:nth-child(4){--tape-d:1.81s}.pocket-card:nth-child(5){--tape-d:1.93s}.pocket-card:nth-child(6){--tape-d:2.05s}
   .scard-avail .prog-fi{animation-delay:1.05s}
 }
 
@@ -1101,6 +1101,27 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{--tape-o:.5}
   .modal,.ann-modal{animation:mg-overlay-in .18s!important}
   .overlay.closing,.ann-overlay.closing,.overlay.closing .modal,.ann-overlay.closing .ann-modal{animation:mg-overlay-out .18s both!important}
 }
+
+/* ══ splash primeiro, colagem depois: entradas pausadas até o carimbo sair ══ */
+html.pre-mount .lg-mar,html.pre-mount .lg-gem,html.pre-mount .tool-strip,html.pre-mount .u-pill,
+html.pre-mount .mob-bar,html.pre-mount .month-pills,html.pre-mount .scard,html.pre-mount .scard::before,
+html.pre-mount .scard-lb,html.pre-mount .pocket-card,html.pre-mount .pocket-card::before,html.pre-mount .pc-add,
+html.pre-mount .scard-avail .prog-fi,html.pre-mount .mm-bar .meta-fill,
+html.pre-mount .l-pill,html.pre-mount .l-hero-title,html.pre-mount .l-hero-sub,
+html.pre-mount .l-card,html.pre-mount .l-card::before,html.pre-mount #loginScreen .user-grid,
+html.pre-mount #loginScreen .pass-who,html.pre-mount #loginScreen .l-form h2,html.pre-mount #loginScreen .l-form-sub,
+html.pre-mount #loginScreen .field,html.pre-mount #loginScreen .btn-p,html.pre-mount #loginScreen .divider,
+html.pre-mount #loginScreen .btn-g,html.pre-mount #loginScreen .btn-link{animation-play-state:paused!important}
+
+/* ══ sticker "+" nos recortes: adicionar sem abrir o card ══ */
+.pc-add{position:absolute;top:-13px;right:-11px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  background:var(--pop);border:2px solid var(--ink);border-radius:0;color:#1b1b1b;font-family:'Anton',sans-serif;font-size:19px;line-height:1;
+  cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);z-index:3;--r:calc(var(--rot) * 6deg);transform:rotate(var(--r));
+  transition:transform .15s cubic-bezier(.22,1,.36,1),box-shadow .15s;padding:0 0 2px;
+  animation:mg-pop .45s cubic-bezier(.3,1.5,.4,1) calc(var(--tape-d,1.5s) + .12s) backwards}
+.pc-add:hover{transform:rotate(var(--r)) scale(1.14);box-shadow:3px 3px 0 var(--ink-sh)}
+.pc-add:active{transform:rotate(var(--r)) scale(.94);box-shadow:1px 1px 0 var(--ink-sh)}
+@media(prefers-reduced-motion:reduce){.pc-add{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1332,31 +1353,37 @@ html[data-dark] .pocket-card::before,html[data-dark] .scard::before{--tape-o:.5}
     <div class="dash">
     <div class="pockets">
         <div class="pocket-card rc-income" onclick="openSec('income-fixed')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('income-fixed')" title="adicionar" aria-label="adicionar em renda fixa">+</button>
           <span class="pc-chip">renda fixa</span>
           <div class="pc-total c-green" id="tot-income-fixed">R$ 0,00</div>
           <div class="pc-sub">entrando todo mês</div>
         </div>
         <div class="pocket-card rc-income" onclick="openSec('income-extra')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('income-extra')" title="adicionar" aria-label="adicionar em renda eventual">+</button>
           <span class="pc-chip">renda eventual</span>
           <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
           <div class="pc-sub">um extra este mês</div>
         </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-fixed')" title="adicionar" aria-label="adicionar em gastos fixos">+</button>
           <span class="pc-chip">gastos fixos</span>
           <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
           <div class="pc-sub">saindo todo mês</div>
         </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-extra')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-extra')" title="adicionar" aria-label="adicionar em gastos esporádicos">+</button>
           <span class="pc-chip">gastos esporádicos</span>
           <div class="pc-total c-red" id="tot-exp-extra">R$ 0,00</div>
           <div class="pc-sub">controle do mês</div>
         </div>
         <div class="pocket-card rc-amber" onclick="openSec('loans')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('loans')" title="adicionar" aria-label="adicionar em emprestado">+</button>
           <span class="pc-chip">emprestado</span>
           <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
           <div class="pc-sub">a receber</div>
         </div>
         <div class="pocket-card rc-purple" onclick="openSec('savings')">
+          <button class="pc-add" onclick="event.stopPropagation();openModal('savings')" title="adicionar" aria-label="adicionar em caixinhas">+</button>
           <span class="pc-chip">caixinhas</span>
           <div class="pc-total c-purple" id="tot-savings">R$ 0,00</div>
           <div class="pc-sub" id="sub-savings">total guardado</div>
@@ -2031,7 +2058,7 @@ async function bootApp(fromLogin){
   ls.style.display='none'; ls.classList.remove('exiting');
   const appEl=document.getElementById('app');
   appEl.classList.add('entering');
-  setTimeout(()=>appEl.classList.remove('entering'),3600);
+  setTimeout(()=>appEl.classList.remove('entering'),fromLogin?3600:6200);
   appEl.classList.remove('hidden');
 
   // Nome e cor do perfil
@@ -3610,6 +3637,7 @@ async function boxFixSave(){
 
 // ── Carrinho de desejos ───────────────────────────────
 let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media', wishEditId=null, wishIsParc=false;
+let wishGiftMode=false, wishOtherOwner=null, wishOtherItems=[];
 const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
 function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
 function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
@@ -3657,7 +3685,8 @@ function wishRowHtml(it,mine){
   const sub=it.done?`<em>comprado${it.pay?' · '+(PAYS.find(p=>p.id===it.pay)?.lb||it.pay):''}</em>`:`<em>${pr.lb}</em>`;
   const act=mine?(it.done
     ?`<button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`
-    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="edit-btn" onclick="wishEdit('${it.id}')" title="editar">✎</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`):'';
+    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="edit-btn" onclick="wishEdit('${it.id}')" title="editar">✎</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`)
+    :(it.done?'':`<button class="loan-recv-btn" onclick="wishGift('${it.id}')" title="comprar de presente e tirar da lista">🎁 presentear</button>`);
   return `<div class="wish-it${it.done?' done':''}">
     <span class="wish-pr" style="background:${pr.c}"></span>
     <span class="wish-nm">${nm}${sub}</span>
@@ -3680,6 +3709,7 @@ function buildWish(){
         const {data,error}=await sb.from('wishlists').select('items').eq('user_id',sh.owner_id).maybeSingle();
         if(error) throw error;
         const items=(data?.items)||[];
+        wishOtherOwner=sh.owner_id; wishOtherItems=items;
         document.getElementById('wishOtherList').innerHTML=items.length
           ? wishSorted(items).map(it=>wishRowHtml(it,false)).join('')
           : '<div class="cal-empty-msg">a lista está vazia por enquanto</div>';
@@ -3753,8 +3783,21 @@ function wishEdit(id){
 }
 function wishEditCancel(){ wishEditId=null; buildWish(); }
 function wishDel(id){ if(wishEditId===id) wishEditId=null; wishItems=wishItems.filter(x=>x.id!==id); wishPush(); buildWish(); }
+function wishGift(id){
+  const it=wishOtherItems.find(x=>x.id===id); if(!it) return;
+  wishGiftMode=true; wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
+  document.querySelector('#wishBuyOverlay .m-title').textContent='presente! 🎁';
+  document.getElementById('wishParcSw').classList.remove('on');
+  document.getElementById('wishParcN').classList.add('hidden');
+  document.getElementById('wishParcVal').value='';
+  document.getElementById('wishParcHintEl').classList.add('hidden');
+  document.getElementById('wishBuyMsg').innerHTML=`dar <strong>${esc(it.name)}</strong> de presente por <strong>${fmt(it.value)}</strong> — como pagou? sai dos seus gastos e some da lista da pessoa.`;
+  renderWishPays();
+  showOv('wishBuyOverlay');
+}
 function wishBuy(id){
-  wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
+  wishGiftMode=false; wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
+  document.querySelector('#wishBuyOverlay .m-title').textContent='comprei!';
   document.getElementById('wishParcSw').classList.remove('on');
   document.getElementById('wishParcN').classList.add('hidden');
   document.getElementById('wishParcVal').value='';
@@ -3764,7 +3807,7 @@ function wishBuy(id){
   renderWishPays();
   showOv('wishBuyOverlay');
 }
-function closeWishBuy(){ hideOv('wishBuyOverlay'); wishBuyId=null; wishIsParc=false; }
+function closeWishBuy(){ hideOv('wishBuyOverlay'); wishBuyId=null; wishIsParc=false; wishGiftMode=false; }
 function wishToggleParc(){
   wishIsParc=!wishIsParc;
   document.getElementById('wishParcSw').classList.toggle('on',wishIsParc);
@@ -3775,7 +3818,7 @@ function wishToggleParc(){
 }
 function wishParcHint(){
   const el=document.getElementById('wishParcHintEl');
-  const it=wishItems.find(x=>x.id===wishBuyId);
+  const it=(wishGiftMode?wishOtherItems:wishItems).find(x=>x.id===wishBuyId);
   const n=parseInt(document.getElementById('wishParcVal').value);
   if(!wishIsParc||!it||!n||n<2){ el.classList.add('hidden'); return; }
   let k=curMonth; for(let i=0;i<n;i++) k=nextKeyOf(k);
@@ -3792,32 +3835,44 @@ function renderWishPays(){
   if(!cred){ wishIsParc=false; document.getElementById('wishParcSw').classList.remove('on'); document.getElementById('wishParcN').classList.add('hidden'); document.getElementById('wishParcHintEl').classList.add('hidden'); }
   document.getElementById('wishBuyNote').textContent=cred?`no crédito vai pra fatura de ${mkLbl(nextKeyOf(curMonth))}`:'';
 }
-function confirmWishBuy(){
-  const it=wishItems.find(x=>x.id===wishBuyId); if(!it) return;
+async function confirmWishBuy(){
+  const gift=wishGiftMode;
+  const it=(gift?wishOtherItems:wishItems).find(x=>x.id===wishBuyId); if(!it) return;
   const parc=wishIsParc?(parseInt(document.getElementById('wishParcVal').value)||1):1;
   if(wishPaySel==='credito'&&wishIsParc&&parc<2){ document.getElementById('wishParcVal').focus(); return; }
-  it.done=true; it.pay=wishPaySel; wishPush();
+  if(gift){
+    // tira da lista da pessoa primeiro — só lança o gasto se der certo
+    try{
+      const {error}=await sb.rpc('gift_wish_item',{p_owner:wishOtherOwner,p_item:it.id});
+      if(error) throw error;
+      wishOtherItems=wishOtherItems.filter(x=>x.id!==it.id);
+    }catch(e){
+      toast(String(e?.message||'').includes('sem acesso')?'você não tem mais acesso a essa lista':'não deu pra tirar da lista da pessoa — tenta de novo','err');
+      return;
+    }
+  } else { it.done=true; it.pay=wishPaySel; wishPush(); }
+  const nm=gift?`${it.name} 🎁 presente`:it.name;
   if(wishPaySel==='credito'&&parc>1){
     const pp=Math.round(it.value/parc*100)/100; let k=curMonth; const keys=[];
     for(let i=0;i<parc;i++){ k=nextKeyOf(k);
       const val=i===parc-1?Math.round((it.value-pp*(parc-1))*100)/100:pp;
-      monthLocal(k)['exp-extra'].push({desc:`${it.name} (${i+1}/${parc})`,value:val,pay:'credito'}); keys.push(k); }
+      monthLocal(k)['exp-extra'].push({desc:`${nm} (${i+1}/${parc})`,value:val,pay:'credito'}); keys.push(k); }
     if(curUser){ const rows=keys.map(kk=>({user_id:curUser.id,month_key:kk,data:allMonths[kk],updated_at:new Date().toISOString()})); sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'}); }
     renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
     closeWishBuy(); buildWish();
-    toast(`comprado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`); return;
+    toast(gift?`presenteado! 🎁 ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`:`comprado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`); return;
   }
-  const exp={desc:it.name,value:it.value,pay:wishPaySel};
+  const exp={desc:nm,value:it.value,pay:wishPaySel};
   if(wishPaySel==='credito'){
     const nk=nextKeyOf(curMonth);
     monthLocal(nk)['exp-extra'].push(exp); saveMonth(nk);
-    toast('comprado! na fatura de '+mkLbl(nk)+' ✓');
+    toast(gift?'presenteado! 🎁 na fatura de '+mkLbl(nk)+' ✓':'comprado! na fatura de '+mkLbl(nk)+' ✓');
   } else {
     const d=monthLocal(curMonth);
     d['exp-extra'].push(exp);
     pages['exp-extra']=Math.ceil(d['exp-extra'].length/PAGE_SZ('exp-extra'))-1;
     schedSave();
-    toast('comprado! lançado nos gastos ✓');
+    toast(gift?'presenteado! 🎁 lançado nos seus gastos ✓':'comprado! lançado nos gastos ✓');
   }
   renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
   closeWishBuy(); buildWish();
@@ -4287,6 +4342,7 @@ function memeCheck(item){
 
 // ── Boot ──────────────────────────────────────────────
 setTimeout(()=>document.getElementById('introSplash')?.remove(),2600);
+setTimeout(()=>document.documentElement.classList.remove('pre-mount'),2450);
 (()=>{const m=new Date().getMonth()+1;
   if(m===12) document.documentElement.classList.add('season-dec');
   else if(m===6) document.documentElement.classList.add('season-jun');})();
