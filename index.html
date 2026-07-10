@@ -512,7 +512,8 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
   /* bottom sheet */
   .overlay{align-items:flex-end;padding:0}
-  .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;padding:28px 20px calc(env(safe-area-inset-bottom,0px) + 32px);animation:slideup .28s cubic-bezier(.32,.72,0,1);--mr:0deg;transform:none}
+  .overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;max-width:100%;width:100%;margin:0;max-height:calc(100dvh - 28px);overflow-y:auto;padding:24px 20px calc(env(safe-area-inset-bottom,0px) + 24px);animation:slideup .28s cubic-bezier(.32,.72,0,1);--mr:0deg;transform:none}
   .modal::before{content:'';display:block;width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
 }
 
@@ -1122,6 +1123,7 @@ html.pre-mount #loginScreen .btn-g,html.pre-mount #loginScreen .btn-link{animati
 .pc-add:hover{transform:rotate(var(--r)) scale(1.14);box-shadow:3px 3px 0 var(--ink-sh)}
 .pc-add:active{transform:rotate(var(--r)) scale(.94);box-shadow:1px 1px 0 var(--ink-sh)}
 @media(prefers-reduced-motion:reduce){.pc-add{animation:none!important}}
+html{background:var(--bg)}
 </style>
 </head>
 <body>
@@ -1267,9 +1269,6 @@ html.pre-mount #loginScreen .btn-g,html.pre-mount #loginScreen .btn-link{animati
         <button class="icon-btn wish-btn" onclick="openWish()" title="carrinho de desejos">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.2C1.2 7 3.6 4 6.8 4c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.2 0 5.6 3 4.1 6.8C19.5 15.4 12 20 12 20z"/></svg><span class="wish-dot hidden"></span>
         </button>
-        <button class="icon-btn" onclick="openAnnual()" title="resumo anual">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg>
-        </button>
       </div>
       
       <div class="u-pill-wrap">
@@ -1295,7 +1294,6 @@ html.pre-mount #loginScreen .btn-g,html.pre-mount #loginScreen .btn-link{animati
     <button onclick="openBuy()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg><span>posso?</span></button>
     <button onclick="openShop()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 12l2 2 4-4"/></svg><span>compras</span></button>
     <button class="wish-btn" onclick="openWish()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.3-9.2C1.2 7 3.6 4 6.8 4c2 0 3.6 1.1 5.2 3 1.6-1.9 3.2-3 5.2-3 3.2 0 5.6 3 4.1 6.8C19.5 15.4 12 20 12 20z"/></svg><span class="wish-dot hidden"></span><span>desejos</span></button>
-    <button onclick="openAnnual()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V5M19 20v-6M3.5 21h17"/></svg><span>ano</span></button>
   </nav>
   <select class="hidden" id="monthSel"></select>
 
@@ -3686,7 +3684,7 @@ function wishRowHtml(it,mine){
   const act=mine?(it.done
     ?`<button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`
     :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="edit-btn" onclick="wishEdit('${it.id}')" title="editar">✎</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`)
-    :(it.done?'':`<button class="loan-recv-btn" onclick="wishGift('${it.id}')" title="comprar de presente e tirar da lista">🎁 presentear</button>`);
+    :(it.done?'':`<button class="loan-recv-btn" onclick="wishGift('${it.id}')" title="comprar de presente e tirar da lista">presentear</button>`);
   return `<div class="wish-it${it.done?' done':''}">
     <span class="wish-pr" style="background:${pr.c}"></span>
     <span class="wish-nm">${nm}${sub}</span>
@@ -3786,7 +3784,7 @@ function wishDel(id){ if(wishEditId===id) wishEditId=null; wishItems=wishItems.f
 function wishGift(id){
   const it=wishOtherItems.find(x=>x.id===id); if(!it) return;
   wishGiftMode=true; wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
-  document.querySelector('#wishBuyOverlay .m-title').textContent='presente! 🎁';
+  document.querySelector('#wishBuyOverlay .m-title').textContent='presente!';
   document.getElementById('wishParcSw').classList.remove('on');
   document.getElementById('wishParcN').classList.add('hidden');
   document.getElementById('wishParcVal').value='';
@@ -3851,7 +3849,7 @@ async function confirmWishBuy(){
       return;
     }
   } else { it.done=true; it.pay=wishPaySel; wishPush(); }
-  const nm=gift?`${it.name} 🎁 presente`:it.name;
+  const nm=gift?`${it.name} — presente`:it.name;
   if(wishPaySel==='credito'&&parc>1){
     const pp=Math.round(it.value/parc*100)/100; let k=curMonth; const keys=[];
     for(let i=0;i<parc;i++){ k=nextKeyOf(k);
@@ -3860,19 +3858,19 @@ async function confirmWishBuy(){
     if(curUser){ const rows=keys.map(kk=>({user_id:curUser.id,month_key:kk,data:allMonths[kk],updated_at:new Date().toISOString()})); sb.from('financial_data').upsert(rows,{onConflict:'user_id,month_key'}); }
     renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
     closeWishBuy(); buildWish();
-    toast(gift?`presenteado! 🎁 ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`:`comprado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`); return;
+    toast(gift?`presenteado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`:`comprado! ${parc}x na fatura a partir de ${mkLbl(nextKeyOf(curMonth))} ✓`); return;
   }
   const exp={desc:nm,value:it.value,pay:wishPaySel};
   if(wishPaySel==='credito'){
     const nk=nextKeyOf(curMonth);
     monthLocal(nk)['exp-extra'].push(exp); saveMonth(nk);
-    toast(gift?'presenteado! 🎁 na fatura de '+mkLbl(nk)+' ✓':'comprado! na fatura de '+mkLbl(nk)+' ✓');
+    toast(gift?'presenteado! na fatura de '+mkLbl(nk)+' ✓':'comprado! na fatura de '+mkLbl(nk)+' ✓');
   } else {
     const d=monthLocal(curMonth);
     d['exp-extra'].push(exp);
     pages['exp-extra']=Math.ceil(d['exp-extra'].length/PAGE_SZ('exp-extra'))-1;
     schedSave();
-    toast(gift?'presenteado! 🎁 lançado nos seus gastos ✓':'comprado! lançado nos gastos ✓');
+    toast(gift?'presenteado! lançado nos seus gastos ✓':'comprado! lançado nos gastos ✓');
   }
   renderRows('exp-extra'); recalc(); drawChart(); drawCatBreak();
   closeWishBuy(); buildWish();
