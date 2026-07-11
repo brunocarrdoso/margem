@@ -487,10 +487,11 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .scard-avail{grid-column:auto}
   .scard-avail .av-bar-scale{display:none}
   .scard-avail .avail-pcts{font-size:9px}
-  .scard{min-height:96px;min-width:0}
+  .scard{min-height:88px;min-width:0;padding:14px 13px 12px}
+  .scard-val{font-size:clamp(16px,5.6vw,22px)}
+  .scard-lb{font-size:10px}
   .scard-avail .cover-btn{white-space:normal;font-size:9.5px;padding:6px 9px;line-height:1.25}
-  .scard-avail-val{font-size:19px;white-space:nowrap}
-  .scard-avail-val{font-size:28px;letter-spacing:-.8px}
+  .scard-avail-val{font-size:clamp(17px,6vw,23px);letter-spacing:-.5px;white-space:nowrap}
   .carry-bar{padding:10px 14px 0}
   .due-bar{margin:10px 14px 0}
   .carry-card{padding:14px 16px}
@@ -504,8 +505,13 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
   .metas-in{padding:18px}
   .chart-sec{padding:10px 14px 24px}
   .chart-in{padding:18px 16px}
-  .ann-modal{padding:20px}
-  .ann-table td,.ann-table th{padding:6px;font-size:12px}
+  .ann-overlay{padding:12px}
+  .ann-modal{padding:18px 13px}
+  #annContent{overflow-x:auto;margin:0 -3px}
+  .ann-table td{padding:6px 4px;font-size:11px}
+  .ann-table th{padding:4px 4px 8px;font-size:8.5px;letter-spacing:.5px}
+  .ann-table tfoot td{font-size:12.5px;padding-top:10px}
+  .ann-avg{font-size:11px}
   .tool-strip{display:none}
   .mob-bar{display:flex}
   .main-content{padding-bottom:82px}
@@ -621,7 +627,7 @@ html[data-dark] .pc-slip{background:var(--surf2);box-shadow:1.5px 2px 0 rgba(0,0
 .pc-front .meter{width:100%;align-self:stretch;background:var(--surf);border:1.5px solid var(--bdr);border-radius:11px 8px 11px 9px;padding:10px 13px;margin-top:auto;box-shadow:1.5px 2px 0 rgba(120,90,40,.1)}
 html[data-dark] .pc-front .meter{box-shadow:1.5px 2px 0 rgba(0,0,0,.35)}
 .sec-list{margin-bottom:14px;max-height:min(56vh,520px);overflow-y:auto}
-@media(max-width:680px){.pockets{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-flow:row;grid-auto-rows:1fr;gap:20px 14px} .metas-grid{grid-template-columns:1fr}}
+@media(max-width:680px){.pockets{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-flow:row;grid-auto-rows:1fr;gap:20px 14px} .metas-grid{grid-template-columns:1fr} .pc-total{font-size:clamp(24px,7.5vw,32px)} .pocket-card{padding:18px 18px 16px;min-height:132px}}
 @media(max-width:440px){.pockets{grid-template-columns:1fr;grid-auto-rows:auto}}
 .pager{display:flex;align-items:center;gap:7px;padding-top:10px}
 .pg-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surf);border:1.5px solid var(--ink);border-radius:7px 4px 7px 5px;font-size:14px;color:var(--t1);cursor:pointer;line-height:1;box-shadow:2px 2px 0 var(--ink-sh);transition:all .14s cubic-bezier(.22,1,.36,1);padding:0;font-family:inherit}
@@ -3468,25 +3474,28 @@ function openAnnual(){
   const y=parseInt(document.getElementById('yearSel').value);
   document.getElementById('annTitle').textContent='resumo '+y;
   const mns=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const mob=matchMedia('(max-width:660px)').matches;
+  const nmM=m=>mob?mns[m-1].slice(0,3):mns[m-1];
+  const fm=v=>mob?fmt(v).replace(/^R\$\s?/,''):fmt(v);
   let totI=0,totE=0,totS=0,count=0,rows='';
   for(let m=1;m<=12;m++){
     const mk=`${y}-${String(m).padStart(2,'0')}`;
     const d=allMonths[mk];
     const dash='<td style="color:var(--t4)">—</td>';
     if(!d||!(sum(d['income-fixed'])+sum(d['income-extra'])+sum(d['exp-fixed'])+sum(d['exp-extra'])+sum(d['savings']))){
-      rows+=`<tr><td>${mns[m-1]}</td>${dash}${dash}${dash}${dash}</tr>`; continue;
+      rows+=`<tr><td>${nmM(m)}</td>${dash}${dash}${dash}${dash}</tr>`; continue;
     }
     const la=loanAdj(mk);
     const ti=sum(d['income-fixed'])+sum(d['income-extra']),te=sum(d['exp-fixed'])+sum(d['exp-extra']),sv=sum(d['savings']),av=ti-te-sumFlow(d['savings'])-la.lent+la.recvd;
     totI+=ti; totE+=te; totS+=sv; count++;
-    rows+=`<tr><td>${mns[m-1]}</td><td class="c-green">${fmt(ti)}</td><td class="c-red">${fmt(te)}</td><td class="c-purple">${fmt(sv)}</td><td class="${av<0?'c-red':'c-green'}">${fmt(av)}</td></tr>`;
+    rows+=`<tr><td>${nmM(m)}</td><td class="c-green">${fm(ti)}</td><td class="c-red">${fm(te)}</td><td class="c-purple">${fm(sv)}</td><td class="${av<0?'c-red':'c-green'}">${fm(av)}</td></tr>`;
   }
   const totAv=totI-totE-totS;
   document.getElementById('annContent').innerHTML=`
     <table class="ann-table">
       <thead><tr><th>mês</th><th>renda</th><th>gastos</th><th>guardado</th><th>disponível</th></tr></thead>
       <tbody>${rows}</tbody>
-      <tfoot><tr><td>total ${y}</td><td class="c-green">${fmt(totI)}</td><td class="c-red">${fmt(totE)}</td><td class="c-purple">${fmt(totS)}</td><td class="${totAv<0?'c-red':'c-green'}">${fmt(totAv)}</td></tr></tfoot>
+      <tfoot><tr><td>total ${y}</td><td class="c-green">${fm(totI)}</td><td class="c-red">${fm(totE)}</td><td class="c-purple">${fm(totS)}</td><td class="${totAv<0?'c-red':'c-green'}">${fm(totAv)}</td></tr></tfoot>
     </table>
     ${count>1?`<div class="ann-avg">média mensal (${count} meses): renda <span>${fmt(totI/count)}</span> · gastos <span>${fmt(totE/count)}</span> · reserva <span>${fmt(totS/count)}</span></div>`:''}
   `;
