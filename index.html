@@ -4077,7 +4077,7 @@ function openBuy(){
   showOv('buyOverlay');
   setTimeout(()=>document.getElementById('buyVal').focus(),60);
 }
-function closeBuy(){ const ov=document.getElementById('buyOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); buyTrigger?.focus?.(); buyTrigger=null; }
+function closeBuy(){ hideOv('buyOverlay',()=>{ buyTrigger?.focus?.(); buyTrigger=null; }); }
 function renderBuyPays(){
   document.getElementById('buyPays').innerHTML=PAYS.map(p=>{
     const on=buySelPay===p.id,c=PAY_COL[p.id];
@@ -4208,7 +4208,7 @@ function openShop(){
   showOv('shopOverlay');
   setTimeout(()=>document.getElementById('shopNew').focus(),60);
 }
-function closeShop(){ const ov=document.getElementById('shopOverlay'); if(ov.classList.contains('hidden')) return; ov.classList.add('hidden'); shopTrigger?.focus?.(); shopTrigger=null; }
+function closeShop(){ hideOv('shopOverlay',()=>{ shopTrigger?.focus?.(); shopTrigger=null; }); }
 function renderShopPays(){
   document.getElementById('shopPays').innerHTML=PAYS.map(p=>{
     const on=shopSelPay===p.id,c=PAY_COL[p.id];
