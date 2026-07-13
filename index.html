@@ -1007,6 +1007,48 @@ html{background:var(--bg)}
 .qa-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
 .qa-hero{grid-column:1/-1;background:var(--red);color:#fff;font-family:'Anton',sans-serif;font-weight:400;font-size:15px;letter-spacing:.02em;justify-content:center;padding:15px 14px}
 .qa-dot{width:11px;height:11px;border:1.5px solid var(--ink);flex-shrink:0}
+
+/* ══ pra onde foi: top 5 gastos do mês ══ */
+.gasto-king{position:relative;background:var(--surf);border:2px solid var(--ink);box-shadow:var(--shadow-sm);padding:22px 24px 20px;margin-top:6px;--r:calc(var(--rot) * .4deg);transform:rotate(var(--r));animation:mg-rise .55s cubic-bezier(.2,.8,.3,1) 1.75s backwards}
+.gasto-king::before{content:'';position:absolute;top:-11px;left:32%;width:74px;height:22px;background:var(--tape);--tr:calc(var(--rot) * -3deg);transform:rotate(var(--tr));box-shadow:0 1px 2px rgba(0,0,0,.2);animation:mg-tape .45s cubic-bezier(.3,1.5,.4,1) 2.25s backwards}
+.gk-chip{display:inline-block;background:var(--red);color:#fff;font-family:'Anton',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.03em;padding:3px 11px 4px;transform:rotate(calc(var(--rot) * -1.5deg));box-shadow:2px 2px 0 var(--ink-sh)}
+.gk-sub{font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--t3);margin:8px 0 18px}
+.gk-star{position:absolute;top:-13px;right:-9px;background:var(--pop);border:2px solid var(--ink);color:#1b1b1b;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:.03em;padding:4px 9px 5px;--r:calc(var(--rot) * 6deg);transform:rotate(var(--r));box-shadow:2px 2px 0 var(--ink-sh);animation:mg-pop .45s cubic-bezier(.3,1.5,.4,1) 2.4s backwards;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gk-hd{display:contents}
+.gk-lb{font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.gk-val{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:13.5px;color:var(--t1);white-space:nowrap;font-variant-numeric:tabular-nums}
+.gk-tr{border:2px solid var(--ink);background:var(--bg);padding:2px;display:flex}
+.gk-fi{background:var(--red);background-image:repeating-linear-gradient(-45deg,rgba(0,0,0,.16) 0 6px,transparent 6px 12px)}
+.gk-row.top1 .gk-fi{background-image:none}
+.gk-row.top1 .gk-lb{color:var(--t1)}
+.gk-ft{margin-top:16px;padding-top:12px;border-top:1.5px dashed var(--bdr-soft);font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--t3)}
+.gk-ft b{color:var(--t1);font-style:normal}
+.gk-ft:empty{display:none;border:none;margin:0;padding:0}
+/* PC: barras verticais */
+@media(min-width:681px){
+  .gk-body{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;align-items:end}
+  .gk-row{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
+  .gk-val{order:1}
+  .gk-tr{order:2;height:150px;width:min(64px,100%);align-items:flex-end}
+  .gk-fi{width:100%;height:var(--w);transform-origin:bottom;animation:mg-fillY .7s cubic-bezier(.2,.7,.2,1) var(--fill-d,.15s) backwards}
+  .gk-lb{order:3}
+  .gk-row.top1 .gk-tr{width:min(72px,100%)}
+  .gk-row.top1 .gk-val{font-size:15.5px}
+}
+/* celular: barras horizontais */
+@media(max-width:680px){
+  .gk-body .gk-row{margin-bottom:13px}
+  .gk-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .gk-tr{height:22px;margin-bottom:2px}
+  .gk-fi{height:100%;width:var(--w);transform-origin:left;animation:mg-fill .7s cubic-bezier(.2,.7,.2,1) var(--fill-d,.15s) backwards}
+  .gk-row.top1 .gk-tr{height:26px}
+  .gk-row.top1 .gk-lb{font-size:12.5px}
+  .gk-row.top1 .gk-val{font-size:15px}
+}
+@keyframes mg-fillY{0%{transform:scaleY(0)}100%{transform:scaleY(1)}}
+#app.entering .gk-fi{--fill-d:2.6s}
+html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk-star,html.pre-mount .gk-fi{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.gasto-king,.gasto-king::before,.gk-star,.gk-fi{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1268,6 +1310,14 @@ html{background:var(--bg)}
           <div class="pc-sub" id="sub-savings">total guardado</div>
           <div class="rc-metas" id="metaCaix"></div>
         </div>
+    </div>
+
+    <div class="gasto-king hidden" id="gastoKing">
+      <span class="gk-star" id="gkStar"></span>
+      <span class="gk-chip">pra onde foi</span>
+      <div class="gk-sub" id="gkSub"></div>
+      <div class="gk-body" id="gkBody"></div>
+      <div class="gk-ft" id="gkFt"></div>
     </div>
 
     </div>
@@ -2526,6 +2576,36 @@ function recalc(){
   updateDueBar();
   checkStamps(av,tI,tE,svFlow,totalSaved);
   updateCarryBanner();
+  renderTopGastos();
+}
+const MESES_NM=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function renderTopGastos(){
+  const el=document.getElementById('gastoKing'); if(!el) return;
+  const d=monthLocal(curMonth);
+  const items=[...(d['exp-fixed']||[]),...(d['exp-extra']||[])].filter(it=>it.value>0);
+  const tot=items.reduce((a,i)=>a+i.value,0);
+  if(!items.length||tot<=0){ el.classList.add('hidden'); return; }
+  const groups={};
+  items.forEach(it=>{
+    const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
+    const lb=cat?cat.lb:(it.desc||'outros').trim();
+    const key=lb.toLowerCase();
+    (groups[key]=groups[key]||{lb,v:0}).v+=it.value;
+  });
+  const top=Object.values(groups).sort((a,b)=>b.v-a.v).slice(0,5);
+  const max=top[0].v;
+  el.classList.remove('hidden');
+  const nome=curMonth?MESES_NM[parseInt(curMonth.split('-')[1],10)-1]:'';
+  document.getElementById('gkSub').textContent='seus maiores gastos'+(nome?' de '+nome:'');
+  document.getElementById('gkStar').textContent='topo: '+top[0].lb;
+  document.getElementById('gkBody').innerHTML=top.map((g,i)=>`
+    <div class="gk-row${i===0?' top1':''}">
+      <div class="gk-hd"><span class="gk-lb">${esc(g.lb)}</span><span class="gk-val">${fmt(g.v)}</span></div>
+      <div class="gk-tr"><i class="gk-fi" style="--w:${Math.max(g.v/max*100,3).toFixed(1)}%"></i></div>
+    </div>`).join('');
+  const s5=top.reduce((a,g)=>a+g.v,0);
+  document.getElementById('gkFt').innerHTML = top.length>1
+    ? `esses ${top.length} levaram <b>${fmt(s5)}</b> — ${Math.round(s5/tot*100)}% dos gastos do mês` : '';
 }
 function doRemoveItem(key,i){
   const arr=monthLocal(curMonth)[key]; const it=arr[i]; if(!it) return;
