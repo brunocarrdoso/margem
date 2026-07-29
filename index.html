@@ -801,7 +801,7 @@ html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(25
 .wt-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px 2px;line-height:1;min-width:15px;text-align:center}
 
 /* botão de novo desejo + formulário recolhido */
-.wish-new{width:100%;background:var(--pop);border:2px solid var(--ink);border-radius:0;padding:11px;font-family:'Anton',sans-serif;
+.wish-new{width:100%;height:47px;background:var(--pop);border:2px solid var(--ink);border-radius:0;font-family:'Anton',sans-serif;
   font-size:14px;letter-spacing:.02em;color:#1b1b1b;cursor:pointer;box-shadow:3px 3px 0 var(--ink-sh);margin-bottom:16px;
   transition:transform .12s,box-shadow .12s}
 .wish-new:active{transform:translateY(1px);box-shadow:2px 2px 0 var(--ink-sh)}
@@ -817,10 +817,11 @@ html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(25
 
 /* item da lista — uma linha só */
 .wi{display:flex;align-items:center;gap:10px;background:var(--surf);border:1.5px solid var(--bdr);border-left:5px solid var(--pc,var(--amber));
-  border-radius:0;padding:10px 11px 10px 12px;margin-bottom:7px;transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s}
+  border-radius:0;padding:8px 11px 8px 12px;margin-bottom:7px;height:var(--wi-h);overflow:hidden;
+  transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s}
 .wi:hover{transform:translateX(2px);box-shadow:3px 3px 0 var(--ink-sh)}
 .wi-nm{flex:1;min-width:0;font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:13px;color:var(--t1);
-  line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  line-height:1.28;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .wi-nm a{color:var(--t1);text-decoration:underline;text-decoration-color:var(--pop);text-decoration-thickness:2px;text-underline-offset:2px}
 .wi-val{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:14px;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap}
 .wi-acts{display:flex;gap:5px;flex-shrink:0}
@@ -861,8 +862,18 @@ html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(25
 .wp-st.p{color:var(--amber);background:var(--amber-bg)}
 .wp-st.r{color:var(--red);background:var(--red-bg)}
 .wish-hint{font-family:'Newsreader',Georgia,serif;font-size:12.5px;font-style:italic;color:var(--t4);line-height:1.55}
+/* ── lista de tamanho fixo: 5 vagas por página ── */
+:root{--wi-h:52px}
+.wish-list{min-height:calc(var(--wi-h) * 5 + 7px * 5)}
+.wi-empty{height:var(--wi-h);margin-bottom:7px;border:1.5px dashed var(--bdr-soft);border-left:5px solid var(--bdr-soft);opacity:.5}
+.wish-pg{display:flex;align-items:center;justify-content:center;gap:9px;height:46px;padding-top:8px;flex-shrink:0}
+.wish-pg .pg-btn{width:30px;height:30px;font-size:16px}
+.wish-owner{display:flex;align-items:center;gap:8px;height:47px;padding:0 12px;margin-bottom:16px;background:var(--bg);
+  border:2px dashed var(--bdr);font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:13px;color:var(--t3)}
+.wish-owner b{font-family:'Oswald',system-ui,sans-serif;font-style:normal;font-weight:700;color:var(--t1)}
+.wish-owner .wp-av{width:24px;height:24px;font-size:10.5px}
 .wi-skel{display:flex;align-items:center;gap:10px;background:var(--surf);border:1.5px solid var(--bdr);border-left:5px solid var(--bdr);
-  padding:10px 11px 10px 12px;margin-bottom:7px;box-sizing:border-box;animation:mg-pulse 1.1s ease-in-out infinite}
+  padding:8px 11px;margin-bottom:7px;height:var(--wi-h);animation:mg-pulse 1.1s ease-in-out infinite}
 .wi-skel i{display:block;height:11px;background:var(--bdr-soft);border-radius:0}
 .wi-skel i:first-child{flex:1} .wi-skel i:last-child{width:62px}
 .wi-skel:nth-child(2){animation-delay:.12s} .wi-skel:nth-child(3){animation-delay:.24s}
@@ -3554,6 +3565,7 @@ async function boxFixSave(){
 // ── Carrinho de desejos ───────────────────────────────
 let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media', wishEditId=null, wishIsParc=false;
 let wishGiftMode=false, wishOtherOwner=null, wishOtherItems=[], wishFormOpen=false, wishOtherCache={}, wishLoadSeq=0, wishTabsIn=false;
+const WISH_PP=5; let wishPage=0, wishOtherPage=0;
 const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
 function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
 function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
@@ -3607,7 +3619,6 @@ async function wishPrefetch(){
         const el=document.getElementById('wishOtherList');
         if(el&&el.querySelector('.wi-skel')){
           wishOtherOwner=sh.owner_id; wishOtherItems=wishOtherCache[sh.id];
-          el.style.minHeight='';
           el.innerHTML=wishOtherItems.length?wishListHtml(wishOtherItems,false):'<div class="cal-empty-msg">lista vazia</div>';
         }
       }
@@ -3654,9 +3665,32 @@ function wishTabs(){
   h+=`<button class="wt${wishView==='people'?' sel':''}" onclick="wishGo('people')"><span class="wt-nm">pessoas</span>${pend?`<span class="wt-badge">${pend}</span>`:''}</button>`;
   return h+`</div>`;
 }
-function wishGo(v){ wishView=v; wishEditId=null; wishFormOpen=false; buildWish(); }
-const wishListHtml=(items,mine)=>`<div class="wish-list">${wishSorted(items).map(it=>wishRowHtml(it,mine)).join('')}</div>`;
-const wishSkel=n=>`<div class="wish-list">${'<div class="wi-skel"><i></i><i></i></div>'.repeat(n)}</div>`;
+function wishGo(v){ wishView=v; wishEditId=null; wishFormOpen=false; wishOtherPage=0; buildWish(); }
+function wishListHtml(items,mine){
+  const total=Math.max(1,Math.ceil(items.length/WISH_PP));
+  let p=mine?wishPage:wishOtherPage;
+  p=Math.min(Math.max(p,0),total-1);
+  if(mine) wishPage=p; else wishOtherPage=p;
+  const slice=wishSorted(items).slice(p*WISH_PP,(p+1)*WISH_PP);
+  const vagas='<div class="wi-empty"></div>'.repeat(Math.max(0,WISH_PP-slice.length));
+  return `<div class="wish-list">${slice.map(it=>wishRowHtml(it,mine)).join('')}${vagas}</div>
+    <div class="wish-pg">${total>1?`
+      <button class="pg-btn" onclick="wishPageGo(-1)" ${p===0?'disabled':''} aria-label="página anterior">‹</button>
+      <span class="pg-lbl">${p+1} / ${total}</span>
+      <button class="pg-btn" onclick="wishPageGo(1)" ${p>=total-1?'disabled':''} aria-label="próxima página">›</button>`:''}</div>`;
+}
+function wishPageGo(d){
+  const mine=wishView==='mine';
+  const items=mine?wishItems:wishOtherItems;
+  const total=Math.max(1,Math.ceil(items.length/WISH_PP));
+  let p=(mine?wishPage:wishOtherPage)+d;
+  p=Math.min(Math.max(p,0),total-1);
+  if(mine){ wishPage=p; buildWish(); return; }
+  wishOtherPage=p;
+  const el=document.getElementById('wishOtherList');
+  if(el) el.innerHTML=wishListHtml(items,false);   // só o painel, sem refazer a busca
+}
+const wishSkel=()=>`<div class="wish-list">${'<div class="wi-skel"><i></i><i></i></div>'.repeat(WISH_PP)}</div><div class="wish-pg"></div>`;
 function wishFormToggle(){ wishFormOpen=!wishFormOpen; wishEditId=null; buildWish(); if(wishFormOpen) setTimeout(()=>document.getElementById('wishName')?.focus(),60); }
 function buildWish(){
   const wrap=document.getElementById('wishContent'); if(!wrap) return;
@@ -3668,11 +3702,10 @@ function buildWish(){
     if(!sh){ wishView='mine'; buildWish(); return; }
     const seq=++wishLoadSeq, cached=wishOtherCache[sh.id];
     if(cached){ wishOtherOwner=sh.owner_id; wishOtherItems=cached; }
-    const saindo=wrap.querySelector('.wish-list,.cal-empty-msg');
-    const reserva=(!cached&&saindo)?Math.round(saindo.getBoundingClientRect().height):0;
-    wrap.innerHTML=views+`<div id="wishOtherList"${reserva?` style="min-height:${reserva}px"`:''}>${
+    const dono=shName(sh,'owner');
+    wrap.innerHTML=views+`<div class="wish-owner">${shAv(dono)}<span>desejos de <b>${esc(dono)}</b></span></div><div id="wishOtherList">${
       cached ? (cached.length?wishListHtml(cached,false):'<div class="cal-empty-msg">lista vazia</div>')
-             : wishSkel(Math.min(Math.max(wishItems.length,2),4))}</div>`;
+             : wishSkel()}</div>`;
     (async()=>{
       try{
         const {data,error}=await sb.from('wishlists').select('items').eq('user_id',sh.owner_id).maybeSingle();
@@ -3681,12 +3714,11 @@ function buildWish(){
         const items=(data?.items)||[];
         wishOtherCache[sh.id]=items; wishOtherOwner=sh.owner_id; wishOtherItems=items;
         const el=document.getElementById('wishOtherList'); if(!el) return;
-        el.style.minHeight='';
         el.innerHTML=items.length?wishListHtml(items,false):'<div class="cal-empty-msg">lista vazia</div>';
       }catch(_){
         if(seq!==wishLoadSeq||wishView!==sh.id) return;
         const el=document.getElementById('wishOtherList');
-        if(el&&!cached){ el.style.minHeight=''; el.innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>'; }
+        if(el&&!cached) el.innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>';
       }
     })();
     return;
@@ -3753,7 +3785,8 @@ function buildWish(){
   } else {
     html+=`<button class="wish-new" onclick="wishFormToggle()">+ novo desejo</button>`;
   }
-  html+= wishItems.length ? wishListHtml(wishItems,true) : '<div class="cal-empty-msg">nenhum desejo ainda</div>';
+  html+= wishItems.length ? wishListHtml(wishItems,true)
+    : `<div class="wish-list"><div class="cal-empty-msg">nenhum desejo ainda</div>${'<div class="wi-empty"></div>'.repeat(3)}</div><div class="wish-pg"></div>`;
   if(wishRemote===false) html+=`<div class="wp-sec" style="margin-top:16px"><div class="wish-hint">sem conexão — os desejos ficam neste aparelho por enquanto.</div></div>`;
   wrap.innerHTML=html;
 }
