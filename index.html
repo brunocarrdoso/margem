@@ -758,8 +758,8 @@ html[data-dark] .shop-t::after{background-image:url("data:image/svg+xml,<svg xml
 /* ── CAIXINHAS ────────────────────────────────────────── */
 .box-row{padding:11px 13px;border:1.5px dashed var(--bdr-soft);border-radius:12px 7px 11px 8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s;background:var(--surf2)}
 html[data-dark] .box-row{background:var(--surf2)}
-.box-row:hover,.wish-it:hover,.shop-it:hover{border-style:solid;border-color:var(--bdr);box-shadow:2px 2px 0 var(--bdr);transform:translateX(3px) rotate(.25deg);background:rgba(255,255,255,.5)}
-html[data-dark] .box-row:hover,html[data-dark] .wish-it:hover,html[data-dark] .shop-it:hover{background:rgba(255,255,255,.06)}
+.box-row:hover,.shop-it:hover{border-style:solid;border-color:var(--bdr);box-shadow:2px 2px 0 var(--bdr);transform:translateX(3px) rotate(.25deg);background:rgba(255,255,255,.5)}
+html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(255,255,255,.06)}
 .box-row.done{border-style:solid;border-color:rgba(74,222,128,.45)}
 .box-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .box-nm{font-size:13px;font-weight:600;color:var(--t1)}
@@ -792,41 +792,79 @@ html[data-dark] .box-row:hover,html[data-dark] .wish-it:hover,html[data-dark] .s
 .wish-btn{position:relative}
 .wish-dot{position:absolute;top:3px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surf);pointer-events:none}
 #wishBuyOverlay{z-index:120}
-.wish-views{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.wish-form{display:flex;flex-direction:column;gap:8px;padding:12px;border:1.5px dashed var(--bdr);border-radius:12px 8px 11px 9px;margin-bottom:14px;background:rgba(255,255,255,.25)}
-html[data-dark] .wish-form{background:rgba(255,255,255,.03)}
-.wish-form.editing{border-style:solid;border-color:var(--blue)}
-.wish-form-row{display:flex;gap:8px}
-.wish-form-row .m-in{flex:1;padding:9px 12px;font-size:13px}
-.wish-form .cat-pills{margin-top:0}
-.wish-it{display:flex;align-items:center;gap:9px;padding:10px 11px;border:1px dashed var(--bdr-soft);border-radius:10px 6px 10px 7px;margin-bottom:6px;background:rgba(255,255,255,.28);transition:border-color .15s,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .15s,background .15s}
-html[data-dark] .wish-it{background:rgba(255,255,255,.03)}
-.wish-pr{width:8px;height:8px;border-radius:0;transform:rotate(45deg);flex-shrink:0}
-.wish-nm{flex:1;font-size:13px;font-weight:600;color:var(--t1);min-width:0;position:relative;line-height:1.35}
-.wish-nm a{color:var(--blue);text-decoration:none;font-weight:700}
-.wish-nm a:hover{text-decoration:underline;text-underline-offset:2px}
-.wish-nm em{font-style:normal;display:block;font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
-.wish-it.done .wish-nm{color:var(--t4)}
-.wish-it.done .wish-nm::after{content:'';position:absolute;left:-2px;right:-2px;top:48%;height:6px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23b45309' stroke-width='1.5' fill='none' opacity='.65'/></svg>") repeat-x left center/24px 6px;pointer-events:none}
-html[data-dark] .wish-it.done .wish-nm::after{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 6'><path d='M0 3 q3 -3 6 0 t6 0 t6 0 t6 0' stroke='%23f5b942' stroke-width='1.5' fill='none' opacity='.65'/></svg>")}
-.wish-val{font-family:'Newsreader',Georgia,serif;font-weight:700;font-size:14px;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap}
-.wish-it.done .wish-val{color:var(--t4);text-decoration:line-through}
-.wish-share{margin-top:18px;padding-top:14px;border-top:1px dashed var(--bdr-soft)}
-.wish-share-lb{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:9px}
-.wish-req{display:flex;align-items:center;gap:8px;background:var(--amber-bg);border:1.5px solid rgba(217,119,6,.35);border-radius:10px 7px 10px 8px;padding:9px 12px;margin-bottom:7px;font-size:12px;color:var(--t1);flex-wrap:wrap}
-.wish-req b{font-weight:700}
-.wish-req .carry-btn-p{padding:5px 12px;font-size:11px}
-.wish-req .carry-btn-g{padding:5px 10px;font-size:11px}
-.wish-mail-row{display:flex;gap:8px;margin-bottom:9px}
-.wish-mail-row .m-in{flex:1;padding:9px 12px;font-size:13px}
-.wish-share-it{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);padding:6px 2px;border-bottom:1px solid var(--bdr-soft)}
-.wish-share-it:last-child{border-bottom:none}
-.wish-share-it span:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.wish-st{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:8px}
-.wish-st.p{color:var(--amber);background:var(--amber-bg)}
-.wish-st.a{color:var(--green);background:var(--green-bg)}
-.wish-st.r{color:var(--red);background:var(--red-bg)}
-.wish-hint{font-size:11px;font-style:italic;color:var(--t4);line-height:1.55}
+.wish-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.wt{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:2px solid var(--ink);border-radius:0;padding:6px 11px;
+  font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:11.5px;color:var(--t2);cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);
+  transition:transform .12s,box-shadow .12s;max-width:100%}
+.wt:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
+.wt.sel{background:var(--ink);color:var(--pop);box-shadow:2px 2px 0 rgba(232,68,46,.85)}
+.wt-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wp-av{width:19px;height:19px;flex-shrink:0;border:1.5px solid var(--ink);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:9.5px;font-style:normal;display:flex;align-items:center;justify-content:center;line-height:1}
+.wt.sel .wp-av{border-color:var(--pop)}
+.wt-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px 2px;line-height:1;min-width:15px;text-align:center}
+
+/* botão de novo desejo + formulário recolhido */
+.wish-new{width:100%;background:var(--pop);border:2px solid var(--ink);border-radius:0;padding:11px;font-family:'Anton',sans-serif;
+  font-size:14px;letter-spacing:.02em;color:#1b1b1b;cursor:pointer;box-shadow:3px 3px 0 var(--ink-sh);margin-bottom:16px;
+  transition:transform .12s,box-shadow .12s}
+.wish-new:active{transform:translateY(1px);box-shadow:2px 2px 0 var(--ink-sh)}
+.wish-form{display:flex;flex-direction:column;gap:9px;padding:15px;border:2px solid var(--ink);border-radius:0;margin-bottom:16px;
+  background:var(--bg);box-shadow:3px 3px 0 var(--ink-sh)}
+.wish-form .m-in{padding:10px 12px;font-size:13.5px}
+.wf-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.wf-row .cat-pills{margin:0;flex-wrap:nowrap}
+.wf-row .val-wrap{flex:1;min-width:118px}
+.wf-acts{display:flex;gap:9px;margin-top:2px}
+.wf-acts button{flex:1;padding:10px;font-size:12.5px}
+.wf-lb{font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3)}
+
+/* item da lista — uma linha só */
+.wi{display:flex;align-items:center;gap:10px;background:var(--surf);border:1.5px solid var(--bdr);border-left:5px solid var(--pc,var(--amber));
+  border-radius:0;padding:10px 11px 10px 12px;margin-bottom:7px;transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s}
+.wi:hover{transform:translateX(2px);box-shadow:3px 3px 0 var(--ink-sh)}
+.wi-nm{flex:1;min-width:0;font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:13px;color:var(--t1);
+  line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wi-nm a{color:var(--t1);text-decoration:underline;text-decoration-color:var(--pop);text-decoration-thickness:2px;text-underline-offset:2px}
+.wi-val{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:14px;color:var(--t1);font-variant-numeric:tabular-nums;white-space:nowrap}
+.wi-acts{display:flex;gap:5px;flex-shrink:0}
+.wi-b{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--bg);border:1.5px solid var(--bdr);
+  border-radius:0;font-family:inherit;font-size:14px;color:var(--t3);cursor:pointer;flex-shrink:0;transition:all .12s;padding:0}
+.wi-b:hover{border-color:var(--ink);color:var(--t1);box-shadow:2px 2px 0 var(--ink-sh)}
+.wi-b.wi-ok{background:var(--pop);border-color:var(--ink);color:#1b1b1b;font-weight:700}
+.wi-gift{background:var(--pop);border:2px solid var(--ink);border-radius:0;padding:6px 12px;font-family:'Oswald',system-ui,sans-serif;
+  font-weight:700;font-size:11px;color:#1b1b1b;cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);flex-shrink:0;white-space:nowrap}
+.wi-gift:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
+.wi.done{opacity:.6}
+.wi.done .wi-nm,.wi.done .wi-val{text-decoration:line-through;color:var(--t4)}
+.wi-tag{font-family:'Oswald',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--green);
+  background:var(--green-bg);padding:2px 7px 3px;flex-shrink:0}
+
+/* aba pessoas */
+.wp-sec{margin-bottom:20px}
+.wp-sec:last-child{margin-bottom:0}
+.wp-lb{font-family:'Oswald',system-ui,sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.11em;
+  color:var(--t3);margin-bottom:10px}
+.wp-row{display:flex;align-items:center;gap:10px;background:var(--surf);border:1.5px solid var(--bdr);padding:9px 11px;margin-bottom:7px}
+.wp-row .wp-av{width:26px;height:26px;font-size:11px}
+.wp-nm{flex:1;min-width:0;font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:13px;color:var(--t1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wp-ask{border-color:var(--ink);background:var(--surf);box-shadow:3px 3px 0 var(--ink-sh);border-width:2px;flex-wrap:wrap}
+.wp-ask .wp-nm{font-family:'Newsreader',Georgia,serif;font-style:italic;font-weight:400;font-size:12.5px;color:var(--t2);white-space:normal}
+.wp-ask .wp-nm b{font-family:'Oswald',sans-serif;font-style:normal;font-weight:700;color:var(--t1)}
+.wp-yes,.wp-no{border:2px solid var(--ink);border-radius:0;padding:6px 12px;font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;
+  cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh)}
+.wp-yes{background:var(--green);color:#fff}
+.wp-no{background:var(--bg);color:var(--t3)}
+.wp-add{display:flex;gap:9px}
+.wp-add .val-wrap{flex:1;position:relative}
+.wp-at{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;
+  color:var(--t4);pointer-events:none}
+.wp-add .m-in{width:100%;padding:10px 12px 10px 28px;font-size:13.5px;text-align:left}
+.wp-st{font-family:'Oswald',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px 3px;flex-shrink:0}
+.wp-st.p{color:var(--amber);background:var(--amber-bg)}
+.wp-st.r{color:var(--red);background:var(--red-bg)}
+.wish-hint{font-family:'Newsreader',Georgia,serif;font-size:12.5px;font-style:italic;color:var(--t4);line-height:1.55}
 
 /* ── SCORE ────────────────────────────────────────────── */
 .sc-band{font-family:'Newsreader',Georgia,serif;font-size:20px;font-weight:700;margin-top:2px}
@@ -916,7 +954,7 @@ html.int-mid{--rot:.5;--tex:.03} html.int-calm{--rot:.12;--tex:0}
 .pg-btn,.chart-nav-btn,.yr-nav,.yr-btn,.sel,.icon-btn,.tool-strip,.mob-bar,.mob-bar button,.u-pill,.u-menu,.u-menu button,
 .modal,.ann-modal,.ann-close,.l-card,.pin-box,.u-tile,.u-new,.toast,.toast-undo,.cat-pill,.cat-break-lb,
 .item-cat,.item-pay-badge,.item-day-badge,.cal-chip,.cal-cell,.due-bar,.due-chip,.due-lb,.card-fatura,.l-pill,.l-pill-badge,
-.wish-form,.wish-it,.wish-pr,.wish-req,.wish-st,.shop-it,.box-row,.nk,.item,.meter,.prog-tr,.prog-fi,.mp,.field,
+.wish-form,.shop-it,.box-row,.nk,.item,.meter,.prog-tr,.prog-fi,.mp,.field,
 .numpad,.numpad .nk,.overlay .modal,.sc-band,.sc-delta,.hst-tr{border-radius:0}
 html[data-dark] .pocket-card,html[data-dark] .scard{box-shadow:5px 6px 0 rgba(0,0,0,.45)}
 html[data-dark] .pocket-card::before,html[data-dark] .scard::before{opacity:.5}
@@ -2934,7 +2972,7 @@ document.addEventListener('keydown',e=>{
     else if(f?.id==='wishName') document.getElementById('wishLink').focus();
     else if(f?.id==='wishLink') document.getElementById('wishVal').focus();
     else if(f?.id==='wishVal') wishAdd();
-    else if(f?.id==='shareEmail') shareAsk();
+    else if(f?.id==='shareUser') shareAsk();
     else if(f?.id==='wishParcVal') confirmWishBuy();
     else if(f?.id==='boxName') document.getElementById('boxTarget').focus();
     else if(f?.id==='boxTarget') confirmNewBox();
@@ -3423,7 +3461,7 @@ async function boxFixSave(){
 
 // ── Carrinho de desejos ───────────────────────────────
 let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media', wishEditId=null, wishIsParc=false;
-let wishGiftMode=false, wishOtherOwner=null, wishOtherItems=[];
+let wishGiftMode=false, wishOtherOwner=null, wishOtherItems=[], wishFormOpen=false;
 const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
 function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
 function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
@@ -3448,6 +3486,13 @@ async function sharesRefresh(){
   try{ const {data,error}=await sb.from('wishlist_shares').select('*'); if(error) throw error; wishShares=data||[]; }catch(_){ wishShares=[]; }
 }
 const myEmail=()=> (curUser?.email||'').toLowerCase();
+const myName=()=>{ const p=allProfiles.find(x=>x.id===curUser?.id); return p?.username||p?.name||myEmail().split('@')[0]||'eu'; };
+const shName=(r,who)=>{
+  const nm=who==='owner'?r.owner_name:r.requester_name;
+  const em=(who==='owner'?r.owner_email:r.requester_email)||'';
+  return (nm&&nm.trim())||em.split('@')[0]||'alguém';
+};
+const shAv=nm=>`<i class="wp-av" style="background:${avc(nm||'x')}">${ini(nm||'?')}</i>`;
 const sharesIn=()=> wishShares.filter(r=>(r.owner_email||'').toLowerCase()===myEmail()&&r.requester_id!==curUser?.id);
 const sharesOut=()=> wishShares.filter(r=>r.requester_id===curUser?.id);
 const pendingIn=()=> sharesIn().filter(r=>r.status==='pending');
@@ -3456,8 +3501,8 @@ function wishBadge(){
   document.querySelectorAll('.wish-dot').forEach(d=>d.classList.toggle('hidden',!n));
   if(n&&!wishBadge._t){ wishBadge._t=1; toast(n===1?'novo pedido pra ver sua lista':n+' pedidos pra ver sua lista'); }
 }
-function openWish(){ wishView='mine'; buildWish(); showOv('wishOverlay'); }
-function closeWish(){ hideOv('wishOverlay'); wishEditId=null; }
+function openWish(){ wishView='mine'; wishFormOpen=false; buildWish(); showOv('wishOverlay'); }
+function closeWish(){ hideOv('wishOverlay'); wishEditId=null; wishFormOpen=false; }
 function wishPrPills(){
   return Object.keys(WISH_PR).map(k=>{
     const on=wishPr===k,c=WISH_PR[k].c;
@@ -3467,28 +3512,46 @@ function wishPrPills(){
 function wishSetPr(k){ wishPr=k; const el=document.getElementById('wishPrRow'); if(el) el.innerHTML=wishPrPills(); }
 function wishRowHtml(it,mine){
   const pr=WISH_PR[it.pr]||WISH_PR.media;
-  const nm=it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(it.name)} ↗</a>`:esc(it.name);
-  const sub=it.done?`<em>comprado${it.pay?' · '+(PAYS.find(p=>p.id===it.pay)?.lb||it.pay):''}</em>`:`<em>${pr.lb}</em>`;
-  const act=mine?(it.done
-    ?`<button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`
-    :`<button class="loan-recv-btn" onclick="wishBuy('${it.id}')">comprei</button><button class="edit-btn" onclick="wishEdit('${it.id}')" title="editar">✎</button><button class="del-btn" onclick="wishDel('${it.id}')" title="remover">×</button>`)
-    :(it.done?'':`<button class="loan-recv-btn" onclick="wishGift('${it.id}')" title="comprar de presente e tirar da lista">presentear</button>`);
-  return `<div class="wish-it${it.done?' done':''}">
-    <span class="wish-pr" style="background:${pr.c}"></span>
-    <span class="wish-nm">${nm}${sub}</span>
-    <span class="wish-val">${fmt(it.value||0)}</span>${act}</div>`;
+  const nm=it.link
+    ? `<a href="${esc(it.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(it.name)}</a>`
+    : esc(it.name);
+  const act = mine
+    ? (it.done
+      ? `<span class="wi-tag">comprado</span><button class="wi-b" onclick="wishDel('${it.id}')" title="remover">×</button>`
+      : `<button class="wi-b wi-ok" onclick="wishBuy('${it.id}')" title="comprei">✓</button>`+
+        `<button class="wi-b" onclick="wishEdit('${it.id}')" title="editar">✎</button>`+
+        `<button class="wi-b" onclick="wishDel('${it.id}')" title="remover">×</button>`)
+    : (it.done ? `<span class="wi-tag">comprado</span>` : `<button class="wi-gift" onclick="wishGift('${it.id}')">presentear</button>`);
+  return `<div class="wi${it.done?' done':''}" style="--pc:${pr.c}">
+    <span class="wi-nm">${nm}</span>
+    <span class="wi-val">${fmt(it.value||0)}</span>
+    <span class="wi-acts">${act}</span></div>`;
 }
 function wishSorted(list){
   const w={alta:0,media:1,baixa:2};
   return list.slice().sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(w[a.pr]??1)-(w[b.pr]??1));
 }
+function wishTabs(){
+  const outAcc=sharesOut().filter(r=>r.status==='accepted');
+  const pend=pendingIn().length;
+  let h=`<div class="wish-tabs">
+    <button class="wt${wishView==='mine'?' sel':''}" onclick="wishGo('mine')"><span class="wt-nm">meus desejos</span></button>`;
+  h+=outAcc.map(r=>{ const nm=shName(r,'owner');
+    return `<button class="wt${wishView===r.id?' sel':''}" onclick="wishGo('${r.id}')">${shAv(nm)}<span class="wt-nm">${esc(nm)}</span></button>`;
+  }).join('');
+  h+=`<button class="wt${wishView==='people'?' sel':''}" onclick="wishGo('people')"><span class="wt-nm">pessoas</span>${pend?`<span class="wt-badge">${pend}</span>`:''}</button>`;
+  return h+`</div>`;
+}
+function wishGo(v){ wishView=v; wishEditId=null; wishFormOpen=false; buildWish(); }
+function wishFormToggle(){ wishFormOpen=!wishFormOpen; wishEditId=null; buildWish(); if(wishFormOpen) setTimeout(()=>document.getElementById('wishName')?.focus(),60); }
 function buildWish(){
   const wrap=document.getElementById('wishContent'); if(!wrap) return;
-  const outAcc=sharesOut().filter(r=>r.status==='accepted');
-  let views=`<div class="wish-views"><div class="cat-pill${wishView==='mine'?' sel':''}" style="color:var(--blue);${wishView==='mine'?'background:var(--blue-bg);border-color:var(--blue)':'border-color:transparent;background:var(--surf2)'}" onclick="wishView='mine';buildWish()">meus desejos</div>`+
-    outAcc.map(r=>`<div class="cat-pill${wishView===r.id?' sel':''}" style="color:var(--purple);${wishView===r.id?'background:var(--purple-bg);border-color:var(--purple)':'border-color:transparent;background:var(--surf2)'}" onclick="wishViewOther('${r.id}')">${esc(r.owner_email)}</div>`).join('')+`</div>`;
-  if(wishView!=='mine'){
+  const views=wishTabs();
+
+  // ── lista de outra pessoa ──
+  if(wishView!=='mine'&&wishView!=='people'){
     const sh=wishShares.find(r=>r.id===wishView);
+    if(!sh){ wishView='mine'; buildWish(); return; }
     wrap.innerHTML=views+`<div id="wishOtherList"><div class="cal-empty-msg">carregando…</div></div>`;
     (async()=>{
       try{
@@ -3496,53 +3559,78 @@ function buildWish(){
         if(error) throw error;
         const items=(data?.items)||[];
         wishOtherOwner=sh.owner_id; wishOtherItems=items;
-        document.getElementById('wishOtherList').innerHTML=items.length
+        const el=document.getElementById('wishOtherList'); if(!el) return;
+        el.innerHTML=items.length
           ? wishSorted(items).map(it=>wishRowHtml(it,false)).join('')
           : '<div class="cal-empty-msg">lista vazia</div>';
-      }catch(_){ document.getElementById('wishOtherList').innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>'; }
+      }catch(_){ const el=document.getElementById('wishOtherList'); if(el) el.innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>'; }
     })();
     return;
   }
+
+  // ── pessoas ──
+  if(wishView==='people'){
+    let h=views;
+    if(wishRemote===false){
+      wrap.innerHTML=h+`<div class="wish-hint">sem conexão — os desejos ficam neste aparelho por enquanto.</div>`;
+      return;
+    }
+    const pend=pendingIn();
+    if(pend.length){
+      h+=`<div class="wp-sec"><div class="wp-lb">querem ver sua lista</div>`+
+        pend.map(r=>{ const nm=shName(r,'requester');
+          return `<div class="wp-row wp-ask">${shAv(nm)}<span class="wp-nm"><b>${esc(nm)}</b> quer ver seus desejos</span>
+            <button class="wp-yes" onclick="shareAnswer('${r.id}',true)">aceitar</button>
+            <button class="wp-no" onclick="shareAnswer('${r.id}',false)">recusar</button></div>`;
+        }).join('')+`</div>`;
+    }
+    h+=`<div class="wp-sec"><div class="wp-lb">ver a lista de alguém</div>
+      <div class="wp-add"><div class="val-wrap"><span class="wp-at">@</span>
+        <input class="m-in" id="shareUser" type="text" placeholder="nome de usuário" autocomplete="off" onkeydown="if(event.key==='Enter')shareAsk()"></div>
+        <button class="shop-add-btn" onclick="shareAsk()" title="pedir pra ver">→</button></div></div>`;
+    const out=sharesOut();
+    if(out.length){
+      h+=`<div class="wp-sec"><div class="wp-lb">listas que você pediu</div>`+
+        out.map(r=>{ const nm=shName(r,'owner');
+          const st=r.status==='accepted'?'':`<span class="wp-st ${r.status==='pending'?'p':'r'}">${r.status==='pending'?'pendente':'recusado'}</span>`;
+          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm">${esc(nm)}</span>${st}
+            <button class="wi-b" onclick="shareRemove('${r.id}')" title="remover">×</button></div>`;
+        }).join('')+`</div>`;
+    }
+    const seeMine=sharesIn().filter(r=>r.status==='accepted');
+    if(seeMine.length){
+      h+=`<div class="wp-sec"><div class="wp-lb">quem vê a sua lista</div>`+
+        seeMine.map(r=>{ const nm=shName(r,'requester');
+          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm">${esc(nm)}</span>
+            <button class="wi-b" onclick="shareRevoke('${r.id}')" title="revogar acesso">×</button></div>`;
+        }).join('')+`</div>`;
+    }
+    wrap.innerHTML=h;
+    return;
+  }
+
+  // ── meus desejos ──
   let html=views;
   const ed=wishEditId?wishItems.find(x=>x.id===wishEditId):null;
-  html+=`<div class="wish-form${ed?' editing':''}">
-    ${ed?`<div class="wish-hint" style="display:flex;justify-content:space-between;gap:8px"><span>editando <b>${esc(ed.name)}</b></span><button class="sav-fix-btn" onclick="wishEditCancel()">cancelar</button></div>`:''}
-    <div class="wish-form-row"><input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off" value="${ed?esc(ed.name):''}"></div>
-    <div class="wish-form-row"><input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off" value="${ed&&ed.link?esc(ed.link):''}"></div>
-    <div class="wish-form-row" style="align-items:center">
-      <div class="cat-pills" id="wishPrRow">${wishPrPills()}</div>
-      <div class="val-wrap" style="flex:1;min-width:110px"><span class="val-pfx">R$</span><input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px" value="${ed?numBR(ed.value):''}"></div>
-      <button class="shop-add-btn" onclick="wishAdd()" title="${ed?'salvar alterações':'adicionar desejo'}">${ed?'✓':'+'}</button>
-    </div></div>`;
+  if(ed||wishFormOpen){
+    html+=`<div class="wish-form">
+      ${ed?`<div class="wf-lb">editando ${esc(ed.name)}</div>`:''}
+      <input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off" value="${ed?esc(ed.name):''}">
+      <input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off" value="${ed&&ed.link?esc(ed.link):''}">
+      <div class="wf-row">
+        <div class="cat-pills" id="wishPrRow">${wishPrPills()}</div>
+        <div class="val-wrap"><span class="val-pfx">R$</span>
+          <input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px" value="${ed?numBR(ed.value):''}"></div>
+      </div>
+      <div class="wf-acts">
+        <button class="m-cancel" onclick="${ed?'wishEditCancel()':'wishFormToggle()'}">cancelar</button>
+        <button class="m-ok" onclick="wishAdd()">${ed?'salvar':'adicionar'}</button>
+      </div></div>`;
+  } else {
+    html+=`<button class="wish-new" onclick="wishFormToggle()">+ novo desejo</button>`;
+  }
   html+= wishItems.length ? wishSorted(wishItems).map(it=>wishRowHtml(it,true)).join('') : '<div class="cal-empty-msg">nenhum desejo ainda</div>';
-  // compartilhamento
-  html+=`<div class="wish-share">`;
-  if(wishRemote===false){
-    html+=`<div class="wish-hint">sem conexão — os desejos ficam neste aparelho por enquanto.</div></div>`;
-    wrap.innerHTML=html; return;
-  }
-  const pend=pendingIn();
-  if(pend.length){
-    html+=`<div class="wish-share-lb">pedidos pra ver a sua lista</div>`;
-    pend.forEach(r=>{ html+=`<div class="wish-req"><span style="flex:1"><b>${esc(r.requester_email)}</b> quer ver seus desejos</span>
-      <button class="carry-btn-p" onclick="shareAnswer('${r.id}',true)">aceitar</button>
-      <button class="carry-btn-g" onclick="shareAnswer('${r.id}',false)">recusar</button></div>`; });
-  }
-  html+=`<div class="wish-share-lb">ver a lista de alguém</div>
-    <div class="wish-mail-row"><input class="m-in" id="shareEmail" type="email" placeholder="e-mail de quem usa o margem" autocomplete="off"><button class="shop-add-btn" onclick="shareAsk()" title="pedir pra ver">→</button></div>`;
-  const out=sharesOut();
-  if(out.length){
-    html+=out.map(r=>`<div class="wish-share-it"><span>${esc(r.owner_email)}</span>
-      <span class="wish-st ${r.status==='accepted'?'a':r.status==='pending'?'p':'r'}">${r.status==='accepted'?'aceito':r.status==='pending'?'pendente':'recusado'}</span>
-      <button class="del-btn" onclick="shareRemove('${r.id}')" title="remover">×</button></div>`).join('');
-  }
-  const seeMine=sharesIn().filter(r=>r.status==='accepted');
-  if(seeMine.length){
-    html+=`<div class="wish-share-lb" style="margin-top:12px">quem vê a sua lista</div>`+
-      seeMine.map(r=>`<div class="wish-share-it"><span>${esc(r.requester_email)}</span>
-      <button class="del-btn" onclick="shareRevoke('${r.id}')" title="revogar acesso">×</button></div>`).join('');
-  }
-  html+=`</div>`;
+  if(wishRemote===false) html+=`<div class="wp-sec" style="margin-top:16px"><div class="wish-hint">sem conexão — os desejos ficam neste aparelho por enquanto.</div></div>`;
   wrap.innerHTML=html;
 }
 function wishAdd(){
@@ -3559,7 +3647,7 @@ function wishAdd(){
   }
   const it={id:'w'+Date.now().toString(36),name,pr:wishPr,value:val,done:false};
   if(lk) it.link=lk;
-  wishItems.push(it); wishPush(); buildWish(); toast('desejo anotado ✓');
+  wishItems.push(it); wishFormOpen=false; wishPush(); buildWish(); toast('desejo anotado ✓');
 }
 function wishEdit(id){
   const it=wishItems.find(x=>x.id===id); if(!it) return;
@@ -3664,19 +3752,28 @@ async function confirmWishBuy(){
   closeWishBuy(); buildWish();
 }
 async function shareAsk(){
-  const inp=document.getElementById('shareEmail');
-  const em=(inp.value||'').trim().toLowerCase();
-  if(!em||!em.includes('@')){ inp.focus(); return; }
-  if(em===myEmail()){ toast('essa é a sua própria lista!'); return; }
+  const inp=document.getElementById('shareUser');
+  const u=(inp.value||'').trim().replace(/^@+/,'');
+  if(!u){ inp.focus(); return; }
+  if(u.toLowerCase()===myName().toLowerCase()){ toast('essa é a sua própria lista'); return; }
+  let mail=null;
+  try{ const {data}=await sb.rpc('email_for_username',{uname:u}); mail=data||null; }catch(_){}
+  if(!mail&&u.includes('@')) mail=u;                       // deixa colar e-mail também
+  if(!mail){ toast('não achei ninguém com esse usuário','err'); return; }
+  mail=mail.toLowerCase();
+  if(mail===myEmail()){ toast('essa é a sua própria lista'); return; }
   try{
-    const {error}=await sb.from('wishlist_shares').insert({requester_id:curUser.id,requester_email:myEmail(),owner_email:em});
+    const {error}=await sb.from('wishlist_shares').insert({
+      requester_id:curUser.id, requester_email:myEmail(), requester_name:myName(),
+      owner_email:mail, owner_name:u.includes('@')?u.split('@')[0]:u });
     if(error) throw error;
+    inp.value='';
     await sharesRefresh(); buildWish(); toast('pedido enviado ✓');
   }catch(e){ toast((e?.code==='23505')?'você já pediu pra essa pessoa':'não deu pra enviar o pedido','err'); }
 }
 async function shareAnswer(id,ok){
   try{
-    const {error}=await sb.from('wishlist_shares').update({status:ok?'accepted':'refused',owner_id:curUser.id}).eq('id',id);
+    const {error}=await sb.from('wishlist_shares').update({status:ok?'accepted':'refused',owner_id:curUser.id,owner_name:myName()}).eq('id',id);
     if(error) throw error;
     await sharesRefresh(); buildWish(); wishBadge();
     toast(ok?'acesso liberado ✓':'pedido recusado');
@@ -3686,7 +3783,7 @@ async function shareRemove(id){
   try{ await sb.from('wishlist_shares').delete().eq('id',id); await sharesRefresh(); if(wishView===id) wishView='mine'; buildWish(); }catch(_){}
 }
 async function shareRevoke(id){
-  try{ await sb.from('wishlist_shares').update({status:'refused',owner_id:curUser.id}).eq('id',id); await sharesRefresh(); buildWish(); toast('acesso revogado'); }catch(_){}
+  try{ await sb.from('wishlist_shares').update({status:'refused',owner_id:curUser.id,owner_name:myName()}).eq('id',id); await sharesRefresh(); buildWish(); toast('acesso revogado'); }catch(_){}
 }
 function wishViewOther(id){ wishView=id; buildWish(); }
 
