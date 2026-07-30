@@ -1045,13 +1045,23 @@ html.pre-mount #loginScreen .field,html.pre-mount #loginScreen .btn-p,html.pre-m
 html.pre-mount #loginScreen .btn-g,html.pre-mount #loginScreen .btn-link{animation-play-state:paused!important}
 
 /* ══ sticker "+" nos recortes: adicionar sem abrir o card ══ */
-.pc-add{position:absolute;top:-13px;right:-11px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  background:var(--pop);border:2px solid var(--ink);border-radius:0;color:#1b1b1b;font-family:'Anton',sans-serif;font-size:19px;line-height:1;
-  cursor:pointer;box-shadow:2px 2px 0 var(--ink-sh);z-index:3;--r:calc(var(--rot) * 6deg);transform:rotate(var(--r));
-  transition:transform .15s cubic-bezier(.22,1,.36,1),box-shadow .15s;padding:0 0 2px;
-  animation:mg-pop .45s cubic-bezier(.3,1.5,.4,1) calc(var(--tape-d,1.5s) + .12s) backwards}
-.pc-add:hover{transform:rotate(var(--r)) scale(1.14);box-shadow:3px 3px 0 var(--ink-sh)}
-.pc-add:active{transform:rotate(var(--r)) scale(.94);box-shadow:1px 1px 0 var(--ink-sh)}
+/* PC: rodapé discreto do recorte */
+.pc-add{display:flex;align-items:center;gap:7px;width:100%;margin-top:15px;padding:11px 0 0;
+  border:0;border-top:1.5px dashed var(--bdr-soft);background:none;border-radius:0;
+  font-family:'Oswald',system-ui,sans-serif;font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--t3);cursor:pointer;transition:color .15s,gap .15s;
+  animation:mg-slip .32s cubic-bezier(.22,1,.36,1) calc(var(--tape-d,1.5s) + .12s) backwards}
+.pc-add b{font-family:'Anton',sans-serif;font-weight:400;font-size:16px;line-height:1;color:var(--ink);transition:transform .15s}
+.pc-add:hover{color:var(--t1);gap:9px}
+.pc-add:hover b{transform:rotate(-8deg) scale(1.1)}
+.pc-add:active b{transform:scale(.9)}
+/* celular: linha tracejada esperando, alvo grande pro dedo */
+@media(max-width:680px){
+  .pc-add{justify-content:center;gap:8px;height:38px;margin-top:13px;padding:0;
+    border:1.5px dashed var(--bdr);border-top:1.5px dashed var(--bdr);color:var(--t4);letter-spacing:.08em}
+  .pc-add b{font-size:15px;color:var(--t3)}
+  .pc-add:active{background:var(--surf2)}
+}
 @media(prefers-reduced-motion:reduce){.pc-add{animation:none!important}}
 html{background:var(--bg)}
 .qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1140,7 +1150,7 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 :is(.wish-tabs.in .wt):nth-child(5){animation-delay:0.22s}
 :is(.wish-tabs.in .wt):nth-child(6){animation-delay:0.275s}
 :is(.wish-tabs.in .wt):nth-child(n+7){animation-delay:0.33s}
-.wish-new{animation:mg-pop .34s cubic-bezier(.3,1.5,.4,1) .1s backwards}
+.wish-new.in{animation:mg-pop .34s cubic-bezier(.3,1.5,.4,1) .1s backwards}
 .wish-form{animation:mg-unfold .3s cubic-bezier(.22,1,.36,1) backwards;transform-origin:top}
 .wish-form>*{animation:mg-slip .28s cubic-bezier(.22,1,.36,1) backwards}
 :is(.wish-form>*):nth-child(2){animation-delay:0.045s}
@@ -1418,41 +1428,41 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
     <div class="dash">
     <div class="pockets">
         <div class="pocket-card rc-income" onclick="openSec('income-fixed')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('income-fixed')" title="adicionar" aria-label="adicionar em renda fixa">+</button>
           <span class="pc-chip">renda fixa</span>
           <div class="pc-total c-green" id="tot-income-fixed">R$ 0,00</div>
           <div class="pc-sub">entrando todo mês</div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('income-fixed')" title="adicionar" aria-label="adicionar em renda fixa"><b>+</b> adicionar</button>
         </div>
         <div class="pocket-card rc-income" onclick="openSec('income-extra')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('income-extra')" title="adicionar" aria-label="adicionar em renda eventual">+</button>
           <span class="pc-chip">renda eventual</span>
           <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
           <div class="pc-sub">um extra este mês</div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('income-extra')" title="adicionar" aria-label="adicionar em renda eventual"><b>+</b> adicionar</button>
         </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-fixed')" title="adicionar" aria-label="adicionar em gastos fixos">+</button>
           <span class="pc-chip">gastos fixos</span>
           <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
           <div class="pc-sub">saindo todo mês</div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-fixed')" title="adicionar" aria-label="adicionar em gastos fixos"><b>+</b> adicionar</button>
         </div>
         <div class="pocket-card rc-exp" onclick="openSec('exp-extra')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-extra')" title="adicionar" aria-label="adicionar em gastos esporádicos">+</button>
           <span class="pc-chip">gastos esporádicos</span>
           <div class="pc-total c-red" id="tot-exp-extra">R$ 0,00</div>
           <div class="pc-sub">controle do mês</div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('exp-extra')" title="adicionar" aria-label="adicionar em gastos esporádicos"><b>+</b> adicionar</button>
         </div>
         <div class="pocket-card rc-amber" onclick="openSec('loans')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('loans')" title="adicionar" aria-label="adicionar em emprestado">+</button>
           <span class="pc-chip">emprestado</span>
           <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
           <div class="pc-sub">a receber</div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('loans')" title="adicionar" aria-label="adicionar em emprestado"><b>+</b> adicionar</button>
         </div>
         <div class="pocket-card rc-purple" onclick="openSec('savings')">
-          <button class="pc-add" onclick="event.stopPropagation();openModal('savings')" title="adicionar" aria-label="adicionar em caixinhas">+</button>
           <span class="pc-chip">caixinhas</span>
           <div class="pc-total c-purple" id="tot-savings">R$ 0,00</div>
           <div class="pc-sub" id="sub-savings">total guardado</div>
           <div class="rc-metas" id="metaCaix"></div>
+          <button class="pc-add" onclick="event.stopPropagation();openModal('savings')" title="adicionar" aria-label="adicionar em caixinhas"><b>+</b> adicionar</button>
         </div>
     </div>
 
@@ -3786,7 +3796,7 @@ function buildWish(){
         <button class="m-ok" onclick="wishAdd()">${ed?'salvar':'adicionar'}</button>
       </div></div>`;
   } else {
-    html+=`<button class="wish-new" onclick="wishFormToggle()">+ novo desejo</button>`;
+    html+=`<button class="wish-new${wishTabsIn?' in':''}" onclick="wishFormToggle()">+ novo desejo</button>`;
   }
   html+= wishItems.length ? wishListHtml(wishItems,true)
     : `<div class="wish-list"><div class="cal-empty-msg">nenhum desejo ainda</div>${'<div class="wi-empty"></div>'.repeat(3)}</div><div class="wish-pg"></div>`;
