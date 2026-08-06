@@ -137,7 +137,7 @@ html[data-dark] .l-logo span{text-decoration-color:rgba(245,158,11,.25)}
 /* ── APP ──────────────────────────────────── */
 #app{min-height:100dvh;display:flex;flex-direction:column}
 .load-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:50;transition:opacity .4s}
-.load-overlay.fade{opacity:0;pointer-events:none}
+.load-overlay.fade{opacity:0;pointer-events:none;visibility:hidden}
 .load-spinner{display:flex;gap:6px;align-items:center}
 .load-spinner span{width:8px;height:8px;border-radius:50%;background:var(--blue);animation:loadpulse .9s ease-in-out infinite}
 .load-spinner span:nth-child(2){animation-delay:.18s;opacity:.7}
@@ -356,7 +356,7 @@ html[data-dark] .add-trig{background:rgba(255,255,255,.04);border-color:rgba(245
 .chart-h{position:relative;height:190px}
 .chart-empty{height:190px;display:flex;align-items:center;justify-content:center;font-size:15px;font-style:italic;color:var(--t4);text-align:center;padding:0 20px}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
 #secOverlay{z-index:96}
 .modal{background:var(--surf);border:2px solid var(--ink);border-radius:16px 10px 14px 12px;width:100%;max-width:340px;padding:28px;box-shadow:var(--shadow-sm);animation:mg-popup-in .45s cubic-bezier(.2,1.2,.4,1);position:relative;margin:auto;--mr:calc(var(--rot) * -1deg);transform:rotate(var(--mr))}
 @media(min-width:661px){.modal::after{content:'';position:absolute;top:-9px;left:calc(50% - 26px);--tr:-1.6deg;transform:rotate(var(--tr));width:52px;height:13px;background:var(--tape);border-radius:3px;pointer-events:none;animation:mg-tape .4s cubic-bezier(.3,1.5,.4,1) .3s backwards}}
@@ -423,7 +423,7 @@ html[data-dark] .add-trig{background:rgba(255,255,255,.04);border-color:rgba(245
 .cat-leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
 
 /* ── RESUMO ANUAL ─────────────────────────────────────── */
-.ann-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
+.ann-overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;animation:mg-overlay-in .3s ease-out}
 .ann-modal{background:var(--surf);border:2px solid var(--ink);border-radius:14px 10px 16px 12px;width:100%;max-width:680px;padding:28px;box-shadow:var(--shadow-sm);animation:mg-popup-in .45s cubic-bezier(.2,1.2,.4,1);margin:auto;position:relative;--mr:calc(var(--rot) * -.6deg);transform:rotate(var(--mr))}
 .ann-modal::before{content:'';position:absolute;top:-9px;left:8%;width:46px;height:13px;background:var(--tape);border-radius:3px;transform:rotate(-2deg);pointer-events:none}
 .ann-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
@@ -442,8 +442,8 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 .ann-avg span{font-weight:600;color:var(--t2)}
 
 @media(max-width:660px){
-  .sidebar{padding:0 14px;height:50px;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-  html[data-dark] .sidebar{background:rgba(30,25,22,.94)}
+  .sidebar{padding:0 14px;height:50px;background:rgba(255,255,255,.985)}
+  html[data-dark] .sidebar{background:rgba(30,25,22,.985)}
   .sb-year-wrap{display:none}
   .pill-nm{display:none}
   .stats-row{grid-template-columns:1fr 1fr;padding:12px 14px 0;gap:8px}
@@ -2167,7 +2167,10 @@ async function bootApp(fromLogin){
   initSelectors();
   wishInit();
   ensureUsername();
-  setTimeout(()=>document.getElementById('loadOverlay').classList.add('fade'),200);
+  setTimeout(()=>{
+    const lo=document.getElementById('loadOverlay');
+    if(lo){ lo.classList.add('fade'); setTimeout(()=>lo.remove(),450); }   // sai do DOM: sem animação eterna
+  },200);
 }
 
 function setHeaderUser(u){
