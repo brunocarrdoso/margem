@@ -2364,7 +2364,7 @@ function confirmCarryOver(){
   const d=monthLocal(curMonth);
   const p=allMonths[carrySourceKey];
   if(p['income-fixed']?.length) d['income-fixed']=p['income-fixed'].map(i=>({...i}));
-  if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].map(i=>{const{tp,...rest}=i;return rest;});
+  if(p['exp-fixed']?.length)    d['exp-fixed']   =p['exp-fixed'].filter(i=>freqHits(i,curMonth)).map(i=>{const{tp,...rest}=i;return rest;});
   renderRows('income-fixed'); renderRows('exp-fixed'); recalc(); drawChart(); schedSave();
   toast('itens fixos importados ✓');
 }
@@ -2458,7 +2458,7 @@ function renderRows(key){
     const dotStyle=it.adj?`style="background:var(--purple);width:7px;height:7px"`:(cat?`style="background:${cat.color};width:7px;height:7px"`:'');
     const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
                  :(cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'');
-    const freqBadge=it.freq?`<span class="item-freq-badge" title="${fmt(it.freq.base)} ${FREQ[it.freq.per]?.lb||''}">${it.freq.n}x/${it.freq.per==='mes'?'mês':it.freq.per==='sem'?'sem':'ano'}</span>`:'';
+    const freqBadge=it.freq?`<span class="item-freq-badge" title="${it.freq.n}x ${FREQ[it.freq.per]?.lb||''}">${it.freq.n}x/${it.freq.per==='mes'?'mês':it.freq.per==='sem'?'sem':'ano'}</span>`:'';
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
     const tpBadge=it.tp?`<span class="item-pay-badge pay-tp">${esc(it.tp)} paga</span>`:'';
@@ -2853,7 +2853,7 @@ function openModal(key, idx=-1){
   if(editing){
     const item = key==='loans' ? ((editLoanMk?allMonths[editLoanMk]:monthLocal(curMonth)).loans||[])[idx] : monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
-    document.getElementById('mVal').value  = numBR(item.freq?item.freq.base:item.value);
+    document.getElementById('mVal').value  = numBR(item.freq&&item.freq.per==='mes'&&item.freq.n>1 ? item.value/item.freq.n : item.value);
     if(hasFreq&&item.freq){ freqPer=item.freq.per; document.getElementById('mFreqN').value=item.freq.n; }
     selCat = item.cat || null;
     selPay = item.pay || null;
@@ -2890,8 +2890,11 @@ function confirmModal(){
   if(modalKey==='exp-fixed'){
     const n=freqNum();
     if(n!==1||freqPer!=='mes'){
-      item.value=freqMensal(val,n,freqPer);        // é o que pesa no mês
-      item.freq={n,per:freqPer,base:val};          // e isto foi o que você digitou
+      // por mês: acontece n vezes dentro do mês → soma tudo.
+      // por semestre/ano: valor cheio, só nos meses do ciclo (ver freqHits)
+      item.value = freqPer==='mes' ? Math.round(val*n*100)/100 : val;
+      const keep = (editIdx>=0 && arr[editIdx]?.freq?.mk) ? arr[editIdx].freq.mk : curMonth;
+      item.freq={n,per:freqPer,mk:keep};
     }
   }
   if(modalKey==='savings') item.box=depositBox||'emerg';
@@ -2948,7 +2951,9 @@ function maybeOfferPropagate(item,key){
   if(!rest.length) return;
   pendingProp={item:{...item},key};
   delete pendingProp.item.tp; // o "a receber" não se repete sozinho
-  document.getElementById('propMsg').innerHTML=`<strong>${esc(item.desc)}</strong> é fixo — aplicar também de ${mkLbl(rest[0])} até ${mkLbl(rest[rest.length-1])}?`;
+  const alvo=rest.filter(mk=>freqHits(item,mk));
+  if(!alvo.length){ pendingProp=null; return; }               // só cai em meses de outro ano
+  document.getElementById('propMsg').innerHTML=`<strong>${esc(item.desc)}</strong> é fixo — aplicar também ${alvo.length===1?`em ${mkLbl(alvo[0])}`:`de ${mkLbl(alvo[0])} até ${mkLbl(alvo[alvo.length-1])}`}?`;
   showOv('propOverlay');
 }
 function propKeep(){ hideOv('propOverlay'); pendingProp=null; }
@@ -2960,6 +2965,7 @@ async function propApply(){
   const low=item.desc.trim().toLowerCase();
   const touched=[];
   rest.forEach(mk=>{
+    if(!freqHits(item,mk)) return;                             // mês fora do ciclo
     const arr=monthLocal(mk)[key];
     if(arr.some(x=>x.desc.trim().toLowerCase()===low)) return; // já existe lá
     arr.push({...item});
@@ -3471,7 +3477,16 @@ function closeAnnual(){ hideOv('annOverlay'); }
 const FREQ={mes:{lb:'por mês',m:1},sem:{lb:'por semestre',m:6},ano:{lb:'por ano',m:12}};
 let freqPer='mes';
 const freqNum=()=>Math.min(Math.max(parseInt(document.getElementById('mFreqN').value)||1,1),24);
-const freqMensal=(base,n,per)=>Math.round(base*n/FREQ[per].m*100)/100;
+// de quantos em quantos meses o gasto reaparece (por mês = todo mês)
+const freqStep=f=>(!f||f.per==='mes')?1:Math.max(1,Math.round(FREQ[f.per].m/f.n));
+const mkIndex=mk=>{const[y,m]=mk.split('-').map(Number);return y*12+(m-1);};
+// o item cai neste mês? (conta a partir do mês em que foi criado, pra frente e pra trás)
+function freqHits(it,mk){
+  const f=it&&it.freq;
+  if(!f||f.per==='mes'||!f.mk) return true;
+  const step=freqStep(f);
+  return Math.abs(mkIndex(mk)-mkIndex(f.mk))%step===0;
+}
 function renderFreqPills(){
   const el=document.getElementById('freqPills'); if(!el) return;
   el.innerHTML=Object.keys(FREQ).map(k=>{
@@ -3484,7 +3499,13 @@ function updateFreqHint(){
   const el=document.getElementById('freqHint'); if(!el) return;
   const n=freqNum(), base=parseMoney(document.getElementById('mVal').value);
   if((n===1&&freqPer==='mes')||!base){ el.classList.add('hidden'); return; }
-  el.textContent=`pesa ${fmt(freqMensal(base,n,freqPer))} por mês`;
+  if(freqPer==='mes'){
+    el.textContent=`${fmt(base*n)} por mês (${n}x de ${fmt(base)})`;
+  } else {
+    const step=freqStep({n,per:freqPer});
+    const nm=mkLbl(curMonth);
+    el.textContent=`${fmt(base)} em ${nm}, e a cada ${step} ${step===1?'mês':'meses'}`;
+  }
   el.classList.remove('hidden');
 }
 function renderCatPills(){
