@@ -1203,6 +1203,14 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 /* foco no papel: sombra dura em vez do brilho azul antigo */
 .m-in:focus{border-color:var(--ink);background:var(--surf);box-shadow:2px 2px 0 var(--ink-sh)}
 .field input:focus{border-color:var(--ink);box-shadow:2px 2px 0 var(--ink-sh)}
+.freq-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.freq-n{width:66px;flex:0 0 auto;text-align:center;padding:10px 6px;font-size:16px;font-weight:700}
+.freq-x{font-family:'Newsreader',Georgia,serif;font-size:15px;color:var(--t4);flex:0 0 auto}
+.freq-row .cat-pills{margin:0;flex:1;min-width:0}
+.item-freq-badge{font-size:8px;font-weight:700;color:var(--amber);background:var(--amber-bg);padding:1px 6px 2px;
+  border-radius:10px;flex-shrink:0;white-space:nowrap;letter-spacing:.3px;text-transform:uppercase;
+  border:1px solid rgba(217,119,6,.18)}
+html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 </style>
 </head>
 <body>
@@ -1790,8 +1798,17 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
       <label id="mValLabel">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
-        <input class="m-in" id="mVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);if(isParcelado)updateParcelHint()" />
+        <input class="m-in" id="mVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);if(isParcelado)updateParcelHint();if(modalKey==='exp-fixed')updateFreqHint()" />
       </div>
+    </div>
+    <div class="m-field hidden" id="freqWrap">
+      <label>Frequência</label>
+      <div class="freq-row">
+        <input class="m-in freq-n" id="mFreqN" type="number" min="1" max="24" value="1" oninput="updateFreqHint()" />
+        <span class="freq-x">×</span>
+        <div class="cat-pills" id="freqPills"></div>
+      </div>
+      <div class="parc-hint hidden" id="freqHint"></div>
     </div>
     <div class="m-field hidden" id="catWrap">
       <label>Categoria <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
@@ -2441,6 +2458,7 @@ function renderRows(key){
     const dotStyle=it.adj?`style="background:var(--purple);width:7px;height:7px"`:(cat?`style="background:${cat.color};width:7px;height:7px"`:'');
     const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
                  :(cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'');
+    const freqBadge=it.freq?`<span class="item-freq-badge" title="${fmt(it.freq.base)} ${FREQ[it.freq.per]?.lb||''}">${it.freq.n}x/${it.freq.per==='mes'?'mês':it.freq.per==='sem'?'sem':'ano'}</span>`:'';
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
     const tpBadge=it.tp?`<span class="item-pay-badge pay-tp">${esc(it.tp)} paga</span>`:'';
@@ -2452,6 +2470,7 @@ function renderRows(key){
       <span class="item-desc">${esc(it.desc)}${catLbl}</span>
       ${tpBadge}
       ${payBadge}
+      ${freqBadge}
       ${dayBadge}
       <span class="item-val"${it.value<0?' style="color:var(--red)"':''}>${valTxt}</span>
       <div class="item-btns">
@@ -2805,6 +2824,11 @@ function openModal(key, idx=-1){
   // parcelado: gastos esporádicos (parcelas nos próximos meses) e empréstimos (receber em partes)
   document.getElementById('parceladoWrap').classList.toggle('hidden', !['exp-extra','loans'].includes(key) || idx>=0);
   document.querySelector('#parceladoWrap .parc-lbl').textContent = key==='loans' ? 'vão te pagar parcelado?' : 'parcelado?';
+  // frequência: só em gastos fixos
+  const hasFreq=key==='exp-fixed';
+  document.getElementById('freqWrap').classList.toggle('hidden',!hasFreq);
+  document.getElementById('freqHint').classList.add('hidden');
+  freqPer='mes'; document.getElementById('mFreqN').value=1;
   // categoria: só em gastos fixos e esporádicos
   const hasCat=['exp-fixed','exp-extra'].includes(key);
   document.getElementById('catWrap').classList.toggle('hidden',!hasCat);
@@ -2829,7 +2853,8 @@ function openModal(key, idx=-1){
   if(editing){
     const item = key==='loans' ? ((editLoanMk?allMonths[editLoanMk]:monthLocal(curMonth)).loans||[])[idx] : monthLocal(curMonth)[key][idx];
     document.getElementById('mDesc').value = item.desc;
-    document.getElementById('mVal').value  = numBR(item.value);
+    document.getElementById('mVal').value  = numBR(item.freq?item.freq.base:item.value);
+    if(hasFreq&&item.freq){ freqPer=item.freq.per; document.getElementById('mFreqN').value=item.freq.n; }
     selCat = item.cat || null;
     selPay = item.pay || null;
     if(hasDay) document.getElementById('mDay').value = item.day||'';
@@ -2838,6 +2863,7 @@ function openModal(key, idx=-1){
     document.getElementById('mDesc').value=''; document.getElementById('mVal').value='';
     if(hasDay) document.getElementById('mDay').value='';
   }
+  if(hasFreq){ renderFreqPills(); updateFreqHint(); }
   if(hasCat) renderCatPills();
   if(hasPay) renderPayPills();
   buildDescSuggestions(key);
@@ -2861,6 +2887,13 @@ function confirmModal(){
   const d0=(modalKey==='loans'&&editIdx>=0&&editLoanMk)?allMonths[editLoanMk]:monthLocal(curMonth);
   const arr= modalKey==='loans' ? (d0.loans=d0.loans||[]) : d0[modalKey];
   const item={desc,value:val};
+  if(modalKey==='exp-fixed'){
+    const n=freqNum();
+    if(n!==1||freqPer!=='mes'){
+      item.value=freqMensal(val,n,freqPer);        // é o que pesa no mês
+      item.freq={n,per:freqPer,base:val};          // e isto foi o que você digitou
+    }
+  }
   if(modalKey==='savings') item.box=depositBox||'emerg';
   if(selCat&&['exp-fixed','exp-extra'].includes(modalKey)) item.cat=selCat;
   if(selPay&&['exp-fixed','exp-extra'].includes(modalKey)) item.pay=selPay;
@@ -3433,6 +3466,27 @@ function openAnnual(){
 function closeAnnual(){ hideOv('annOverlay'); }
 
 // ── Categorias ────────────────────────────────────────
+// ── Frequência dos gastos fixos: o valor digitado é POR OCORRÊNCIA;
+//    o que entra na conta do mês é sempre o equivalente mensal ──
+const FREQ={mes:{lb:'por mês',m:1},sem:{lb:'por semestre',m:6},ano:{lb:'por ano',m:12}};
+let freqPer='mes';
+const freqNum=()=>Math.min(Math.max(parseInt(document.getElementById('mFreqN').value)||1,1),24);
+const freqMensal=(base,n,per)=>Math.round(base*n/FREQ[per].m*100)/100;
+function renderFreqPills(){
+  const el=document.getElementById('freqPills'); if(!el) return;
+  el.innerHTML=Object.keys(FREQ).map(k=>{
+    const on=freqPer===k, c='#d97706';
+    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="setFreqPer('${k}')">${FREQ[k].lb}</div>`;
+  }).join('');
+}
+function setFreqPer(k){ freqPer=k; renderFreqPills(); updateFreqHint(); }
+function updateFreqHint(){
+  const el=document.getElementById('freqHint'); if(!el) return;
+  const n=freqNum(), base=parseMoney(document.getElementById('mVal').value);
+  if((n===1&&freqPer==='mes')||!base){ el.classList.add('hidden'); return; }
+  el.textContent=`pesa ${fmt(freqMensal(base,n,freqPer))} por mês`;
+  el.classList.remove('hidden');
+}
 function renderCatPills(){
   document.getElementById('catPills').innerHTML=CATS.map(c=>{
     const on=selCat===c.id;
