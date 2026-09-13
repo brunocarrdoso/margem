@@ -1895,18 +1895,14 @@ const AV_COL = ['#2563eb','#9333ea','#16a34a','#dc2626','#d97706','#0891b2'];
 const PROF_KEY = 'margem-profiles';
 const CATS=[
   {id:'food',    lb:'alimentação',  color:'#f97316'},
-  {id:'transp',  lb:'transporte',   color:'#0891b2'},
   {id:'home',    lb:'moradia',      color:'#7c3aed'},
+  {id:'transp',  lb:'transporte',   color:'#0891b2'},
   {id:'health',  lb:'saúde',        color:'#dc2626'},
   {id:'fun',     lb:'lazer',        color:'#d97706'},
-  {id:'edu',     lb:'educação',     color:'#2563eb'},
-  {id:'cloth',   lb:'vestuário',    color:'#ec4899'},
-  {id:'pet',     lb:'pet',          color:'#84cc16'},
-  {id:'sub',     lb:'assinaturas',  color:'#6366f1'},
-  {id:'beauty',  lb:'beleza',       color:'#f43f5e'},
-  {id:'finance', lb:'financeiro',   color:'#0d9488'},
   {id:'other',   lb:'outros',       color:'#64748b'},
 ];
+// categoria que saiu da lista (educação, pet…) aparece como "outros" — o dado salvo não muda
+const catOf=id=>id?(CATS.find(c=>c.id===id)||CATS.find(c=>c.id==='other')):null;
 
 let curUser=null, curMonth=null, allMonths={}, allProfiles=[], selProfile=null;
 let curUsername=null, loggedWithPin=false;
@@ -2504,7 +2500,7 @@ function renderRows(key){
   const start=pg*sz;
   document.getElementById('rows-'+key).innerHTML=items.slice(start,start+sz).map((it,j)=>{
     const i=start+j;
-    const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
+    const cat=catOf(it.cat);
     const dotStyle=it.adj?`style="background:var(--purple);width:7px;height:7px"`:(cat?`style="background:${cat.color};width:7px;height:7px"`:'');
     const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
                  :(cat?`<span class="item-cat-lb">${cat.lb}</span>`:'');
@@ -2813,7 +2809,7 @@ function renderTopGastos(){
   if(!items.length||tot<=0){ el.classList.add('hidden'); return; }
   const groups={};
   items.forEach(it=>{
-    const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
+    const cat=catOf(it.cat);
     const lb=cat?cat.lb:(it.desc||'outros').trim();
     const key=lb.toLowerCase();
     (groups[key]=groups[key]||{lb,v:0}).v+=it.value;
@@ -2906,7 +2902,7 @@ function openModal(key, idx=-1){
     document.getElementById('mDesc').value = item.desc;
     document.getElementById('mVal').value  = numBR(item.freq&&item.freq.per==='mes'&&item.freq.n>1 ? item.value/item.freq.n : item.value);
     if(hasFreq&&item.freq){ freqPer=item.freq.per; document.getElementById('mFreqN').value=item.freq.n; }
-    selCat = item.cat || null;
+    selCat = item.cat ? catOf(item.cat).id : null;
     selPay = item.pay || null;
     if(hasDay) document.getElementById('mDay').value = item.day||'';
   } else {
