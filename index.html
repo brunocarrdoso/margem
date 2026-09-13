@@ -27,6 +27,7 @@
   --green:#2e6b4f; --green-bg:rgba(46,107,79,.1);
   --red:#e8442e; --red-bg:rgba(232,68,46,.1);
   --amber:#c46a10; --amber-bg:rgba(196,106,16,.1);
+  --red-solid:#bf3320; --amber-solid:#9a520a;
   --purple:#6d4a9e; --purple-bg:rgba(109,74,158,.1);
   --tape:rgba(230,208,140,.8);
   --rot:1; --tex:.06;
@@ -50,6 +51,7 @@ html[data-dark] {
 }
 html{scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+button,input,select,textarea{font-family:inherit}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
 input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 body{font-family:'Oswald',system-ui,sans-serif;background-color:var(--bg);background-image:radial-gradient(rgba(120,80,20,var(--tex)) 1px,transparent 1.4px);background-size:15px 15px;color:var(--t1);font-size:14px;-webkit-font-smoothing:antialiased;min-height:100dvh;transition:background-color .2s,color .2s}
@@ -181,12 +183,12 @@ html[data-dark] body::before{opacity:.1}
   60% {opacity:1;transform:scale(.97) rotate(0.3deg)}
   100%{transform:scale(1) rotate(0deg)}
 }
-.item{animation:itemIn .28s cubic-bezier(.22,1,.36,1) backwards}
-.item:nth-child(2){animation-delay:.04s}
-.item:nth-child(3){animation-delay:.08s}
-.item:nth-child(4){animation-delay:.12s}
-.item:nth-child(5){animation-delay:.15s}
-.item:nth-child(n+6){animation-delay:.17s}
+.entra .item{animation:itemIn .28s cubic-bezier(.22,1,.36,1) backwards}
+.entra .item:nth-child(2){animation-delay:.04s}
+.entra .item:nth-child(3){animation-delay:.08s}
+.entra .item:nth-child(4){animation-delay:.12s}
+.entra .item:nth-child(5){animation-delay:.15s}
+.entra .item:nth-child(n+6){animation-delay:.17s}
 
 /* ── TOP BAR ──────────────────────────────────────────── */
 .sidebar{width:100%;height:54px;display:flex;flex-direction:row;align-items:center;background:var(--surf);border-bottom:1.5px solid var(--bdr);position:sticky;top:0;z-index:20;padding:0 20px;gap:14px;transition:background .2s,border-color .2s;flex-shrink:0}
@@ -373,7 +375,7 @@ html[data-dark] .add-trig{background:rgba(255,255,255,.04);border-color:rgba(245
 .m-field{margin-bottom:14px}
 .m-field label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
 .m-in{width:100%;border:1.5px solid var(--bdr);border-radius:10px 8px 10px 8px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--t1);background:var(--bg);outline:none;transition:border-color .15s;-webkit-appearance:none}
-.m-in:focus{background:var(--surf)} .m-in::placeholder{color:var(--t4)}
+.m-in:focus{background:var(--surf)} .m-in::placeholder{color:var(--t3)}
 .val-wrap{position:relative}
 .val-pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:500;color:var(--t4);pointer-events:none}
 .val-wrap .m-in{padding-left:36px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
@@ -540,7 +542,7 @@ html[data-dark] .ann-table tr:nth-child(even) td{background:rgba(255,255,255,.02
 .pocket-card:hover{transform:translateY(-3px) rotate(var(--r,0deg));box-shadow:8px 9px 0 var(--ink-sh);z-index:2}
 .pc-empty{font-size:12px;color:var(--t4);font-style:italic;text-align:center;padding:8px 0}
 .pc-chip{align-self:flex-start;font-family:'Anton',sans-serif;font-size:14.5px;letter-spacing:.01em;text-transform:uppercase;color:#f4eedf;padding:2px 10px 4px;border-radius:0;transform:rotate(calc(var(--rot) * -1.5deg));margin-bottom:11px;line-height:1.1}
-.rc-income .pc-chip{background:#2e6b4f} .rc-exp .pc-chip{background:#e8442e} .rc-amber .pc-chip{background:#c46a10} .rc-purple .pc-chip{background:#6d4a9e}
+.rc-income .pc-chip{background:#2e6b4f} .rc-exp .pc-chip{background:var(--red-solid)} .rc-amber .pc-chip{background:var(--amber-solid)} .rc-purple .pc-chip{background:#6d4a9e}
 .pc-total{display:block;font-family:'Newsreader',Georgia,serif;font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
 .pc-sub{font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:13.5px;font-weight:400;color:var(--t3);margin-top:8px}
 .pc-income .pc-front{background:#e9f3df} html[data-dark] .pc-income .pc-front{background:#17231a}
@@ -581,7 +583,7 @@ html[data-dark] .pc-front .meter{box-shadow:1.5px 2px 0 rgba(0,0,0,.35)}
 .loan-act-wrap .edit-btn:hover,.loan-act-wrap .del-btn:hover{opacity:1}
 
 /* ── BADGE FORMA DE PAGAMENTO ─────────────────────────── */
-.item-pay-badge{font-size:8px;font-weight:700;padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;letter-spacing:.3px;text-transform:uppercase}
+.item-pay-badge{font-size:11px;font-weight:700;padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;letter-spacing:.3px;text-transform:uppercase}
 .pay-credito{color:#b45309;background:rgba(217,119,6,.12)}
 .pay-debito{color:#2563eb;background:rgba(37,99,235,.1)}
 .pay-pix{color:#0d9488;background:rgba(13,148,136,.12)}
@@ -801,7 +803,7 @@ html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(25
 .wp-av{width:19px;height:19px;flex-shrink:0;border:1.5px solid var(--ink);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;
   font-size:9.5px;font-style:normal;display:flex;align-items:center;justify-content:center;line-height:1}
 .wt.sel .wp-av{border-color:var(--pop)}
-.wt-badge{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px 2px;line-height:1;min-width:15px;text-align:center}
+.wt-badge{background:var(--red-solid);color:#fff;font-size:11px;font-weight:700;padding:1px 5px 2px;line-height:1;min-width:15px;text-align:center}
 
 /* botão de novo desejo + formulário recolhido */
 .wish-new{width:100%;height:47px;background:var(--pop);border:2px solid var(--ink);border-radius:0;font-family:'Anton',sans-serif;
@@ -837,7 +839,7 @@ html[data-dark] .box-row:hover,html[data-dark] .shop-it:hover{background:rgba(25
 .wi-gift:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
 .wi.done{opacity:.6}
 .wi.done .wi-nm,.wi.done .wi-val{text-decoration:line-through;color:var(--t4)}
-.wi-tag{font-family:'Oswald',sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--green);
+.wi-tag{font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--green);
   background:var(--green-bg);padding:2px 7px 3px;flex-shrink:0}
 
 /* aba pessoas */
@@ -902,13 +904,13 @@ html.season-jun .logo::after{content:'';position:absolute;top:-10px;left:2px;wid
 html.season-jun .intro-card::after,html.season-jun .l-card::after{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:160px;height:22px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 16'><path d='M0 2 Q48 8 96 2' stroke='%232b2117' stroke-width='1.2' fill='none'/><path d='M8 3.5l5 9 5-9z' fill='%23e8554d' stroke='%232b2117'/><path d='M26 5l5 9 5-9z' fill='%23ffd84d' stroke='%232b2117'/><path d='M44 5.6l5 9 5-9z' fill='%233f8f5f' stroke='%232b2117'/><path d='M62 5l5 9 5-9z' fill='%236b8fd9' stroke='%232b2117'/><path d='M80 3.5l5 9 5-9z' fill='%23d96bb8' stroke='%232b2117'/></svg>") no-repeat center/contain;pointer-events:none}
 
 /* ── DAY BADGE ────────────────────────────────────────── */
-.item-day-badge{font-size:8px;font-weight:600;color:var(--blue);background:var(--blue-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(180,83,9,.12)}
+.item-day-badge{font-size:11px;font-weight:600;color:var(--t2);background:var(--blue-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;border:1px solid rgba(180,83,9,.12)}
 html[data-dark] .item-day-badge{border-color:rgba(245,158,11,.18)}
 
 /* ── DELETE CONFIRM ───────────────────────────────────── */
 .del-confirm-msg{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
-.m-ok.m-danger{background:var(--red);border-color:var(--ink);color:#fff;box-shadow:3px 3px 0 var(--ink-sh)}
-html[data-dark] .m-ok.m-danger{color:#241c12}
+.m-ok.m-danger{background:var(--red-solid);border-color:var(--ink);color:#fff;box-shadow:3px 3px 0 var(--ink-sh)}
+html[data-dark] .m-ok.m-danger{color:#fff}
 html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .m-ok.m-danger:hover{opacity:.88;transform:translateY(-1px)}
 
@@ -928,7 +930,7 @@ html[data-dark] .m-ok.m-danger{box-shadow:3px 3px 0 rgba(248,113,113,.35)}
 .scard-meta{margin-top:10px;padding-top:9px;border-top:1.5px dashed var(--bdr-soft)}
 .scard-meta:empty,.rc-metas:empty{display:none;border:none;padding:0;margin:0}
 .mm+.mm{margin-top:7px}
-.mm-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+.mm-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:1px 8px;margin-bottom:4px}
 .mm-top>span:first-child{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)}
 .mm-v{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:12.5px;color:var(--t2);white-space:nowrap}
 .mm-bar{height:9px;margin:0}
@@ -1069,13 +1071,13 @@ html{background:var(--bg)}
   font-family:'Oswald',system-ui,sans-serif;font-weight:600;font-size:13px;color:var(--t1);box-shadow:2px 2px 0 var(--ink-sh);cursor:pointer;
   transition:transform .12s,box-shadow .12s}
 .qa-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--ink-sh)}
-.qa-hero{grid-column:1/-1;background:var(--red);color:#fff;font-family:'Anton',sans-serif;font-weight:400;font-size:15px;letter-spacing:.02em;justify-content:center;padding:15px 14px}
+.qa-hero{grid-column:1/-1;background:var(--red-solid);color:#fff;font-family:'Anton',sans-serif;font-weight:400;font-size:15px;letter-spacing:.02em;justify-content:center;padding:15px 14px}
 .qa-dot{width:11px;height:11px;border:1.5px solid var(--ink);flex-shrink:0}
 
 /* ══ pra onde foi: top 5 gastos do mês ══ */
 .gasto-king{position:relative;background:var(--surf);border:2px solid var(--ink);box-shadow:var(--shadow-sm);padding:22px 24px 20px;margin-top:6px;--r:calc(var(--rot) * .4deg);transform:rotate(var(--r));animation:mg-rise .55s cubic-bezier(.2,.8,.3,1) 1.75s backwards}
 .gasto-king::before{content:'';position:absolute;top:-11px;left:32%;width:74px;height:22px;background:var(--tape);--tr:calc(var(--rot) * -3deg);transform:rotate(var(--tr));box-shadow:0 1px 2px rgba(0,0,0,.2);animation:mg-tape .45s cubic-bezier(.3,1.5,.4,1) 2.25s backwards}
-.gk-chip{display:inline-block;background:var(--red);color:#fff;font-family:'Anton',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.03em;padding:3px 11px 4px;transform:rotate(calc(var(--rot) * -1.5deg));box-shadow:2px 2px 0 var(--ink-sh)}
+.gk-chip{display:inline-block;background:var(--red-solid);color:#fff;font-family:'Anton',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.03em;padding:3px 11px 4px;transform:rotate(calc(var(--rot) * -1.5deg));box-shadow:2px 2px 0 var(--ink-sh)}
 .gk-sub{font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:12.5px;color:var(--t3);margin:8px 0 18px}
 .gk-star{position:absolute;top:-13px;right:-9px;background:var(--pop);border:2px solid var(--ink);color:#1b1b1b;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:.03em;padding:4px 9px 5px;--r:calc(var(--rot) * 6deg);transform:rotate(var(--r));box-shadow:2px 2px 0 var(--ink-sh);animation:mg-pop .45s cubic-bezier(.3,1.5,.4,1) 2.4s backwards;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gk-hd{display:contents}
@@ -1132,15 +1134,15 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 .ann-modal>.ann-hd{animation-delay:0s}
 
 /* linhas de lista (desejos, caixinhas, compras, pessoas) */
-.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi{animation:mg-slip .3s cubic-bezier(.22,1,.36,1) backwards}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(2){animation-delay:0.045s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(3){animation-delay:0.09s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(4){animation-delay:0.135s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(5){animation-delay:0.18s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(6){animation-delay:0.225s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(7){animation-delay:0.27s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(8){animation-delay:0.315s}
-:is(.wi,.wp-row,.box-row,.shop-it,.wish-list>.wi):nth-child(n+9){animation-delay:0.36s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it){animation:mg-slip .3s cubic-bezier(.22,1,.36,1) backwards}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(2){animation-delay:0.045s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(3){animation-delay:0.09s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(4){animation-delay:0.135s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(5){animation-delay:0.18s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(6){animation-delay:0.225s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(7){animation-delay:0.27s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(8){animation-delay:0.315s}
+.entra :is(.wi,.wp-row,.box-row,.shop-it):nth-child(n+9){animation-delay:0.36s}
 
 /* desejos: abas, botão novo, formulário */
 .wish-tabs.in .wt{animation:mg-pop .3s cubic-bezier(.3,1.5,.4,1) backwards}
@@ -1158,8 +1160,8 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 :is(.wish-form>*):nth-child(4){animation-delay:0.135s}
 :is(.wish-form>*):nth-child(5){animation-delay:0.18s}
 :is(.wish-form>*):nth-child(n+6){animation-delay:0.225s}
-.wp-lb{animation:mg-slip .28s cubic-bezier(.22,1,.36,1) backwards}
-.wi-gift,.wi-tag{animation:mg-pop .32s cubic-bezier(.3,1.5,.4,1) .12s backwards}
+.entra .wp-lb{animation:mg-slip .28s cubic-bezier(.22,1,.36,1) backwards}
+.entra :is(.wi-gift,.wi-tag){animation:mg-pop .32s cubic-bezier(.3,1.5,.4,1) .12s backwards}
 
 /* lançar: botões pipocam */
 .qa-btn{animation:mg-pop .32s cubic-bezier(.3,1.5,.4,1) backwards}
@@ -1192,13 +1194,13 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 .sc-delta{animation:mg-pop .35s cubic-bezier(.3,1.5,.4,1) .3s backwards}
 
 /* pílulas de categoria/pagamento */
-.cat-pills>*{animation:mg-pop .28s cubic-bezier(.3,1.5,.4,1) backwards}
-:is(.cat-pills>*):nth-child(2){animation-delay:0.035s}
-:is(.cat-pills>*):nth-child(3){animation-delay:0.07s}
-:is(.cat-pills>*):nth-child(4){animation-delay:0.105s}
-:is(.cat-pills>*):nth-child(5){animation-delay:0.14s}
-:is(.cat-pills>*):nth-child(6){animation-delay:0.175s}
-:is(.cat-pills>*):nth-child(n+7){animation-delay:0.21s}
+.entra .cat-pills>*{animation:mg-pop .28s cubic-bezier(.3,1.5,.4,1) backwards}
+.entra :is(.cat-pills>*):nth-child(2){animation-delay:0.035s}
+.entra :is(.cat-pills>*):nth-child(3){animation-delay:0.07s}
+.entra :is(.cat-pills>*):nth-child(4){animation-delay:0.105s}
+.entra :is(.cat-pills>*):nth-child(5){animation-delay:0.14s}
+.entra :is(.cat-pills>*):nth-child(6){animation-delay:0.175s}
+.entra :is(.cat-pills>*):nth-child(n+7){animation-delay:0.21s}
 
 /* foco no papel: sombra dura em vez do brilho azul antigo */
 .m-in:focus{border-color:var(--ink);background:var(--surf);box-shadow:2px 2px 0 var(--ink-sh)}
@@ -1207,10 +1209,25 @@ html.pre-mount .gasto-king,html.pre-mount .gasto-king::before,html.pre-mount .gk
 .freq-n{width:66px;flex:0 0 auto;text-align:center;padding:10px 6px;font-size:16px;font-weight:700}
 .freq-x{font-family:'Newsreader',Georgia,serif;font-size:15px;color:var(--t4);flex:0 0 auto}
 .freq-row .cat-pills{margin:0;flex:1;min-width:0}
-.item-freq-badge{font-size:8px;font-weight:700;color:var(--amber);background:var(--amber-bg);padding:1px 6px 2px;
+.item-freq-badge{font-size:11px;font-weight:700;color:var(--t2);background:var(--amber-bg);padding:1px 6px 2px;
   border-radius:10px;flex-shrink:0;white-space:nowrap;letter-spacing:.3px;text-transform:uppercase;
   border:1px solid rgba(217,119,6,.18)}
 html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
+
+/* ══ revisão de interface ══ */
+.pc-open{position:absolute;inset:0;z-index:1;margin:0;padding:0;border:0;border-radius:0;background:none;cursor:pointer}
+.pc-add{position:relative;z-index:2}
+.parc-row{width:100%;margin:0;border:0;background:none;color:inherit;font:inherit;text-align:start}
+.t-sw{display:inline-block}
+.logo{margin:0;padding:0;border:0;background:none;color:inherit}
+.cat-pill{color:var(--t1);background:transparent;border-color:var(--bdr);line-height:1.25;margin:0}
+.cat-pill.sel{border-color:var(--t1);background:var(--surf2)}
+.item-pay-badge[class*="pay-"],html[data-dark] .item-pay-badge[class*="pay-"]{color:var(--t2)}
+.wi.pr-alta{--pc:var(--t1)} .wi.pr-media{--pc:var(--t3)} .wi.pr-baixa{--pc:var(--bdr)}
+.wi-val{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}
+.wi-pr-lb{font-family:'Oswald',system-ui,sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-top:2px}
+/* 10) iPhone não dá zoom ao tocar num campo */
+@media(max-width:680px){.m-in,.field input,.goal-input,.sel,.wish-form .m-in,.wp-add .m-in{font-size:16px}}
 </style>
 </head>
 <body>
@@ -1248,7 +1265,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
           <div><div class="pass-name" id="passName"></div><div class="pass-tip">digite sua senha</div></div>
         </div>
         <div class="field pw-field">
-          <label>senha</label>
+          <label for="passInput">senha</label>
           <input id="passInput" type="password" placeholder="sua senha" autocomplete="current-password" />
           <button type="button" class="pw-eye" onclick="togglePw('passInput',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
@@ -1263,8 +1280,8 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
         <div class="l-form">
           <h2>entrar</h2>
           <p class="l-form-sub">use seu usuário e senha</p>
-          <div class="field"><label>usuário ou e-mail</label><input id="lUser" type="text" placeholder="seu usuário" autocomplete="username" /></div>
-          <div class="field pw-field"><label>senha</label><input id="lPass" type="password" placeholder="sua senha" autocomplete="current-password" /><button type="button" class="pw-eye" onclick="togglePw('lPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="field"><label for="lUser">usuário ou e-mail</label><input id="lUser" type="text" placeholder="seu usuário" autocomplete="username" /></div>
+          <div class="field pw-field"><label for="lPass">senha</label><input id="lPass" type="password" placeholder="sua senha" autocomplete="current-password" /><button type="button" class="pw-eye" onclick="togglePw('lPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
           <div class="auth-err hidden" id="lErr"></div>
           <button class="btn-p" id="lBtn" onclick="doLogin()">entrar</button>
           <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
@@ -1277,7 +1294,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
         <div class="l-form">
           <h2>redefinir senha</h2>
           <p class="l-form-sub">enviaremos um link para o seu e-mail</p>
-          <div class="field"><label>e-mail</label><input id="rEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
+          <div class="field"><label for="rEmail">e-mail</label><input id="rEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
           <div class="auth-err hidden" id="rErr"></div>
           <div class="auth-info hidden" id="rInfo">✓ link enviado! verifique sua caixa de entrada.</div>
           <button class="btn-p" id="rBtn" onclick="doResetPassword()">enviar link</button>
@@ -1290,8 +1307,8 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
         <div class="l-form">
           <h2>nova senha</h2>
           <p class="l-form-sub">escolha uma nova senha para sua conta</p>
-          <div class="field pw-field"><label>nova senha</label><input id="npPass1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('npPass1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-          <div class="field"><label>confirmar senha</label><input id="npPass2" type="password" placeholder="repita a senha" /></div>
+          <div class="field pw-field"><label for="npPass1">nova senha</label><input id="npPass1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('npPass1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="field"><label for="npPass2">confirmar senha</label><input id="npPass2" type="password" placeholder="repita a senha" /></div>
           <div class="auth-err hidden" id="npErr"></div>
           <button class="btn-p" id="npBtn" onclick="doSaveNewPass()">salvar nova senha</button>
         </div>
@@ -1302,10 +1319,10 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
         <div class="l-form">
           <h2>criar conta</h2>
           <p class="l-form-sub">é rapidinho</p>
-          <div class="field"><label>e-mail</label><input id="nEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
-          <div class="field"><label>usuário</label><input id="nUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
-          <div class="field pw-field"><label>senha</label><input id="nPass" type="password" placeholder="mín. 6 caracteres" autocomplete="new-password" /><button type="button" class="pw-eye" onclick="togglePw('nPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-          <div class="field"><label>confirmar senha</label><input id="nPass2" type="password" placeholder="repita a senha" autocomplete="new-password" /></div>
+          <div class="field"><label for="nEmail">e-mail</label><input id="nEmail" type="email" placeholder="voce@email.com" autocomplete="email" /></div>
+          <div class="field"><label for="nUser">usuário</label><input id="nUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
+          <div class="field pw-field"><label for="nPass">senha</label><input id="nPass" type="password" placeholder="mín. 6 caracteres" autocomplete="new-password" /><button type="button" class="pw-eye" onclick="togglePw('nPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="field"><label for="nPass2">confirmar senha</label><input id="nPass2" type="password" placeholder="repita a senha" autocomplete="new-password" /></div>
           <div class="auth-err hidden" id="nErr"></div>
           <button class="btn-p" id="nBtn" onclick="createProfile()">criar conta</button>
           <button class="btn-g" onclick="showView('vPicker')">← voltar</button>
@@ -1321,7 +1338,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 
   <aside class="sidebar">
     <div class="sb-head">
-      <div class="logo" onclick="logoEgg()"><span class="lg-mar">mar</span><span class="lg-gem">gem</span></div>
+      <button type="button" class="logo" onclick="logoEgg()" aria-label="margem"><span class="lg-mar">mar</span><span class="lg-gem">gem</span></button>
       <div class="save-dot" id="saveDot"></div>
     </div>
     <nav class="sb-nav">
@@ -1435,37 +1452,43 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 
     <div class="dash">
     <div class="pockets">
-        <div class="pocket-card rc-income" onclick="openSec('income-fixed')">
+        <div class="pocket-card rc-income">
+          <button type="button" class="pc-open" onclick="openSec('income-fixed')" aria-label="ver renda fixa"></button>
           <span class="pc-chip">renda fixa</span>
           <div class="pc-total c-green" id="tot-income-fixed">R$ 0,00</div>
           <div class="pc-sub">entrando todo mês</div>
           <button class="pc-add" onclick="event.stopPropagation();openModal('income-fixed')" title="adicionar" aria-label="adicionar em renda fixa"><b>+</b> adicionar</button>
         </div>
-        <div class="pocket-card rc-income" onclick="openSec('income-extra')">
+        <div class="pocket-card rc-income">
+          <button type="button" class="pc-open" onclick="openSec('income-extra')" aria-label="ver renda eventual"></button>
           <span class="pc-chip">renda eventual</span>
           <div class="pc-total c-green" id="tot-income-extra">R$ 0,00</div>
           <div class="pc-sub">um extra este mês</div>
           <button class="pc-add" onclick="event.stopPropagation();openModal('income-extra')" title="adicionar" aria-label="adicionar em renda eventual"><b>+</b> adicionar</button>
         </div>
-        <div class="pocket-card rc-exp" onclick="openSec('exp-fixed')">
+        <div class="pocket-card rc-exp">
+          <button type="button" class="pc-open" onclick="openSec('exp-fixed')" aria-label="ver gastos fixos"></button>
           <span class="pc-chip">gastos fixos</span>
           <div class="pc-total c-red" id="tot-exp-fixed">R$ 0,00</div>
           <div class="pc-sub">saindo todo mês</div>
           <button class="pc-add" onclick="event.stopPropagation();openModal('exp-fixed')" title="adicionar" aria-label="adicionar em gastos fixos"><b>+</b> adicionar</button>
         </div>
-        <div class="pocket-card rc-exp" onclick="openSec('exp-extra')">
+        <div class="pocket-card rc-exp">
+          <button type="button" class="pc-open" onclick="openSec('exp-extra')" aria-label="ver gastos esporádicos"></button>
           <span class="pc-chip">gastos esporádicos</span>
           <div class="pc-total c-red" id="tot-exp-extra">R$ 0,00</div>
           <div class="pc-sub">controle do mês</div>
           <button class="pc-add" onclick="event.stopPropagation();openModal('exp-extra')" title="adicionar" aria-label="adicionar em gastos esporádicos"><b>+</b> adicionar</button>
         </div>
-        <div class="pocket-card rc-amber" onclick="openSec('loans')">
+        <div class="pocket-card rc-amber">
+          <button type="button" class="pc-open" onclick="openSec('loans')" aria-label="ver emprestado"></button>
           <span class="pc-chip">emprestado</span>
           <div class="pc-total c-amber" id="tot-loans">R$ 0,00</div>
           <div class="pc-sub">a receber</div>
           <button class="pc-add" onclick="event.stopPropagation();openModal('loans')" title="adicionar" aria-label="adicionar em emprestado"><b>+</b> adicionar</button>
         </div>
-        <div class="pocket-card rc-purple" onclick="openSec('savings')">
+        <div class="pocket-card rc-purple">
+          <button type="button" class="pc-open" onclick="openSec('savings')" aria-label="ver caixinhas"></button>
           <span class="pc-chip">caixinhas</span>
           <div class="pc-total c-purple" id="tot-savings">R$ 0,00</div>
           <div class="pc-sub" id="sub-savings">total guardado</div>
@@ -1528,7 +1551,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
     <div class="m-title">recebimento parcial</div>
     <p class="mini-msg" id="partialMsg"></p>
     <div class="m-field">
-      <label>Quanto te pagaram?</label>
+      <label for="partialVal">Quanto te pagaram?</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
         <input class="m-in" id="partialVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);partialHintUpd()" />
@@ -1585,14 +1608,14 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">lista de compras</div>
     <div class="shop-add">
-      <input class="m-in" id="shopNew" type="text" placeholder="adicionar item…" autocomplete="off" />
+      <input aria-label="adicionar item" class="m-in" id="shopNew" type="text" placeholder="adicionar item…" autocomplete="off" />
       <button class="shop-add-btn" onclick="shopAdd()">+</button>
     </div>
     <div id="shopList" class="shop-list"></div>
     <div id="shopDone" class="shop-done hidden">
       <div class="shop-done-msg">quanto deu na compra?</div>
       <div class="m-field"><div class="val-wrap"><span class="val-pfx">R$</span>
-        <input class="m-in" id="shopVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" /></div></div>
+        <input aria-label="0,00" class="m-in" id="shopVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" /></div></div>
       <div class="m-field"><label>Pago com</label><div class="cat-pills" id="shopPays"></div></div>
       <button class="m-ok" onclick="shopFinalize()">lançar como mercado</button>
     </div>
@@ -1604,9 +1627,9 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 <div class="overlay hidden" id="newBoxOverlay" onclick="if(event.target===this)closeNewBox()">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">nova caixinha</div>
-    <div class="m-field"><label>Qual o sonho?</label>
+    <div class="m-field"><label for="boxName">Qual o sonho?</label>
       <input class="m-in" id="boxName" type="text" placeholder="ex: viagem, carro, casa…" autocomplete="off" /></div>
-    <div class="m-field"><label>Quanto quer juntar?</label>
+    <div class="m-field"><label for="boxTarget">Quanto quer juntar?</label>
       <div class="val-wrap"><span class="val-pfx">R$</span>
         <input class="m-in" id="boxTarget" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" /></div></div>
     <div class="m-actions"><button class="m-cancel" onclick="closeNewBox()">cancelar</button>
@@ -1637,10 +1660,10 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
     <p class="mini-msg" id="wishBuyMsg"></p>
     <div class="m-field"><label>Pago com</label><div class="cat-pills" id="wishPays"></div></div>
     <div class="m-field hidden" id="wishParcWrap">
-      <div class="parc-row" onclick="wishToggleParc()"><span class="parc-lbl">parcelar?</span><div class="t-sw" id="wishParcSw"></div></div>
+      <button type="button" class="parc-row" role="switch" aria-checked="false" onclick="wishToggleParc()"><span class="parc-lbl">parcelar?</span><span class="t-sw" id="wishParcSw"></span></button>
     </div>
     <div class="m-field hidden" id="wishParcN">
-      <label>Em quantas vezes?</label>
+      <label for="wishParcVal">Em quantas vezes?</label>
       <input class="m-in" id="wishParcVal" type="number" min="2" max="48" placeholder="ex: 6" oninput="wishParcHint()">
       <div class="parc-hint hidden" id="wishParcHintEl"></div>
     </div>
@@ -1666,11 +1689,11 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">posso comprar?</div>
     <div class="m-field">
-      <label>O que você quer? <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
+      <label for="buyDesc">O que você quer? <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
       <input class="m-in" id="buyDesc" type="text" placeholder="ex: tênis novo" autocomplete="off" />
     </div>
     <div class="m-field">
-      <label>Quanto custa?</label>
+      <label for="buyVal">Quanto custa?</label>
       <div class="val-wrap"><span class="val-pfx">R$</span>
         <input class="m-in" id="buyVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);buyEval()" /></div>
     </div>
@@ -1679,10 +1702,10 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
       <div class="cat-pills" id="buyPays"></div>
     </div>
     <div class="m-field hidden" id="buyParcWrap">
-      <div class="parc-row" onclick="buyToggleParc()"><span class="parc-lbl">parcelar?</span><div class="t-sw" id="buyParcSw"></div></div>
+      <button type="button" class="parc-row" role="switch" aria-checked="false" onclick="buyToggleParc()"><span class="parc-lbl">parcelar?</span><span class="t-sw" id="buyParcSw"></span></button>
     </div>
     <div class="m-field hidden" id="buyParcN">
-      <label>Em quantas vezes?</label>
+      <label for="buyParcVal">Em quantas vezes?</label>
       <input class="m-in" id="buyParcVal" type="number" min="2" max="48" placeholder="ex: 6" oninput="buyEval()" />
     </div>
     <div id="buyVerdict" class="buy-verdict hidden"></div>
@@ -1718,7 +1741,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">editar perfil</div>
     <div class="m-field">
-      <label>Usuário</label>
+      <label for="editUser">Usuário</label>
       <input class="m-in" id="editUser" type="text" autocomplete="username" />
     </div>
     <div class="m-field">
@@ -1727,11 +1750,11 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
     </div>
     <div style="border-top:1px solid var(--bdr);margin:16px 0 18px"></div>
     <div class="m-field">
-      <label>E-mail</label>
+      <label for="editEmail">E-mail</label>
       <input class="m-in" id="editEmail" type="email" autocomplete="email" />
     </div>
     <div class="m-field pw-field">
-      <label>Senha</label>
+      <label for="editPass">Senha</label>
       <input class="m-in" id="editPass" type="password" />
       <button type="button" class="pw-eye" onclick="togglePw('editPass',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
@@ -1747,10 +1770,10 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title">padronizar acesso</div>
     <p class="mig-sub">escolha um usuário<span id="migPwNote"> e uma senha nova</span>.</p>
-    <div class="m-field"><label>Usuário</label><input class="m-in" id="migUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
+    <div class="m-field"><label for="migUser">Usuário</label><input class="m-in" id="migUser" type="text" placeholder="ex: bruno" autocomplete="username" /></div>
     <div id="migPwWrap">
-      <div class="m-field pw-field"><label>Nova senha</label><input class="m-in" id="migPw1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('migPw1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
-      <div class="m-field"><label>Confirmar senha</label><input class="m-in" id="migPw2" type="password" placeholder="repita a senha" /></div>
+      <div class="m-field pw-field"><label for="migPw1">Nova senha</label><input class="m-in" id="migPw1" type="password" placeholder="mín. 6 caracteres" /><button type="button" class="pw-eye" onclick="togglePw('migPw1',this)" aria-label="mostrar senha"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <div class="m-field"><label for="migPw2">Confirmar senha</label><input class="m-in" id="migPw2" type="password" placeholder="repita a senha" /></div>
     </div>
     <div class="auth-err hidden" id="migErr"></div>
     <div class="m-actions">
@@ -1790,19 +1813,19 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="m-title" id="mTitle">novo item</div>
     <div class="m-field">
-      <label>O que é?</label>
+      <label for="mDesc">O que é?</label>
       <input class="m-in" id="mDesc" type="text" placeholder="ex: salário, aluguel…" autocomplete="off" list="mDescList" />
       <datalist id="mDescList"></datalist>
     </div>
     <div class="m-field">
-      <label id="mValLabel">Valor</label>
+      <label id="mValLabel" for="mVal">Valor</label>
       <div class="val-wrap">
         <span class="val-pfx">R$</span>
         <input class="m-in" id="mVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this);if(isParcelado)updateParcelHint();if(modalKey==='exp-fixed')updateFreqHint()" />
       </div>
     </div>
     <div class="m-field hidden" id="freqWrap">
-      <label>Frequência</label>
+      <label for="mFreqN">Frequência</label>
       <div class="freq-row">
         <input class="m-in freq-n" id="mFreqN" type="number" min="1" max="24" value="1" oninput="updateFreqHint()" />
         <span class="freq-x">×</span>
@@ -1819,28 +1842,28 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
       <div class="cat-pills" id="payPills"></div>
     </div>
     <div class="m-field hidden" id="tpWrap">
-      <div class="parc-row" onclick="toggleTp()">
+      <button type="button" class="parc-row" role="switch" aria-checked="false" onclick="toggleTp()">
         <span class="parc-lbl">é de outra pessoa? <span style="font-weight:400;color:var(--t4)">(vão te pagar)</span></span>
-        <div class="t-sw" id="tpSwitch"></div>
-      </div>
+        <span class="t-sw" id="tpSwitch"></span>
+      </button>
     </div>
     <div class="m-field hidden" id="tpNameField">
-      <label>Quem vai te pagar?</label>
+      <label for="tpName">Quem vai te pagar?</label>
       <input class="m-in" id="tpName" type="text" placeholder="ex: cleiton" autocomplete="off" />
     </div>
     <div class="m-field hidden" id="parceladoWrap">
-      <div class="parc-row" onclick="toggleParcelado()">
+      <button type="button" class="parc-row" role="switch" aria-checked="false" onclick="toggleParcelado()">
         <span class="parc-lbl">parcelado?</span>
-        <div class="t-sw" id="tSwitch"></div>
-      </div>
+        <span class="t-sw" id="tSwitch"></span>
+      </button>
     </div>
     <div class="m-field hidden" id="parcelasField">
-      <label>Número de parcelas</label>
+      <label for="mParcelas">Número de parcelas</label>
       <input class="m-in" id="mParcelas" type="number" placeholder="ex: 12" min="2" max="60" oninput="updateParcelHint()" />
       <div class="parc-hint hidden" id="parcelHint"></div>
     </div>
     <div class="m-field hidden" id="dayWrap">
-      <label>Dia do vencimento <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
+      <label for="mDay">Dia do vencimento <span style="font-weight:400;color:var(--t4)">(opcional)</span></label>
       <input class="m-in" id="mDay" type="number" placeholder="ex: 5" min="1" max="31" />
     </div>
     <div class="m-actions">
@@ -2048,7 +2071,7 @@ async function doLogin(){
     const btn=document.getElementById('lBtn'); btn.disabled=true; btn.textContent='entrando…';
     email=await emailForUsername(idv);
     btn.disabled=false; btn.textContent='entrar';
-    if(!email){ err.textContent='usuário não encontrado.'; err.classList.remove('hidden'); return; }
+    if(!email){ err.textContent='usuário não encontrado — confira o nome ou entre com o e-mail.'; err.classList.remove('hidden'); return; }
   }
   await loginWith(email,pw,err,document.getElementById('lBtn'));
 }
@@ -2133,10 +2156,37 @@ function traduzErro(msg){
 
 // ── Pop-ups: colar/descolar (handoff animações) ──
 const RMOTION=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function showOv(id){ const el=document.getElementById(id); clearTimeout(el._ct); el.classList.remove('closing'); el.classList.remove('hidden'); }
+// pilha de painéis abertos: o de cima recebe o foco, o resto da tela fica inerte
+const ovStack=[];
+function ovSyncInert(){
+  const top=ovStack[ovStack.length-1];
+  const app=document.getElementById('app'); if(app) app.inert=ovStack.length>0;
+  ovStack.forEach(i=>{ const o=document.getElementById(i); if(o) o.inert=(i!==top); });
+}
+function ovRelease(el,id){
+  const i=ovStack.indexOf(id); if(i<0) return;
+  ovStack.splice(i,1); el.inert=false; ovSyncInert();
+  const op=el._opener; el._opener=null;
+  if(op&&document.contains(op)&&!op.closest('[inert]')) op.focus({preventScroll:true});
+}
+function showOv(id){
+  const el=document.getElementById(id); clearTimeout(el._ct); el.classList.remove('closing'); el.classList.remove('hidden');
+  const dlg=el.querySelector('.modal,.ann-modal');
+  if(dlg){
+    dlg.setAttribute('role','dialog'); dlg.setAttribute('aria-modal','true');
+    const t=dlg.querySelector('.m-title,.ann-title');
+    if(t){ if(!t.id) t.id=id+'Titulo'; dlg.setAttribute('aria-labelledby',t.id); }
+    if(!dlg.hasAttribute('tabindex')) dlg.setAttribute('tabindex','-1');
+  }
+  if(!ovStack.includes(id)){ el._opener=document.activeElement; ovStack.push(id); }
+  ovSyncInert();
+  el.classList.add('entra'); clearTimeout(el._et); el._et=setTimeout(()=>el.classList.remove('entra'),800);
+  setTimeout(()=>{ if(!el.hidden&&!el.contains(document.activeElement)) (dlg||el).focus({preventScroll:true}); },90);
+}
 function hideOv(id,after){
   const el=document.getElementById(id);
   if(el.classList.contains('hidden')||el.classList.contains('closing')) return;
+  ovRelease(el,id);
   if(RMOTION){ el.classList.add('hidden'); if(after)after(); return; }
   el.classList.add('closing');
   el._ct=setTimeout(()=>{ el.classList.remove('closing'); el.classList.add('hidden'); if(after)after(); },370);
@@ -2457,7 +2507,7 @@ function renderRows(key){
     const cat=it.cat?CATS.find(c=>c.id===it.cat):null;
     const dotStyle=it.adj?`style="background:var(--purple);width:7px;height:7px"`:(cat?`style="background:${cat.color};width:7px;height:7px"`:'');
     const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
-                 :(cat?`<span class="item-cat-lb" style="color:${cat.color}">${cat.lb}</span>`:'');
+                 :(cat?`<span class="item-cat-lb">${cat.lb}</span>`:'');
     const freqBadge=it.freq?`<span class="item-freq-badge" title="${it.freq.n}x ${FREQ[it.freq.per]?.lb||''}">${it.freq.n}x/${it.freq.per==='mes'?'mês':it.freq.per==='sem'?'sem':'ano'}</span>`:'';
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
@@ -2774,9 +2824,10 @@ function renderTopGastos(){
   const nome=curMonth?MESES_NM[parseInt(curMonth.split('-')[1],10)-1]:'';
   document.getElementById('gkSub').textContent='seus maiores gastos'+(nome?' de '+nome:'');
   document.getElementById('gkStar').textContent='topo: '+top[0].lb;
+  document.getElementById('gkStar').title='topo: '+top[0].lb;
   document.getElementById('gkBody').innerHTML=top.map((g,i)=>`
     <div class="gk-row${i===0?' top1':''}">
-      <div class="gk-hd"><span class="gk-lb">${esc(g.lb)}</span><span class="gk-val">${fmt(g.v)}</span></div>
+      <div class="gk-hd"><span class="gk-lb" title="${esc(g.lb)}">${esc(g.lb)}</span><span class="gk-val">${fmt(g.v)}</span></div>
       <div class="gk-tr"><i class="gk-fi" style="--w:${Math.max(g.v/max*100,3).toFixed(1)}%"></i></div>
     </div>`).join('');
   const s5=top.reduce((a,g)=>a+g.v,0);
@@ -3241,16 +3292,17 @@ function animateNumber(el, from, to, dur=480){
 
 // ── Toast ─────────────────────────────────────────────
 const cutS=t=>t.length>24?t.slice(0,23)+'…':t;
-function undoToast(msg,fn){
+function undoToast(msg,fn,onExpire){
   const t=document.createElement('div');
   t.className='toast act';
+  let desfeito=false;
   const sp=document.createElement('span'); sp.textContent=msg;
   const b=document.createElement('button'); b.className='toast-undo'; b.textContent='desfazer';
-  b.onclick=()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); fn(); };
+  b.onclick=()=>{ desfeito=true; t.classList.remove('show'); setTimeout(()=>t.remove(),300); fn(); };
   t.append(sp,b); document.body.appendChild(t);
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>t.classList.add('show'));
-    setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },6000);
+    setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); if(!desfeito&&onExpire) onExpire(); },6000);
   });
 }
 function toast(msg, type=''){
@@ -3491,7 +3543,7 @@ function renderFreqPills(){
   const el=document.getElementById('freqPills'); if(!el) return;
   el.innerHTML=Object.keys(FREQ).map(k=>{
     const on=freqPer===k, c='#d97706';
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="setFreqPer('${k}')">${FREQ[k].lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="setFreqPer('${k}')">${FREQ[k].lb}</button>`;
   }).join('');
 }
 function setFreqPer(k){ freqPer=k; renderFreqPills(); updateFreqHint(); }
@@ -3511,14 +3563,14 @@ function updateFreqHint(){
 function renderCatPills(){
   document.getElementById('catPills').innerHTML=CATS.map(c=>{
     const on=selCat===c.id;
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c.color};${on?`background:${c.color}26;border-color:${c.color}`:`background:${c.color}0d;border-color:${c.color}55`}" onclick="selectCat('${c.id}')">${c.lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c.color}26;border-color:${c.color}`:`background:${c.color}0d;border-color:${c.color}55`}" onclick="selectCat('${c.id}')">${c.lb}</button>`;
   }).join('');
 }
 function selectCat(id){ selCat=selCat===id?null:id; renderCatPills(); }
 function renderPayPills(){
   document.getElementById('payPills').innerHTML=PAYS.map(p=>{
     const on=selPay===p.id, c=PAY_COL[p.id];
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="selectPay('${p.id}')">${p.lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="selectPay('${p.id}')">${p.lb}</button>`;
   }).join('');
 }
 function selectPay(id){ selPay=selPay===id?null:id; renderPayPills(); }
@@ -3627,7 +3679,7 @@ function buildBoxDetail(){
     `<div class="box-dep"><span>${esc(it.desc)}${it.adj?' <i>· ajuste</i>':''}<em>${mkLbl(mk)}</em></span><span class="box-dep-v${it.value<0?' neg':''}">${(it.adj&&it.value>0?'+':'')}${fmt(it.value)}</span><button class="del-btn" onclick="delBoxDep('${mk}',${idx})" title="remover">×</button></div>`).join('')+`</div>`;
   html+=`<div class="box-detail-act"><button class="m-ok" onclick="depositTo('${id}')">+ guardar aqui</button>`;
   if(id==='emerg'){
-    if(boxFixOpen) html+=`<div class="box-fix-row"><span class="goal-pfx">R$</span><input type="text" inputmode="numeric" class="goal-input" id="boxFixInput" placeholder="saldo real" autocomplete="off" oninput="moneyMask(this)" value="${numBR(bal)}"><button class="sav-fix-ok" onclick="boxFixSave()">ok</button></div>`;
+    if(boxFixOpen) html+=`<div class="box-fix-row"><span class="goal-pfx">R$</span><input type="text" inputmode="numeric" class="goal-input" id="boxFixInput" aria-label="saldo corrigido" placeholder="saldo real" autocomplete="off" oninput="moneyMask(this)" value="${numBR(bal)}"><button class="sav-fix-ok" onclick="boxFixSave()">ok</button></div>`;
     else html+=`<button class="carry-btn-g" onclick="boxFixToggle()">corrigir saldo (rendimentos)</button>`;
   } else {
     html+=`<button class="carry-btn-g" onclick="delBox('${id}')">excluir caixinha</button>`;
@@ -3657,7 +3709,7 @@ async function boxFixSave(){
 let wishItems=[], wishRemote=null, wishShares=[], wishView='mine', wishBuyId=null, wishPaySel='debito', wishPr='media', wishEditId=null, wishIsParc=false;
 let wishGiftMode=false, wishOtherOwner=null, wishOtherItems=[], wishFormOpen=false, wishOtherCache={}, wishLoadSeq=0, wishTabsIn=false;
 const WISH_PP=5; let wishPage=0, wishOtherPage=0;
-const WISH_PR={alta:{lb:'alta',c:'#dc2626'},media:{lb:'média',c:'#d97706'},baixa:{lb:'baixa',c:'#16a34a'}};
+const WISH_PR={alta:{lb:'alta'},media:{lb:'média'},baixa:{lb:'baixa'}};
 function wishLKey(){ return 'margem-wish-'+(curUser?.id||''); }
 function wishPersistLocal(){ try{ localStorage.setItem(wishLKey(),JSON.stringify(wishItems)); }catch(_){} }
 async function wishInit(){
@@ -3719,8 +3771,8 @@ async function wishPrefetch(){
 function closeWish(){ hideOv('wishOverlay'); wishEditId=null; wishFormOpen=false; wishOtherCache={}; }
 function wishPrPills(){
   return Object.keys(WISH_PR).map(k=>{
-    const on=wishPr===k,c=WISH_PR[k].c;
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishSetPr('${k}')">${WISH_PR[k].lb}</div>`;
+    const on=wishPr===k;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" onclick="wishSetPr('${k}')">${WISH_PR[k].lb}</button>`;
   }).join('');
 }
 function wishSetPr(k){ wishPr=k; const el=document.getElementById('wishPrRow'); if(el) el.innerHTML=wishPrPills(); }
@@ -3736,9 +3788,9 @@ function wishRowHtml(it,mine){
         `<button class="wi-b" onclick="wishEdit('${it.id}')" title="editar">✎</button>`+
         `<button class="wi-b" onclick="wishDel('${it.id}')" title="remover">×</button>`)
     : (it.done ? `<span class="wi-tag">comprado</span>` : `<button class="wi-gift" onclick="wishGift('${it.id}')">presentear</button>`);
-  return `<div class="wi${it.done?' done':''}" style="--pc:${pr.c}">
-    <span class="wi-nm">${nm}</span>
-    <span class="wi-val">${fmt(it.value||0)}</span>
+  return `<div class="wi pr-${WISH_PR[it.pr]?it.pr:'media'}${it.done?' done':''}">
+    <span class="wi-nm" title="${esc(it.name)}">${nm}</span>
+    <span class="wi-val">${fmt(it.value||0)}${it.done?'':`<small class="wi-pr-lb">${pr.lb}</small>`}</span>
     <span class="wi-acts">${act}</span></div>`;
 }
 function wishSorted(list){
@@ -3751,7 +3803,7 @@ function wishTabs(){
   let h=`<div class="wish-tabs${wishTabsIn?' in':''}">
     <button class="wt${wishView==='mine'?' sel':''}" onclick="wishGo('mine')"><span class="wt-nm">meus desejos</span></button>`;
   h+=outAcc.map(r=>{ const nm=shName(r,'owner');
-    return `<button class="wt${wishView===r.id?' sel':''}" onclick="wishGo('${r.id}')">${shAv(nm)}<span class="wt-nm">${esc(nm)}</span></button>`;
+    return `<button class="wt${wishView===r.id?' sel':''}" onclick="wishGo('${r.id}')">${shAv(nm)}<span class="wt-nm" title="${esc(nm)}">${esc(nm)}</span></button>`;
   }).join('');
   h+=`<button class="wt${wishView==='people'?' sel':''}" onclick="wishGo('people')"><span class="wt-nm">pessoas</span>${pend?`<span class="wt-badge">${pend}</span>`:''}</button>`;
   return h+`</div>`;
@@ -3809,7 +3861,7 @@ function buildWish(){
       }catch(_){
         if(seq!==wishLoadSeq||wishView!==sh.id) return;
         const el=document.getElementById('wishOtherList');
-        if(el&&!cached) el.innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista</div>';
+        if(el&&!cached) el.innerHTML='<div class="cal-empty-msg">não deu pra carregar a lista — verifique a conexão e abra de novo</div>';
       }
     })();
     return;
@@ -3826,21 +3878,21 @@ function buildWish(){
     if(pend.length){
       h+=`<div class="wp-sec"><div class="wp-lb">querem ver sua lista</div>`+
         pend.map(r=>{ const nm=shName(r,'requester');
-          return `<div class="wp-row wp-ask">${shAv(nm)}<span class="wp-nm"><b>${esc(nm)}</b> quer ver seus desejos</span>
+          return `<div class="wp-row wp-ask">${shAv(nm)}<span class="wp-nm" title="${esc(nm)} quer ver seus desejos"><b>${esc(nm)}</b> quer ver seus desejos</span>
             <button class="wp-yes" onclick="shareAnswer('${r.id}',true)">aceitar</button>
             <button class="wp-no" onclick="shareAnswer('${r.id}',false)">recusar</button></div>`;
         }).join('')+`</div>`;
     }
     h+=`<div class="wp-sec"><div class="wp-lb">ver a lista de alguém</div>
       <div class="wp-add"><div class="val-wrap"><span class="wp-at">@</span>
-        <input class="m-in" id="shareUser" type="text" placeholder="nome de usuário" autocomplete="off" onkeydown="if(event.key==='Enter')shareAsk()"></div>
+        <input class="m-in" id="shareUser" type="text" aria-label="nome de usuário" placeholder="nome de usuário" autocomplete="off" onkeydown="if(event.key==='Enter')shareAsk()"></div>
         <button class="shop-add-btn" onclick="shareAsk()" title="pedir pra ver">→</button></div></div>`;
     const out=sharesOut();
     if(out.length){
       h+=`<div class="wp-sec"><div class="wp-lb">listas que você pediu</div>`+
         out.map(r=>{ const nm=shName(r,'owner');
           const st=r.status==='accepted'?'':`<span class="wp-st ${r.status==='pending'?'p':'r'}">${r.status==='pending'?'pendente':'recusado'}</span>`;
-          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm">${esc(nm)}</span>${st}
+          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm" title="${esc(nm)}">${esc(nm)}</span>${st}
             <button class="wi-b" onclick="shareRemove('${r.id}')" title="remover">×</button></div>`;
         }).join('')+`</div>`;
     }
@@ -3848,7 +3900,7 @@ function buildWish(){
     if(seeMine.length){
       h+=`<div class="wp-sec"><div class="wp-lb">quem vê a sua lista</div>`+
         seeMine.map(r=>{ const nm=shName(r,'requester');
-          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm">${esc(nm)}</span>
+          return `<div class="wp-row">${shAv(nm)}<span class="wp-nm" title="${esc(nm)}">${esc(nm)}</span>
             <button class="wi-b" onclick="shareRevoke('${r.id}')" title="revogar acesso">×</button></div>`;
         }).join('')+`</div>`;
     }
@@ -3862,12 +3914,12 @@ function buildWish(){
   if(ed||wishFormOpen){
     html+=`<div class="wish-form">
       ${ed?`<div class="wf-lb">editando ${esc(ed.name)}</div>`:''}
-      <input class="m-in" id="wishName" type="text" placeholder="o que você quer?" autocomplete="off" value="${ed?esc(ed.name):''}">
-      <input class="m-in" id="wishLink" type="url" placeholder="link (opcional)" autocomplete="off" value="${ed&&ed.link?esc(ed.link):''}">
+      <input class="m-in" id="wishName" type="text" aria-label="o que você quer" placeholder="o que você quer?" autocomplete="off" value="${ed?esc(ed.name):''}">
+      <input class="m-in" id="wishLink" type="url" aria-label="link" placeholder="link (opcional)" autocomplete="off" value="${ed&&ed.link?esc(ed.link):''}">
       <div class="wf-row">
         <div class="cat-pills" id="wishPrRow">${wishPrPills()}</div>
         <div class="val-wrap"><span class="val-pfx">R$</span>
-          <input class="m-in" id="wishVal" type="text" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px" value="${ed?numBR(ed.value):''}"></div>
+          <input class="m-in" id="wishVal" type="text" aria-label="valor" inputmode="numeric" placeholder="0,00" autocomplete="off" oninput="moneyMask(this)" style="padding-left:34px" value="${ed?numBR(ed.value):''}"></div>
       </div>
       <div class="wf-acts">
         <button class="m-cancel" onclick="${ed?'wishEditCancel()':'wishFormToggle()'}">cancelar</button>
@@ -3904,7 +3956,13 @@ function wishEdit(id){
   setTimeout(()=>document.getElementById('wishName')?.focus(),60);
 }
 function wishEditCancel(){ wishEditId=null; buildWish(); }
-function wishDel(id){ if(wishEditId===id) wishEditId=null; wishItems=wishItems.filter(x=>x.id!==id); wishPush(); buildWish(); }
+function wishDel(id){
+  const i=wishItems.findIndex(x=>x.id===id); if(i<0) return;
+  const it=wishItems[i];
+  if(wishEditId===id) wishEditId=null;
+  wishItems.splice(i,1); wishPush(); buildWish();
+  undoToast(`“${cutS(it.name)}” removido`,()=>{ wishItems.splice(Math.min(i,wishItems.length),0,it); wishPush(); buildWish(); });
+}
 function wishGift(id){
   const it=wishOtherItems.find(x=>x.id===id); if(!it) return;
   wishGiftMode=true; wishBuyId=id; wishPaySel='debito'; wishIsParc=false;
@@ -3950,7 +4008,7 @@ function wishParcHint(){
 function renderWishPays(){
   document.getElementById('wishPays').innerHTML=PAYS.map(p=>{
     const on=wishPaySel===p.id,c=PAY_COL[p.id];
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishPaySel='${p.id}';renderWishPays()">${p.lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="wishPaySel='${p.id}';renderWishPays()">${p.lb}</button>`;
   }).join('');
   const cred=wishPaySel==='credito';
   document.getElementById('wishParcWrap').classList.toggle('hidden',!cred);
@@ -4018,7 +4076,7 @@ async function shareAsk(){
     if(error) throw error;
     inp.value='';
     await sharesRefresh(); buildWish(); toast('pedido enviado ✓');
-  }catch(e){ toast((e?.code==='23505')?'você já pediu pra essa pessoa':'não deu pra enviar o pedido','err'); }
+  }catch(e){ toast((e?.code==='23505')?'você já pediu pra essa pessoa':'não deu pra enviar o pedido — verifique a conexão e tente de novo','err'); }
 }
 async function shareAnswer(id,ok){
   try{
@@ -4026,13 +4084,26 @@ async function shareAnswer(id,ok){
     if(error) throw error;
     await sharesRefresh(); buildWish(); wishBadge();
     toast(ok?'acesso liberado ✓':'pedido recusado');
-  }catch(_){ toast('não deu pra responder','err'); }
+  }catch(_){ toast('não deu pra responder — verifique a conexão e tente de novo','err'); }
 }
-async function shareRemove(id){
-  try{ await sb.from('wishlist_shares').delete().eq('id',id); await sharesRefresh(); if(wishView===id) wishView='mine'; buildWish(); }catch(_){}
+// remove da tela na hora; só grava no servidor quando o "desfazer" expira
+function shareRemove(id){
+  const r=wishShares.find(x=>x.id===id); if(!r) return;
+  wishShares=wishShares.filter(x=>x.id!==id); if(wishView===id) wishView='mine'; buildWish();
+  undoToast(`pedido pra ${shName(r,'owner')} removido`,()=>{ wishShares.push(r); buildWish(); },async()=>{
+    try{ const {error}=await sb.from('wishlist_shares').delete().eq('id',id); if(error) throw error; }
+    catch(_){ toast('não deu pra remover o pedido — verifique a conexão e tente de novo','err'); }
+    await sharesRefresh(); buildWish();
+  });
 }
-async function shareRevoke(id){
-  try{ await sb.from('wishlist_shares').update({status:'refused',owner_id:curUser.id,owner_name:myName()}).eq('id',id); await sharesRefresh(); buildWish(); toast('acesso revogado'); }catch(_){}
+function shareRevoke(id){
+  const r=wishShares.find(x=>x.id===id); if(!r) return;
+  const antes=r.status; r.status='refused'; buildWish();
+  undoToast(`acesso de ${shName(r,'requester')} revogado`,()=>{ r.status=antes; buildWish(); },async()=>{
+    try{ const {error}=await sb.from('wishlist_shares').update({status:'refused',owner_id:curUser.id,owner_name:myName()}).eq('id',id); if(error) throw error; }
+    catch(_){ r.status=antes; toast('não deu pra revogar o acesso — verifique a conexão e tente de novo','err'); }
+    await sharesRefresh(); buildWish();
+  });
 }
 function wishViewOther(id){ wishView=id; buildWish(); }
 
@@ -4184,7 +4255,7 @@ function closeBuy(){ hideOv('buyOverlay',()=>{ buyTrigger?.focus?.(); buyTrigger
 function renderBuyPays(){
   document.getElementById('buyPays').innerHTML=PAYS.map(p=>{
     const on=buySelPay===p.id,c=PAY_COL[p.id];
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="buyPick('${p.id}')">${p.lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="buyPick('${p.id}')">${p.lb}</button>`;
   }).join('');
 }
 function buyPick(id){
@@ -4315,7 +4386,7 @@ function closeShop(){ hideOv('shopOverlay',()=>{ shopTrigger?.focus?.(); shopTri
 function renderShopPays(){
   document.getElementById('shopPays').innerHTML=PAYS.map(p=>{
     const on=shopSelPay===p.id,c=PAY_COL[p.id];
-    return `<div class="cat-pill${on?' sel':''}" style="color:${c};${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="shopPick('${p.id}')">${p.lb}</div>`;
+    return `<button type="button" class="cat-pill${on?' sel':''}" aria-pressed="${on}" style="${on?`background:${c}26;border-color:${c}`:`background:${c}0d;border-color:${c}55`}" onclick="shopPick('${p.id}')">${p.lb}</button>`;
   }).join('');
 }
 function shopPick(id){ shopSelPay=id; renderShopPays(); }
@@ -4471,6 +4542,18 @@ function memeCheck(item){
   else if(cents===777) stamp('NÚMERO DA SORTE!');
   if(item.desc.trim().toLowerCase()==='margem') toast('eu? que honra!');
 }
+
+// rede de segurança: painel escondido por outro caminho também libera a tela
+document.querySelectorAll('.overlay,.ann-overlay').forEach(o=>new MutationObserver(()=>{
+  if(o.classList.contains('hidden')&&ovStack.includes(o.id)) ovRelease(o,o.id);
+}).observe(o,{attributes:true,attributeFilter:['class']}));
+
+// ── switches: estado lido pelo leitor de tela acompanha o visual ──
+document.querySelectorAll('.t-sw').forEach(sw=>{
+  const row=sw.closest('.parc-row'); if(!row) return;
+  const sync=()=>row.setAttribute('aria-checked',sw.classList.contains('on')?'true':'false');
+  sync(); new MutationObserver(sync).observe(sw,{attributes:true,attributeFilter:['class']});
+});
 
 // ── Boot ──────────────────────────────────────────────
 // espera as fontes antes de mostrar qualquer texto (sem troca de fonte na cara do usuário)
