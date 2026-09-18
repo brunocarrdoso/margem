@@ -1229,6 +1229,7 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 /* 10) iPhone não dá zoom ao tocar num campo */
 @media(max-width:680px){.m-in,.field input,.goal-input,.sel,.wish-form .m-in,.wp-add .m-in{font-size:16px}}
 .fat-acoes{display:flex;gap:9px;margin-top:16px}
+.fat-chips{display:flex;gap:7px;flex-wrap:wrap}
 .fat-acoes button{flex:1;padding:11px;font-size:13px}
 .fat-form{display:flex;flex-direction:column;gap:9px;margin-top:16px;padding:15px;border:2px solid var(--ink);background:var(--bg);box-shadow:3px 3px 0 var(--ink-sh)}
 .item-ant-badge{font-size:11px;font-weight:700;color:var(--t2);background:var(--green-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px}
@@ -3412,7 +3413,20 @@ function dispDe(mk){
 const fatAntecipado=mk=>(allMonths[mk]?.['exp-extra']||[]).filter(i=>i.ant&&i.value<0).reduce((a,i)=>a-i.value,0);
 function openFatura(){ fatView='atual'; fatFormOpen=false; buildFatura(); showOv('faturaOverlay'); }
 function fatGo(v){ fatView=v; fatFormOpen=false; buildFatura(); }
-function fatFormToggle(){ fatFormOpen=!fatFormOpen; buildFatura(); if(fatFormOpen) setTimeout(()=>document.getElementById('fatVal')?.select(),60); }
+function fatFormToggle(){ fatFormOpen=!fatFormOpen; buildFatura(); if(fatFormOpen) setTimeout(()=>document.getElementById('fatVal')?.focus(),60); }
+function fatPor(v){ const c=document.getElementById('fatVal'); if(!c) return; c.value=numBR(v); fatHint(); c.focus(); }
+// aviso ao vivo: quanto sobra na fatura e quanto sobra aqui
+function fatHint(){
+  const el=document.getElementById('fatHintEl'); if(!el) return;
+  const prox=nextKeyOf(curMonth), tot=fatTotal(prox), disp=dispDe(curMonth);
+  let v=parseMoney(document.getElementById('fatVal').value);
+  if(!v||v<=0){ el.textContent=`você tem ${fmt(disp)} disponível em ${mkLbl(curMonth)}`; return; }
+  if(v>tot) v=tot;
+  const resta=Math.round((tot-v)*100)/100, sobra=Math.round((disp-v)*100)/100;
+  el.textContent = resta>0.004
+    ? `sobram ${fmt(resta)} na fatura de ${mkLbl(prox)}, e ${fmt(sobra)} disponível aqui`
+    : `quita a fatura de ${mkLbl(prox)}, e sobra ${fmt(sobra)} disponível aqui`;
+}
 function buildFatura(){
   const prox=nextKeyOf(curMonth), mk=fatView==='atual'?curMonth:prox;
   const items=creditItemsOf(mk), tot=items.reduce((a,i)=>a+i.value,0);
@@ -3439,8 +3453,12 @@ function buildFatura(){
     if(tot>0.004) h+= fatFormOpen
       ? `<div class="fat-form">
           <div class="wf-lb">quanto antecipar</div>
-          <div class="val-wrap"><span class="val-pfx">R$</span><input class="m-in" id="fatVal" type="text" inputmode="numeric" aria-label="valor a antecipar" placeholder="0,00" oninput="moneyMask(this)" value="${numBR(tot)}" style="padding-left:34px"></div>
-          <div class="parc-hint">sai do disponível de ${mkLbl(curMonth)}, que hoje é ${fmt(dispDe(curMonth))}</div>
+          <div class="fat-chips">
+            <button type="button" class="cat-pill" onclick="fatPor(${tot})">tudo — ${fmt(tot)}</button>
+            <button type="button" class="cat-pill" onclick="fatPor(${Math.round(tot/2*100)/100})">metade — ${fmt(Math.round(tot/2*100)/100)}</button>
+          </div>
+          <div class="val-wrap"><span class="val-pfx">R$</span><input class="m-in" id="fatVal" type="text" inputmode="numeric" aria-label="valor a antecipar" placeholder="0,00" oninput="moneyMask(this);fatHint()" style="padding-left:34px"></div>
+          <div class="parc-hint" id="fatHintEl">você tem ${fmt(dispDe(curMonth))} disponível em ${mkLbl(curMonth)}</div>
           <div class="wf-acts"><button class="m-cancel" onclick="fatFormToggle()">cancelar</button><button class="m-ok" onclick="fatAntecipar()">antecipar</button></div>
         </div>`
       : `<div class="fat-acoes"><button class="m-ok" onclick="fatFormToggle()">antecipar esta fatura</button></div>`;
