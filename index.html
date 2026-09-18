@@ -1228,6 +1228,10 @@ html[data-dark] .item-freq-badge{border-color:rgba(245,158,11,.2)}
 .wi-pr-lb{font-family:'Oswald',system-ui,sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-top:2px}
 /* 10) iPhone não dá zoom ao tocar num campo */
 @media(max-width:680px){.m-in,.field input,.goal-input,.sel,.wish-form .m-in,.wp-add .m-in{font-size:16px}}
+.fat-acoes{display:flex;gap:9px;margin-top:16px}
+.fat-acoes button{flex:1;padding:11px;font-size:13px}
+.fat-form{display:flex;flex-direction:column;gap:9px;margin-top:16px;padding:15px;border:2px solid var(--ink);background:var(--bg);box-shadow:3px 3px 0 var(--ink-sh)}
+.item-ant-badge{font-size:11px;font-weight:700;color:var(--t2);background:var(--green-bg);padding:1px 6px 2px;border-radius:10px;flex-shrink:0;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px}
 </style>
 </head>
 <body>
@@ -2505,23 +2509,25 @@ function renderRows(key){
     const catLbl=it.adj?`<span class="item-cat-lb" style="color:var(--purple)">ajuste de rendimento</span>`
                  :(cat?`<span class="item-cat-lb">${cat.lb}</span>`:'');
     const freqBadge=it.freq?`<span class="item-freq-badge" title="${it.freq.n}x ${FREQ[it.freq.per]?.lb||''}">${it.freq.n}x/${it.freq.per==='mes'?'mês':it.freq.per==='sem'?'sem':'ano'}</span>`:'';
+    const antBadge=it.ant?`<span class="item-ant-badge">antecipada</span>`:'';
     const dayBadge=it.day?`<span class="item-day-badge">dia ${it.day}</span>`:'';
     const payBadge=it.pay?`<span class="item-pay-badge pay-${it.pay}">${PAYS.find(p=>p.id===it.pay)?.lb||it.pay}</span>`:'';
     const tpBadge=it.tp?`<span class="item-pay-badge pay-tp">${esc(it.tp)} paga</span>`:'';
     // ajustes e resgates (valor negativo) não passam pelo modal de edição
-    const editBtn=(it.adj||it.value<0)?'':`<button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>`;
+    const editBtn=(it.adj||it.ant||it.value<0)?'':`<button class="edit-btn" onclick="openModal('${key}',${i})" title="editar">✎</button>`;
     const valTxt=(it.adj&&it.value>0?'+':'')+fmt(it.value);
     return `<div class="item">
       <span class="item-dot" ${dotStyle}></span>
       <span class="item-desc">${esc(it.desc)}${catLbl}</span>
       ${tpBadge}
       ${payBadge}
+      ${antBadge}
       ${freqBadge}
       ${dayBadge}
       <span class="item-val"${it.value<0?' style="color:var(--red)"':''}>${valTxt}</span>
       <div class="item-btns">
         ${editBtn}
-        <button class="del-btn" onclick="removeItem('${key}',${i})" title="remover">×</button>
+        ${it.ant?'':`<button class="del-btn" onclick="removeItem('${key}',${i})" title="remover">×</button>`}
       </div>
     </div>`;
   }).join('');
@@ -2791,9 +2797,13 @@ function recalc(){
     li.classList.toggle('hidden',out<=0.005);
     if(out>0.005) li.innerHTML=`se todos pagarem, o mês fecha com <b>${fmt(av+out)}</b>`;
   }
-  const fat=creditItemsOf(curMonth).reduce((a,i)=>a+i.value,0);
+  const fat=fatTotal(curMonth), fatProx=fatTotal(nextKeyOf(curMonth));
   const fl=document.getElementById('faturaLine');
-  if(fl){ fl.classList.toggle('hidden',fat<=0.004); if(fat>0.004) fl.textContent='cartão: '+fmt(fat); }
+  if(fl){
+    const mostrar=fat>0.004||fatProx>0.004;
+    fl.classList.toggle('hidden',!mostrar);
+    if(mostrar) fl.textContent = fat>0.004 ? ('cartão: '+fmt(fat)+(d.faturaPaga?' · paga':'')) : ('cartão: próxima '+fmt(fatProx));
+  }
   updateMood(av,tI,tE,svFlow);
   updateDueBar();
   checkStamps(av,tI,tE,svFlow,totalSaved);
@@ -3392,17 +3402,80 @@ function creditItemsOf(mk){
   const d=allMonths[mk]||{};
   return [...(d['exp-fixed']||[]),...(d['exp-extra']||[])].filter(i=>i.pay==='credito');
 }
-function openFatura(){
-  const items=creditItemsOf(curMonth);
-  const tot=items.reduce((a,i)=>a+i.value,0);
+let fatView='atual', fatFormOpen=false;
+const fatTotal=mk=>creditItemsOf(mk).reduce((a,i)=>a+i.value,0);
+function dispDe(mk){
+  const d=allMonths[mk]; if(!d) return 0;
+  const {lent,recvd}=loanAdj(mk);
+  return sum(d['income-fixed'])+sum(d['income-extra'])-sum(d['exp-fixed'])-sum(d['exp-extra'])-sumFlow(d['savings'])-lent+recvd;
+}
+const fatAntecipado=mk=>(allMonths[mk]?.['exp-extra']||[]).filter(i=>i.ant&&i.value<0).reduce((a,i)=>a-i.value,0);
+function openFatura(){ fatView='atual'; fatFormOpen=false; buildFatura(); showOv('faturaOverlay'); }
+function fatGo(v){ fatView=v; fatFormOpen=false; buildFatura(); }
+function fatFormToggle(){ fatFormOpen=!fatFormOpen; buildFatura(); if(fatFormOpen) setTimeout(()=>document.getElementById('fatVal')?.select(),60); }
+function buildFatura(){
+  const prox=nextKeyOf(curMonth), mk=fatView==='atual'?curMonth:prox;
+  const items=creditItemsOf(mk), tot=items.reduce((a,i)=>a+i.value,0);
   const tp=items.filter(i=>i.tp).reduce((a,i)=>a+i.value,0);
-  document.getElementById('faturaTitle').textContent='fatura — '+mkLbl(curMonth);
-  document.getElementById('faturaContent').innerHTML=items.length
+  document.getElementById('faturaTitle').textContent='fatura do cartão';
+  let h=`<div class="wish-tabs">
+    <button class="wt${fatView==='atual'?' sel':''}" onclick="fatGo('atual')"><span class="wt-nm">esta — ${mkLbl(curMonth)}</span></button>
+    <button class="wt${fatView==='proxima'?' sel':''}" onclick="fatGo('proxima')"><span class="wt-nm">próxima — ${mkLbl(prox)}</span></button>
+  </div>`;
+  h+= items.length
     ? `<table class="ann-table"><tbody>${items.map(i=>`<tr><td>${esc(i.desc)}${i.tp?` <span class="item-pay-badge pay-tp">${esc(i.tp)} paga</span>`:''}</td><td>${fmt(i.value)}</td></tr>`).join('')}</tbody>
-       <tfoot><tr><td>total no cartão</td><td>${fmt(tot)}</td></tr></tfoot></table>`+
-      (tp>0?`<div class="ann-avg">desse total, <span>${fmt(tp)}</span> é de outras pessoas (vão te pagar)</div>`:'')
-    : '<div class="cal-empty-msg">nada no cartão este mês</div>';
-  showOv('faturaOverlay');
+       <tfoot><tr><td>total no cartão</td><td>${fmt(tot)}</td></tr></tfoot></table>`
+    : `<div class="cal-empty-msg">nada no cartão em ${mkLbl(mk)}</div>`;
+  if(tp>0.004) h+=`<div class="ann-avg">desse total, <span>${fmt(tp)}</span> é de outras pessoas (vão te pagar)</div>`;
+  if(fatView==='atual'){
+    if(tot>0.004){
+      const paga=!!monthLocal(curMonth).faturaPaga;
+      h+=`<div class="fat-acoes"><button class="${paga?'m-cancel':'m-ok'}" onclick="fatTogglePaga()">${paga?'paga ✓ — desmarcar':'marcar como paga'}</button></div>
+        <div class="wish-hint">esta fatura já saiu do disponível de ${mkLbl(curMonth)} — marcar só registra que você quitou.</div>`;
+    }
+  } else {
+    const ja=fatAntecipado(prox);
+    if(ja>0.004) h+=`<div class="wish-hint">você já antecipou ${fmt(ja)} desta fatura em ${mkLbl(curMonth)}. <button class="sav-fix-btn" onclick="fatDesfazer()">desfazer</button></div>`;
+    if(tot>0.004) h+= fatFormOpen
+      ? `<div class="fat-form">
+          <div class="wf-lb">quanto antecipar</div>
+          <div class="val-wrap"><span class="val-pfx">R$</span><input class="m-in" id="fatVal" type="text" inputmode="numeric" aria-label="valor a antecipar" placeholder="0,00" oninput="moneyMask(this)" value="${numBR(tot)}" style="padding-left:34px"></div>
+          <div class="parc-hint">sai do disponível de ${mkLbl(curMonth)}, que hoje é ${fmt(dispDe(curMonth))}</div>
+          <div class="wf-acts"><button class="m-cancel" onclick="fatFormToggle()">cancelar</button><button class="m-ok" onclick="fatAntecipar()">antecipar</button></div>
+        </div>`
+      : `<div class="fat-acoes"><button class="m-ok" onclick="fatFormToggle()">antecipar esta fatura</button></div>`;
+  }
+  document.getElementById('faturaContent').innerHTML=h;
+}
+function fatTogglePaga(){
+  const d=monthLocal(curMonth); d.faturaPaga=!d.faturaPaga;
+  schedSave(); recalc(); buildFatura();
+  toast(d.faturaPaga?'fatura marcada como paga ✓':'marca de paga removida');
+}
+// antecipar = duas linhas ligadas: o pagamento sai deste mês e abate a fatura do mês que vem
+function fatAntecipar(){
+  const prox=nextKeyOf(curMonth), tot=fatTotal(prox);
+  const campo=document.getElementById('fatVal');
+  let v=parseMoney(campo.value);
+  if(!v||v<=0){ campo.focus(); return; }
+  if(v>tot+0.004) v=tot;
+  v=Math.round(v*100)/100;
+  const id='a'+Date.now().toString(36);
+  monthLocal(curMonth)['exp-extra'].push({desc:`fatura de ${mkLbl(prox)} antecipada`, value:v, pay:'debito', ant:{id,mk:prox}});
+  monthLocal(prox)['exp-extra'].push({desc:`antecipada em ${mkLbl(curMonth)}`, value:-v, pay:'credito', ant:{id,mk:curMonth}});
+  renderRows('exp-extra'); recalc(); schedSave(); saveMonth(prox);
+  fatFormOpen=false; buildFatura();
+  undoToast(`fatura antecipada: ${fmt(v)}`,()=>fatRemover(id));
+}
+function fatRemover(id){
+  const prox=nextKeyOf(curMonth);
+  [curMonth,prox].forEach(mk=>{ const d=allMonths[mk]; if(d) d['exp-extra']=(d['exp-extra']||[]).filter(i=>!(i.ant&&i.ant.id===id)); });
+  renderRows('exp-extra'); recalc(); schedSave(); saveMonth(prox); buildFatura();
+}
+function fatDesfazer(){
+  const prox=nextKeyOf(curMonth);
+  [...new Set((allMonths[prox]?.['exp-extra']||[]).filter(i=>i.ant&&i.value<0).map(i=>i.ant.id))].forEach(fatRemover);
+  toast('antecipação desfeita');
 }
 function closeFatura(){ hideOv('faturaOverlay'); }
 
